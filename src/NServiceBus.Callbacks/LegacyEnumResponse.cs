@@ -8,6 +8,8 @@
     public class LegacyEnumResponse<T>
     {
         // ReSharper disable once NotAccessedField.Global
+        // ReSharper disable once MemberCanBePrivate.Global
+        // This member is used by <see cref="SetLegacyReturnCodeBehavior">
         internal string ReturnCode;
 
         /// <summary>

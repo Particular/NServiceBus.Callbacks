@@ -2,8 +2,6 @@
 {
     using System;
     using System.Linq;
-    using NServiceBus.Callbacks;
-    using NServiceBus.Features;
     using NServiceBus.Pipeline;
     using NServiceBus.Pipeline.Contexts;
 
@@ -63,7 +61,7 @@
             {
                 var legacyEnumResponseType = tcs.ResponseType;
 
-                if (!CallbackSupport.IsLegacyEnumResponse(legacyEnumResponseType))
+                if (!legacyEnumResponseType.IsLegacyEnumResponse())
                 {
                     tcs.SetException(new Exception(string.Format("Invalid response in control message. Expected '{0}' as the response type.", typeof(LegacyEnumResponse<>))));
                 }

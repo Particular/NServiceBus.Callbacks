@@ -1,7 +1,6 @@
 ﻿namespace NServiceBus
 {
     using System;
-    using NServiceBus.Features;
     using NServiceBus.OutgoingPipeline;
     using NServiceBus.Pipeline;
     using NServiceBus.Pipeline.Contexts;
@@ -11,7 +10,7 @@
     {
         public override void Invoke(OutgoingContext context, Action next)
         {
-            if (CallbackSupport.IsLegacyEnumResponse(context.GetMessageType()))
+            if (context.GetMessageType().IsLegacyEnumResponse())
             {
                 string returnCode = ((dynamic) context.GetMessageInstance()).ReturnCode;
                 context.SetHeader(Headers.ReturnMessageErrorCodeHeader,returnCode);
@@ -27,7 +26,6 @@
             public Registration()
                 : base("SetLegacyReturnCode", typeof(SetLegacyReturnCodeBehavior), "Promotes the legacy return code to a header in order to be backwards compatible with v5 and below")
             {
-
             }
         }
     }

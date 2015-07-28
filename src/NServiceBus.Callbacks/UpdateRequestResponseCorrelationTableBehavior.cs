@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading;
-    using NServiceBus.Callbacks;
     using NServiceBus.OutgoingPipeline;
     using NServiceBus.Pipeline;
 

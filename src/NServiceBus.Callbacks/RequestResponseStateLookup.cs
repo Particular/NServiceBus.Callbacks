@@ -1,4 +1,4 @@
-namespace NServiceBus.Callbacks
+namespace NServiceBus
 {
     using System.Collections.Concurrent;
 

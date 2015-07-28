@@ -1,8 +1,5 @@
 ﻿namespace NServiceBus.Features
 {
-    using System;
-    using NServiceBus.Callbacks;
-
     class CallbackSupport : Feature
     {
         public CallbackSupport()
@@ -12,17 +9,11 @@
 
         protected override void Setup(FeatureConfigurationContext context)
         {
-            context.Settings.Get<Conventions>().AddSystemMessagesConventions(IsLegacyEnumResponse);
+            context.Settings.Get<Conventions>().AddSystemMessagesConventions(CallbackSupportTypeExtensions.IsLegacyEnumResponse);
             context.Container.ConfigureComponent<RequestResponseStateLookup>(DependencyLifecycle.SingleInstance);
             context.Pipeline.Register<RequestResponseInvocationBehavior.Registration>();
             context.Pipeline.Register<UpdateRequestResponseCorrelationTableBehavior.Registration>();
             context.Pipeline.Register<SetLegacyReturnCodeBehavior.Registration>();
-        }
-
-        internal static bool IsLegacyEnumResponse(Type instanceType)
-        {
-            return instanceType.IsGenericType
-                   && instanceType.GetGenericTypeDefinition() == typeof(LegacyEnumResponse<>);
         }
     }
 }
