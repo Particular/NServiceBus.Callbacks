@@ -18,7 +18,7 @@
                     .WithEndpoint<Client>(b => b.CustomConfig(c => RuntimeEnvironment.MachineNameAction = () => "ClientA")
                         .Given((bus, context) =>
                         {
-                            bus.RequestWithTransientlyHandledResponseAsync<MyResponse>(new MyRequest
+                            bus.RequestWithTransientlyHandledResponse<MyResponse>(new MyRequest
                             {
                                 Id = context.Id,
                                 Client = RuntimeEnvironment.MachineName
@@ -28,7 +28,7 @@
                     .WithEndpoint<Client>(b => b.CustomConfig(c => RuntimeEnvironment.MachineNameAction = () => "ClientB")
                         .Given((bus, context) =>
                         {
-                            bus.RequestWithTransientlyHandledResponseAsync<MyResponse>(new MyRequest
+                            bus.RequestWithTransientlyHandledResponse<MyResponse>(new MyRequest
                             {
                                 Id = context.Id,
                                 Client = RuntimeEnvironment.MachineName

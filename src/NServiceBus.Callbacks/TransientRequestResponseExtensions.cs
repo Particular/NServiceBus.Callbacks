@@ -20,7 +20,7 @@
         /// <param name="requestMessage">The request message.</param>
         /// <param name="options">The options for the send.</param>
         /// <returns>A task which contains the response when it is completed.</returns>
-        public static Task<TResponse> RequestWithTransientlyHandledResponseAsync<TResponse>(this IBus bus, object requestMessage, SendOptions options)
+        public static Task<TResponse> RequestWithTransientlyHandledResponse<TResponse>(this IBus bus, object requestMessage, SendOptions options)
         {
             if (requestMessage == null)
             {

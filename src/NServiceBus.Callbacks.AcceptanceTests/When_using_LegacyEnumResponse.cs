@@ -1,4 +1,5 @@
-﻿namespace NServiceBus.AcceptanceTests.Callbacks
+﻿
+namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System;
     using NServiceBus.AcceptanceTesting;
@@ -15,7 +16,7 @@
             Scenario.Define(context)
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, c) =>
                     {
-                        var response = bus.RequestWithTransientlyHandledResponseAsync<LegacyEnumResponse<OldEnum>>(new MyRequest(), new SendOptions());
+                        var response = bus.RequestWithTransientlyHandledResponse<LegacyEnumResponse<OldEnum>>(new MyRequest(), new SendOptions());
 
                         c.Response = await response;
                         c.CallbackFired = true;
