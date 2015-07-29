@@ -10,7 +10,7 @@
     {
         public override void Invoke(OutgoingContext context, Action next)
         {
-            if (context.GetMessageType().IsLegacyEnumResponse())
+            if (context.GetMessageType().IsCallbackResponse())
             {
                 string returnCode = ((dynamic) context.GetMessageInstance()).ReturnCode;
                 context.SetHeader(Headers.ReturnMessageErrorCodeHeader,returnCode);

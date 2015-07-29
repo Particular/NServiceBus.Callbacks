@@ -39,14 +39,29 @@
 
             options.SetHeader("$Routing.RouteReplyToSpecificEndpointInstance", Boolean.TrueString);
 
-            var tcs = new TaskCompletionSource<TResponse>();
+            if (typeof(TResponse).IsIntOrEnum())
+            {
+                var tcs = new TaskCompletionSource<CallbackResponse<TResponse>>();
 
-            var taskCompletionSourceAdapter = new TaskCompletionSourceAdapter(tcs);
-            options.RegisterTokenSource(taskCompletionSourceAdapter);
+                var adapter = new TaskCompletionSourceAdapter(tcs);
+                options.RegisterTokenSource(adapter);
+                var continuationTask = tcs.Task.ContinueWith(t => t.Result.Status, TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion);
 
-            bus.Send(requestMessage, options);
+                bus.Send(requestMessage, options);
 
-            return tcs.Task;
+                return continuationTask;
+            }
+            else
+            {
+                var tcs = new TaskCompletionSource<TResponse>();
+
+                var adapter = new TaskCompletionSourceAdapter(tcs);
+                options.RegisterTokenSource(adapter);
+
+                bus.Send(requestMessage, options);
+
+                return tcs.Task;
+            }
         }
 
         

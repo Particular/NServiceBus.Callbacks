@@ -5,7 +5,7 @@
     /// <summary>
     /// Message response wrapper used for compatibility purposes with previous versions of the core callback.
     /// </summary>
-    public class LegacyEnumResponse<T>
+    public class CallbackResponse<T>
     {
         // ReSharper disable once NotAccessedField.Global
         // ReSharper disable once MemberCanBePrivate.Global
@@ -13,14 +13,14 @@
         internal string ReturnCode;
 
         /// <summary>
-        /// Creates an instance of <see cref="LegacyEnumResponse{T}"/>.
+        /// Creates an instance of <see cref="CallbackResponse{T}"/>.
         /// </summary>
         /// <param name="status">The enum to set.</param>
-        public LegacyEnumResponse(T status)
+        public CallbackResponse(T status)
         {
             Status = status;
             var tType = status.GetType();
-            if (!(tType.IsEnum || tType == typeof(Int32) || tType == typeof(Int16) || tType == typeof(Int64)))
+            if (!tType.IsIntOrEnum())
             {
                 throw new ArgumentException("The status can only be an enum or an integer.", "status");
             }

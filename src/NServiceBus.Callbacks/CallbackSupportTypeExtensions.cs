@@ -4,10 +4,15 @@
 
     static class CallbackSupportTypeExtensions
     {
-        internal static bool IsLegacyEnumResponse(this Type instanceType)
+        internal static bool IsCallbackResponse(this Type instanceType)
         {
             return instanceType.IsGenericType
-                   && instanceType.GetGenericTypeDefinition() == typeof(LegacyEnumResponse<>);
+                   && instanceType.GetGenericTypeDefinition() == typeof(CallbackResponse<>);
+        }
+
+        internal static bool IsIntOrEnum(this Type instanceType)
+        {
+            return instanceType.IsEnum || instanceType == typeof(Int32) || instanceType == typeof(Int16) || instanceType == typeof(Int64);
         }
     }
 }

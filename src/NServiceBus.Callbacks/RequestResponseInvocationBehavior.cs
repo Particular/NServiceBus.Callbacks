@@ -61,9 +61,9 @@
             {
                 var legacyEnumResponseType = tcs.ResponseType;
 
-                if (!legacyEnumResponseType.IsLegacyEnumResponse())
+                if (!legacyEnumResponseType.IsCallbackResponse())
                 {
-                    tcs.SetException(new Exception(string.Format("Invalid response in control message. Expected '{0}' as the response type.", typeof(LegacyEnumResponse<>))));
+                    tcs.SetException(new Exception(string.Format("Invalid response in control message. Expected '{0}' as the response type.", typeof(CallbackResponse<>))));
                 }
 
                 var enumType = legacyEnumResponseType.GenericTypeArguments[0];

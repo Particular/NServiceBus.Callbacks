@@ -13,11 +13,13 @@ namespace NServiceBus.AcceptanceTests.Callbacks
         public void ShouldNot_trigger_the_callback_when_canceled()
         {
             OperationCanceledException exception = null;
-            Scenario.Define<Context>()
-                    .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, context) =>
+            var context = new Context();
+
+            Scenario.Define(context)
+                    .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, ctx) =>
                         {
                             var cs = new CancellationTokenSource();
-                            context.TokenSource = cs;
+                            ctx.TokenSource = cs;
 
                             var options = new SendOptions();
 
@@ -28,22 +30,22 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
                             try
                             {
-                                await response;
-                                context.CallbackFired = true;
+                                ctx.Response = await response;
+                                ctx.CallbackFired = true;
                             }
                             catch (OperationCanceledException e)
                             {
                                 exception = e;
                             }
                         }))
-                    .Done(c => exception != null || c.HandlerGotTheRequest)
+                    .Done(c => exception != null)
                     .Repeat(r => r.For(Transports.Default))
-                    .Should(c =>
-                    {
-                        Assert.False(c.CallbackFired);
-                        Assert.True(c.HandlerGotTheRequest);
-                    })
                     .Run();
+
+            Assert.IsNull(context.Response);
+            Assert.False(context.CallbackFired);
+            Assert.True(context.HandlerGotTheRequest);
+            Assert.IsInstanceOf<OperationCanceledException>(exception);
         }
 
         public class Context : ScenarioContext
@@ -53,6 +55,8 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             public bool HandlerGotTheRequest { get; set; }
 
             public bool CallbackFired { get; set; }
+
+            public MyResponse Response { get; set; }
         }
 
         public class EndpointWithLocalCallback : EndpointConfigurationBuilder

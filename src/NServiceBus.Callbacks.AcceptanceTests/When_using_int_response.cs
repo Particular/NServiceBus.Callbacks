@@ -1,12 +1,11 @@
-﻿
-namespace NServiceBus.AcceptanceTests.Callbacks
+﻿namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
 
-    public class When_using_LegacyEnumResponse : NServiceBusAcceptanceTest
+    public class When_using_int_response : NServiceBusAcceptanceTest
     {
         [Test]
         public void Should_send_back_old_style_control_message()
@@ -15,24 +14,23 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
             Scenario.Define(context)
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, c) =>
-                    {
-                        var response = bus.RequestWithTransientlyHandledResponse<LegacyEnumResponse<OldEnum>>(new MyRequest(), new SendOptions());
+                {
+                    var response = bus.RequestWithTransientlyHandledResponse<int>(new MyRequest(), new SendOptions());
 
-                        c.Response = await response;
-                        c.CallbackFired = true;
-                    }))
+                    c.Response = await response;
+                    c.CallbackFired = true;
+                }))
                 .WithEndpoint<Replier>()
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.IsNotNull(context.Response);
-            Assert.AreEqual(OldEnum.Success, context.Response.Status);
+            Assert.AreEqual(200, context.Response);
         }
 
         public class Context : ScenarioContext
         {
             public bool CallbackFired { get; set; }
-            public LegacyEnumResponse<OldEnum> Response { get; set; }
+            public int Response { get; set; }
         }
 
         public class Replier : EndpointConfigurationBuilder
@@ -48,7 +46,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
                 public void Handle(MyRequest request)
                 {
-                    Bus.Reply(new LegacyEnumResponse<OldEnum>(OldEnum.Success));
+                    Bus.Reply(new CallbackResponse<int>(200));
                 }
             }
         }
@@ -67,11 +65,5 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
         [Serializable]
         public class MyResponse : IMessage { }
-
-        public enum OldEnum
-        {
-            Fail,
-            Success,
-        }
     }
 }

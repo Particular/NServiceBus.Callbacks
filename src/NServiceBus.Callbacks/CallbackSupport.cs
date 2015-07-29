@@ -9,7 +9,7 @@
 
         protected override void Setup(FeatureConfigurationContext context)
         {
-            context.Settings.Get<Conventions>().AddSystemMessagesConventions(CallbackSupportTypeExtensions.IsLegacyEnumResponse);
+            context.Settings.Get<Conventions>().AddSystemMessagesConventions(CallbackSupportTypeExtensions.IsCallbackResponse);
             context.Container.ConfigureComponent<RequestResponseStateLookup>(DependencyLifecycle.SingleInstance);
             context.Pipeline.Register<RequestResponseInvocationBehavior.Registration>();
             context.Pipeline.Register<UpdateRequestResponseCorrelationTableBehavior.Registration>();
