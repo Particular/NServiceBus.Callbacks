@@ -50,8 +50,8 @@
     <Compile Include="ExtendableOptionsExtensions.cs" />
     <Compile Include="CallbackSupport.cs" />
     <Compile Include="SendOptionsExtensions.cs" />
-    <Compile Include="SetLegacyReturnCodeBehavior.cs" />
-    <Compile Include="CallbackResponse.cs" />
+    <Compile Include="SetCallbackResponseReturnCodeBehavior.cs" />
+    <Compile Include="CallbackResponseHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskCompletionSourceAdapter.cs" />
     <Compile Include="TransientRequestResponseExtensions.cs" />

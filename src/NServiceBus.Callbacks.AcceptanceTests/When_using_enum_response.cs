@@ -47,7 +47,7 @@
 
                 public void Handle(MyRequest request)
                 {
-                    Bus.Reply(new CallbackResponse<OldEnum>(OldEnum.Success));
+                    Bus.Reply(OldEnum.Success);
                 }
             }
         }

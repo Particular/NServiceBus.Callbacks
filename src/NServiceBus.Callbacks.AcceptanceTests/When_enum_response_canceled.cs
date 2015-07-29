@@ -71,7 +71,7 @@
                     Context.HandlerGotTheRequest = true;
                     Context.TokenSource.Cancel();
 
-                    Bus.Reply(new CallbackResponse<OldEnum>(OldEnum.Success));
+                    Bus.Reply(OldEnum.Success);
                 }
             }
         }

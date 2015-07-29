@@ -46,7 +46,7 @@
 
                 public void Handle(MyRequest request)
                 {
-                    Bus.Reply(new CallbackResponse<int>(200));
+                    Bus.Reply(200);
                 }
             }
         }
