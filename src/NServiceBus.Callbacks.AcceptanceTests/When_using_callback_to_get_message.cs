@@ -14,12 +14,12 @@
 
             Scenario.Define(context)
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, c) =>
-                    {
-                        var response = bus.RequestWithTransientlyHandledResponse<MyResponse>(new MyRequest(), new SendOptions());
+                {
+                    var response = bus.RequestWithTransientlyHandledResponse<MyResponse>(new MyRequest(), new SendOptions());
 
-                        c.Response = await response;
-                        c.CallbackFired = true;
-                    }))
+                    c.Response = await response;
+                    c.CallbackFired = true;
+                }))
                 .WithEndpoint<Replier>()
                 .Done(c => c.CallbackFired)
                 .Run();
