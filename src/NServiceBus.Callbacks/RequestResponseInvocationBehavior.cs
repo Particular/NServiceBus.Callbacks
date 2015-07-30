@@ -59,16 +59,9 @@
 
             if (IsControlMessage(context.GetPhysicalMessage()))
             {
-                var legacyEnumResponseType = tcs.ResponseType;
-
-                if (!legacyEnumResponseType.IsLegacyEnumResponse())
-                {
-                    tcs.SetException(new Exception(string.Format("Invalid response in control message. Expected '{0}' as the response type.", typeof(LegacyEnumResponse<>))));
-                }
-
-                var enumType = legacyEnumResponseType.GenericTypeArguments[0];
-                var enumValue = transportMessage.Headers[Headers.ReturnMessageErrorCodeHeader];
-                result = Activator.CreateInstance(legacyEnumResponseType, Enum.Parse(enumType, enumValue));
+                var responseType = tcs.ResponseType;
+                var errorCode = transportMessage.Headers[Headers.ReturnMessageErrorCodeHeader];
+                result = errorCode.ConvertFromReturnCode(responseType);
             }
             else
             {

@@ -1,13 +1,12 @@
-namespace NServiceBus.AcceptanceTests.Callbacks
+﻿namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System;
     using System.Threading;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NServiceBus.AcceptanceTests.ScenarioDescriptors;
     using NUnit.Framework;
 
-    public class When_a_callback_for_local_message_canceled : NServiceBusAcceptanceTest
+    public class When_using_callback_to_get_message_canceled : NServiceBusAcceptanceTest
     {
         [Test]
         public void ShouldNot_trigger_the_callback_when_canceled()
@@ -16,31 +15,30 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             var context = new Context();
 
             Scenario.Define(context)
-                    .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, ctx) =>
-                        {
-                            var cs = new CancellationTokenSource();
-                            ctx.TokenSource = cs;
+                .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, ctx) =>
+                {
+                    var cs = new CancellationTokenSource();
+                    ctx.TokenSource = cs;
 
-                            var options = new SendOptions();
+                    var options = new SendOptions();
 
-                            options.RouteToLocalEndpointInstance();
-                            options.RegisterCancellationToken(cs.Token);
+                    options.RegisterCancellationToken(cs.Token);
 
-                            var response = bus.RequestWithTransientlyHandledResponse<MyResponse>(new MyRequest(), options);
+                    var response = bus.RequestWithTransientlyHandledResponse<MyResponse>(new MyRequest(), options);
 
-                            try
-                            {
-                                ctx.Response = await response;
-                                ctx.CallbackFired = true;
-                            }
-                            catch (OperationCanceledException e)
-                            {
-                                exception = e;
-                            }
-                        }))
-                    .Done(c => exception != null)
-                    .Repeat(r => r.For(Transports.Default))
-                    .Run();
+                    try
+                    {
+                        ctx.Response = await response;
+                        ctx.CallbackFired = true;
+                    }
+                    catch (OperationCanceledException e)
+                    {
+                        exception = e;
+                    }
+                }))
+                .WithEndpoint<Replier>()
+                .Done(c => exception != null)
+                .Run();
 
             Assert.IsNull(context.Response);
             Assert.False(context.CallbackFired);
@@ -59,9 +57,9 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             public MyResponse Response { get; set; }
         }
 
-        public class EndpointWithLocalCallback : EndpointConfigurationBuilder
+        public class Replier : EndpointConfigurationBuilder
         {
-            public EndpointWithLocalCallback()
+            public Replier()
             {
                 EndpointSetup<DefaultServer>();
             }
@@ -79,6 +77,15 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
                     Bus.Reply(new MyResponse());
                 }
+            }
+        }
+
+        public class EndpointWithLocalCallback : EndpointConfigurationBuilder
+        {
+            public EndpointWithLocalCallback()
+            {
+                EndpointSetup<DefaultServer>()
+                    .AddMapping<MyRequest>(typeof(Replier));
             }
         }
 

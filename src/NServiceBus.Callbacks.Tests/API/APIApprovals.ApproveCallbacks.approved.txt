@@ -3,11 +3,6 @@
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5.1", FrameworkDisplayName=".NET Framework 4.5.1")]
 namespace NServiceBus
 {
-    public class LegacyEnumResponse<T>
-    {
-        public LegacyEnumResponse(T status) { }
-        public T Status { get; }
-    }
     public class static SendOptionsExtensions
     {
         public static NServiceBus.SendOptions RegisterCancellationToken(this NServiceBus.SendOptions options, System.Threading.CancellationToken cancellationToken) { }

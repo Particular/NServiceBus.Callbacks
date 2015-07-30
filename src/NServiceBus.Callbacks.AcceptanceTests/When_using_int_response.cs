@@ -5,17 +5,17 @@
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
 
-    public class When_using_callback_to_get_message : NServiceBusAcceptanceTest
+    public class When_using_int_response : NServiceBusAcceptanceTest
     {
         [Test]
-        public void Should_receive_message()
+        public void Should_send_back_old_style_control_message()
         {
             var context = new Context();
 
             Scenario.Define(context)
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, c) =>
                 {
-                    var response = bus.RequestWithTransientlyHandledResponse<MyResponse>(new MyRequest(), new SendOptions());
+                    var response = bus.RequestWithTransientlyHandledResponse<int>(new MyRequest(), new SendOptions());
 
                     c.Response = await response;
                     c.CallbackFired = true;
@@ -24,13 +24,13 @@
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.IsNotNull(context.Response);
+            Assert.AreEqual(200, context.Response);
         }
 
         public class Context : ScenarioContext
         {
             public bool CallbackFired { get; set; }
-            public MyResponse Response { get; set; }
+            public int Response { get; set; }
         }
 
         public class Replier : EndpointConfigurationBuilder
@@ -46,7 +46,7 @@
 
                 public void Handle(MyRequest request)
                 {
-                    Bus.Reply(new MyResponse());
+                    Bus.Reply(200);
                 }
             }
         }

@@ -41,8 +41,8 @@
 
             var tcs = new TaskCompletionSource<TResponse>();
 
-            var taskCompletionSourceAdapter = new TaskCompletionSourceAdapter(tcs);
-            options.RegisterTokenSource(taskCompletionSourceAdapter);
+            var adapter = new TaskCompletionSourceAdapter(tcs);
+            options.RegisterTokenSource(adapter);
 
             bus.Send(requestMessage, options);
 
