@@ -19,7 +19,7 @@
                         options.SetMessageId(id);
                         options.RouteToLocalEndpointInstance();
 
-                        await bus.RequestWithTransientlyHandledResponse<MyResponse>(new MyRequest(), options);
+                        await bus.Request<MyResponse>(new MyRequest(), options);
 
                         c.CallbackFired = true;
                     }))

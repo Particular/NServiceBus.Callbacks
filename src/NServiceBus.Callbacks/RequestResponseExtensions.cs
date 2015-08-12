@@ -7,7 +7,7 @@
     /// <summary>
     ///  Request/response extension methods.
     /// </summary>
-    public static class TransientRequestResponseExtensions
+    public static class RequestResponseExtensions
     {
         /// <summary>
         /// Sends a <paramref name="requestMessage"/> to the configured destination and returns back a <see cref="Task{TResponse}"/> which can be awaited.
@@ -20,7 +20,7 @@
         /// <param name="requestMessage">The request message.</param>
         /// <param name="options">The options for the send.</param>
         /// <returns>A task which contains the response when it is completed.</returns>
-        public static Task<TResponse> RequestWithTransientlyHandledResponse<TResponse>(this IBus bus, object requestMessage, SendOptions options)
+        public static Task<TResponse> Request<TResponse>(this IBus bus, object requestMessage, SendOptions options)
         {
             if (requestMessage == null)
             {

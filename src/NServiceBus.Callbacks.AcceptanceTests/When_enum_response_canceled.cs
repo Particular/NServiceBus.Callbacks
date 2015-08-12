@@ -24,7 +24,7 @@
 
                     options.RegisterCancellationToken(cs.Token);
 
-                    var response = bus.RequestWithTransientlyHandledResponse<OldEnum>(new MyRequest(), options);
+                    var response = bus.Request<OldEnum>(new MyRequest(), options);
                     try
                     {
                         c.Response = await response;

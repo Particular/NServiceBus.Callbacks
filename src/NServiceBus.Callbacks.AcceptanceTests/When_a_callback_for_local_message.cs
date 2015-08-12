@@ -18,7 +18,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
                             options.RouteToLocalEndpointInstance();
 
-                            var response = bus.RequestWithTransientlyHandledResponse<MyResponse>(new MyRequest(), options);
+                            var response = bus.Request<MyResponse>(new MyRequest(), options);
 
                             await response;
                             
