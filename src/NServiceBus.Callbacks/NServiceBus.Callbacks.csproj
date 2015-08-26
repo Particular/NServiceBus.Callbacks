@@ -52,7 +52,7 @@
     <Compile Include="SendOptionsExtensions.cs" />
     <Compile Include="SetCallbackResponseReturnCodeBehavior.cs" />
     <Compile Include="CallbackResponseHelper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="TaskCompletionSourceAdapter.cs" />
     <Compile Include="RequestResponseExtensions.cs" />
     <Compile Include="RequestResponseInvocationBehavior.cs" />
@@ -60,6 +60,9 @@
     <Compile Include="UpdateRequestResponseCorrelationTableBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\packaging\nuget\nservicebus.callbacks.nuspec">
+      <Link>nservicebus.callbacks.nuspec</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -72,11 +75,4 @@
   </Target>
   <Import Project="..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets')" />
   <Import Project="..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets" Condition="Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
