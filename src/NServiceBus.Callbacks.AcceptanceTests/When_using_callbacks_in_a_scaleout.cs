@@ -45,7 +45,7 @@
                             Assert.True(c.CallbackBFired, "Callback on ClientB should fire");
                             Assert.False(c.ResponseEndedUpAtTheWrongClient, "One of the responses ended up at the wrong client");
                         })
-                      .Run(new RunSettings { UseSeparateAppDomains = true });
+                      .Run(new RunSettings());
         }
 
         public class Context : ScenarioContext

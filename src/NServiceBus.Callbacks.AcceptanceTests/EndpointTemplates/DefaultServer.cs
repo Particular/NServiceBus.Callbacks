@@ -31,7 +31,7 @@
         {
             var settings = runDescriptor.Settings;
 
-            LogManager.UseFactory(new ContextAppender(runDescriptor.ScenarioContext, endpointConfiguration.EndpointName));
+            LogManager.UseFactory(new ContextAppender(runDescriptor.ScenarioContext));
 
             var types = GetTypesScopedByTestClass(endpointConfiguration);
 
