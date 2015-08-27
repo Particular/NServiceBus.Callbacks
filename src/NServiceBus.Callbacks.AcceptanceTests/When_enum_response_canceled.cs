@@ -88,9 +88,6 @@
         [Serializable]
         public class MyRequest : IMessage { }
 
-        [Serializable]
-        public class MyResponse : IMessage { }
-
         public enum OldEnum
         {
             Fail,

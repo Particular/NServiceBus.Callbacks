@@ -16,7 +16,6 @@
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, c) =>
                 {
                     var response = bus.Request<OldEnum>(new MyRequest(), new SendOptions());
-
                     c.Response = await response;
                     c.CallbackFired = true;
                 }))
@@ -63,9 +62,6 @@
 
         [Serializable]
         public class MyRequest : IMessage { }
-
-        [Serializable]
-        public class MyResponse : IMessage { }
 
         public enum OldEnum
         {
