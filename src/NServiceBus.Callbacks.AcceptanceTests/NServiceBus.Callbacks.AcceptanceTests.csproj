@@ -34,7 +34,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NServiceBus.6.0.0-unstable0654\lib\net451\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\packages\NServiceBus.6.0.0-unstable0658\lib\net451\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -72,7 +72,9 @@
     <Compile Include="When_using_callbacks_with_messageid_eq_cid.cs" />
     <Compile Include="When_using_callback_to_get_message.cs" />
     <Compile Include="When_using_callback_to_get_message_canceled.cs" />
+    <Compile Include="When_using_enum_response_and_conventions.cs" />
     <Compile Include="When_using_enum_response.cs" />
+    <Compile Include="When_using_int_response_and_conventions.cs" />
     <Compile Include="When_using_int_response.cs" />
   </ItemGroup>
   <ItemGroup>
