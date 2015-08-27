@@ -1,6 +1,5 @@
 ﻿namespace NServiceBus.AcceptanceTests.Callbacks
 {
-    using System;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
@@ -60,7 +59,6 @@
             }
         }
 
-        [Serializable]
         public class MyRequest : IMessage
         {
         }

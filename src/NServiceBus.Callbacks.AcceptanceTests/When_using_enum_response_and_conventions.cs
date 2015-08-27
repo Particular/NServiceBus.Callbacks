@@ -69,7 +69,6 @@
             }
         }
 
-        [Serializable]
         public class MyRequest : IMessage { }
 
         public enum OldEnum

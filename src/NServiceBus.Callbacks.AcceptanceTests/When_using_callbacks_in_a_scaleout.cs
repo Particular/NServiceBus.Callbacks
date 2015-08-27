@@ -124,7 +124,6 @@
             }
         }
 
-        [Serializable]
         public class MyRequest : IMessage
         {
             public Guid Id { get; set; }
@@ -132,7 +131,6 @@
             public string Client { get; set; }
         }
 
-        [Serializable]
         public class MyResponse : IMessage
         {
             public Guid Id { get; set; }

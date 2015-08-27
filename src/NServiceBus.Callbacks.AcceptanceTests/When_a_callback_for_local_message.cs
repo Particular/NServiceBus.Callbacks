@@ -1,6 +1,5 @@
 namespace NServiceBus.AcceptanceTests.Callbacks
 {
-    using System;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NServiceBus.AcceptanceTests.ScenarioDescriptors;
@@ -65,10 +64,8 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             }
         }
 
-        [Serializable]
         public class MyRequest : IMessage { }
 
-        [Serializable]
         public class MyResponse : IMessage { }
     }
 }

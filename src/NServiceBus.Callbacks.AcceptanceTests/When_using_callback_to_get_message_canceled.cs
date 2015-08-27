@@ -89,10 +89,8 @@
             }
         }
 
-        [Serializable]
         public class MyRequest : IMessage { }
 
-        [Serializable]
         public class MyResponse : IMessage { }
     }
 }
