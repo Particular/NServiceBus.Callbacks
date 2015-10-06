@@ -23,17 +23,17 @@
 
         public static object ConvertFromReturnCode(this string returnCode, Type destinationType)
         {
-            if (destinationType == typeof(Int32))
+            if (destinationType == typeof(int))
             {
                 return Convert.ToInt32(returnCode);
             }
 
-            if (destinationType == typeof(Int16))
+            if (destinationType == typeof(short))
             {
                 return Convert.ToInt16(returnCode);
             }
 
-            if (destinationType == typeof(Int64))
+            if (destinationType == typeof(long))
             {
                 return Convert.ToInt64(returnCode);
             }

@@ -37,7 +37,7 @@
                 throw new ArgumentNullException("bus");
             }
 
-            options.SetHeader("$Routing.RouteReplyToSpecificEndpointInstance", Boolean.TrueString);
+            options.SetHeader("$Routing.RouteReplyToSpecificEndpointInstance", bool.TrueString);
 
             var tcs = new TaskCompletionSource<TResponse>();
 

@@ -11,10 +11,7 @@ namespace NServiceBus
             this.taskCompletionSource = taskCompletionSource;
         }
 
-        public Type ResponseType
-        {
-            get { return taskCompletionSource.GetType().GenericTypeArguments[0]; }
-        }
+        public Type ResponseType => taskCompletionSource.GetType().GenericTypeArguments[0];
 
         public void SetResult(object result)
         {
