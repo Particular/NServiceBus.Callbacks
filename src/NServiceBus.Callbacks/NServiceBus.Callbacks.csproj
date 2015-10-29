@@ -9,12 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NServiceBus.Callbacks</RootNamespace>
     <AssemblyName>NServiceBus.Callbacks</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\NServiceBus.snk</AssemblyOriginatorKeyFile>
     <NuGetPackageImportStamp>0fbd67e6</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,8 +54,8 @@
     <Compile Include="SendOptionsExtensions.cs" />
     <Compile Include="CallbackResponseHelper.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="SkipBestPracticesForReplyIntEnumBehavior.cs"/>
-    <Compile Include="SetCallbackResponseReturnCodeBehavior.cs"/>
+    <Compile Include="SkipBestPracticesForReplyIntEnumBehavior.cs" />
+    <Compile Include="SetCallbackResponseReturnCodeBehavior.cs" />
     <Compile Include="TaskCompletionSourceAdapter.cs" />
     <Compile Include="RequestResponseExtensions.cs" />
     <Compile Include="RequestResponseInvocationBehavior.cs" />
