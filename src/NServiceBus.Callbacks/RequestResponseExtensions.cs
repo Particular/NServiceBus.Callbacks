@@ -16,25 +16,25 @@
         /// Messages can still arrive to the requesting endpoint but in that case no handling code will be attached to consume
         ///  that response message and therefore the message will be moved to the error queue.</remarks>
         /// <typeparam name="TResponse">The response type.</typeparam>
-        /// <param name="bus">Object being extended.</param>
+        /// <param name="context">Object being extended.</param>
         /// <param name="requestMessage">The request message.</param>
         /// <param name="options">The options for the send.</param>
         /// <returns>A task which contains the response when it is completed.</returns>
-        public static Task<TResponse> Request<TResponse>(this IBus bus, object requestMessage, SendOptions options)
+        public static async Task<TResponse> Request<TResponse>(this IBusContext context, object requestMessage, SendOptions options)
         {
             if (requestMessage == null)
             {
-                throw new ArgumentNullException("requestMessage");
+                throw new ArgumentNullException(nameof(requestMessage));
             }
 
             if (options == null)
             {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
             }
 
-            if (bus == null)
+            if (context == null)
             {
-                throw new ArgumentNullException("bus");
+                throw new ArgumentNullException(nameof(context));
             }
 
             options.SetHeader("$Routing.RouteReplyToSpecificEndpointInstance", bool.TrueString);
@@ -44,9 +44,9 @@
             var adapter = new TaskCompletionSourceAdapter(tcs);
             options.RegisterTokenSource(adapter);
 
-            bus.Send(requestMessage, options);
-
-            return tcs.Task;
+            await context.Send(requestMessage, options).ConfigureAwait(false);
+            
+            return await tcs.Task.ConfigureAwait(false);
         }
 
         

@@ -2,6 +2,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System;
     using System.Threading;
+    using System.Threading.Tasks;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NServiceBus.AcceptanceTests.ScenarioDescriptors;
@@ -10,13 +11,12 @@ namespace NServiceBus.AcceptanceTests.Callbacks
     public class When_a_callback_for_local_message_canceled : NServiceBusAcceptanceTest
     {
         [Test]
-        public void ShouldNot_trigger_the_callback_when_canceled()
+        public async Task ShouldNot_trigger_the_callback_when_canceled()
         {
             OperationCanceledException exception = null;
-            var context = new Context();
 
-            Scenario.Define(context)
-                    .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, ctx) =>
+            await Scenario.Define<Context>()
+                    .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, ctx) =>
                         {
                             var cs = new CancellationTokenSource();
                             ctx.TokenSource = cs;
@@ -26,11 +26,9 @@ namespace NServiceBus.AcceptanceTests.Callbacks
                             options.RouteToLocalEndpointInstance();
                             options.RegisterCancellationToken(cs.Token);
 
-                            var response = bus.Request<MyResponse>(new MyRequest(), options);
-
                             try
                             {
-                                ctx.Response = await response;
+                                ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options);
                                 ctx.CallbackFired = true;
                             }
                             catch (OperationCanceledException e)
@@ -40,12 +38,14 @@ namespace NServiceBus.AcceptanceTests.Callbacks
                         }))
                     .Done(c => exception != null)
                     .Repeat(r => r.For(Transports.Default))
+                    .Should(c =>
+                    {
+                        Assert.IsNull(c.Response);
+                        Assert.False(c.CallbackFired);
+                        Assert.True(c.HandlerGotTheRequest);
+                        Assert.IsInstanceOf<OperationCanceledException>(exception);
+                    })
                     .Run();
-
-            Assert.IsNull(context.Response);
-            Assert.False(context.CallbackFired);
-            Assert.True(context.HandlerGotTheRequest);
-            Assert.IsInstanceOf<OperationCanceledException>(exception);
         }
 
         public class Context : ScenarioContext
@@ -70,14 +70,12 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             {
                 public Context Context { get; set; }
 
-                public IBus Bus { get; set; }
-
-                public void Handle(MyRequest request)
+                public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
                     Context.HandlerGotTheRequest = true;
                     Context.TokenSource.Cancel();
 
-                    Bus.Reply(new MyResponse());
+                    return context.Reply(new MyResponse());
                 }
             }
         }

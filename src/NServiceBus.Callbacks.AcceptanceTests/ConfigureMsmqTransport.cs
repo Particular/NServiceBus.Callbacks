@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Messaging;
+using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Configuration.AdvanceExtensibility;
+using NServiceBus.Transports;
 
 public class ConfigureMsmqTransport
 {
     BusConfiguration busConfiguration;
 
-    public void Configure(BusConfiguration configuration)
+    public Task Configure(BusConfiguration configuration)
     {
         busConfiguration = configuration;
+        return Task.FromResult(0);
     }
 
-    public void Cleanup()
+    public Task Cleanup()
     {
-        var name = busConfiguration.GetSettings().EndpointName();
-        var nameFilter = @"private$\" + name;
+        var bindings = busConfiguration.GetSettings().Get<QueueBindings>();
         var allQueues = MessageQueue.GetPrivateQueuesByMachine("localhost");
         var queuesToBeDeleted = new List<string>();
 
@@ -24,7 +27,15 @@ public class ConfigureMsmqTransport
         {
             using (messageQueue)
             {
-                if (messageQueue.QueueName.StartsWith(nameFilter, StringComparison.OrdinalIgnoreCase))
+                if (bindings.ReceivingAddresses.Any(ra =>
+                {
+                    var indexOfAt = ra.IndexOf("@", StringComparison.Ordinal);
+                    if (indexOfAt >= 0)
+                    {
+                        ra = ra.Substring(0, indexOfAt);
+                    }
+                    return messageQueue.QueueName.StartsWith(@"private$\" + ra, StringComparison.OrdinalIgnoreCase);
+                }))
                 {
                     queuesToBeDeleted.Add(messageQueue.Path);
                 }
@@ -33,10 +44,19 @@ public class ConfigureMsmqTransport
 
         foreach (var queuePath in queuesToBeDeleted)
         {
-            MessageQueue.Delete(queuePath);
-            Console.WriteLine("Deleted '{0}' queue", queuePath);
+            try
+            {
+                MessageQueue.Delete(queuePath);
+                Console.WriteLine("Deleted '{0}' queue", queuePath);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Could not delete queue '{0}'", queuePath);
+            }
         }
 
         MessageQueue.ClearConnectionCache();
+
+        return Task.FromResult(0);
     }
 }

@@ -1,5 +1,6 @@
 namespace NServiceBus.AcceptanceTests.Callbacks
 {
+    using System.Threading.Tasks;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NServiceBus.AcceptanceTests.ScenarioDescriptors;
@@ -8,18 +9,16 @@ namespace NServiceBus.AcceptanceTests.Callbacks
     public class When_a_callback_for_local_message : NServiceBusAcceptanceTest
     {
         [Test]
-        public void Should_trigger_the_callback_when_the_response_comes_back()
+        public async Task Should_trigger_the_callback_when_the_response_comes_back()
         {
-            Scenario.Define<Context>()
-                    .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, context) =>
+            await Scenario.Define<Context>()
+                    .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, context) =>
                         {
                             var options = new SendOptions();
 
                             options.RouteToLocalEndpointInstance();
 
-                            var response = bus.Request<MyResponse>(new MyRequest(), options);
-
-                            await response;
+                            await bus.Request<MyResponse>(new MyRequest(), options);
                             
                             Assert.True(context.HandlerGotTheRequest);
                             context.CallbackFired = true;
@@ -52,14 +51,12 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             {
                 public Context Context { get; set; }
 
-                public IBus Bus { get; set; }
-
-                public void Handle(MyRequest request)
+                public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
                     Assert.False(Context.CallbackFired);
                     Context.HandlerGotTheRequest = true;
 
-                    Bus.Reply(new MyResponse());
+                    return context.Reply(new MyResponse());
                 }
             }
         }

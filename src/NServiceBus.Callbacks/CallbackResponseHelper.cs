@@ -9,7 +9,7 @@
             var statusType = returnCode.GetType();
             if (!statusType.IsIntOrEnum())
             {
-                throw new ArgumentException("The status can only be an enum or an integer.", "returnCode");
+                throw new ArgumentException("The status can only be an enum or an integer.", nameof(returnCode));
             }
 
             var result = returnCode.ToString();
@@ -43,7 +43,7 @@
                 return Enum.Parse(destinationType, returnCode);
             }
 
-            throw new ArgumentException("The return code can only be an enum or an integer.", "destinationType");
+            throw new ArgumentException("The return code can only be an enum or an integer.", nameof(destinationType));
         }
     }
 }
