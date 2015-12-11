@@ -1,24 +1,23 @@
 ﻿namespace NServiceBus
 {
     using System;
-    using NServiceBus.OutgoingPipeline;
+    using System.Threading.Tasks;
     using NServiceBus.Pipeline;
-    using NServiceBus.Pipeline.Contexts;
-    using NServiceBus.TransportDispatch;
+    using NServiceBus.Pipeline.OutgoingPipeline;
 
-    class SetCallbackResponseReturnCodeBehavior : Behavior<OutgoingContext>
+    class SetCallbackResponseReturnCodeBehavior : Behavior<OutgoingLogicalMessageContext>
     {
-        public override void Invoke(OutgoingContext context, Action next)
+        public override Task Invoke(OutgoingLogicalMessageContext context, Func<Task> next)
         {
-            if (context.GetMessageType().IsIntOrEnum())
+            if (context.Message.MessageType.IsIntOrEnum())
             {
-                var returnCode = context.GetMessageInstance().ConvertToReturnCode();
-                context.SetHeader(Headers.ReturnMessageErrorCodeHeader,returnCode);
-                context.SetHeader(Headers.ControlMessageHeader, true.ToString());
+                var returnCode = context.Message.Instance.ConvertToReturnCode();
+                context.Headers[Headers.ReturnMessageErrorCodeHeader] = returnCode;
+                context.Headers[Headers.ControlMessageHeader] = true.ToString();
 
                 context.SkipSerialization();
             }
-            next();
+            return next();
         }
 
         public class Registration : RegisterStep

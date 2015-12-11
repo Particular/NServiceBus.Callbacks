@@ -1,6 +1,7 @@
 ﻿namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System;
+    using System.Threading.Tasks;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
@@ -8,10 +9,10 @@
     public class When_using_callbacks_with_messageid_eq_cid : NServiceBusAcceptanceTest
     {
         [Test]
-        public void Should_trigger_the_callback()
+        public async Task Should_trigger_the_callback()
         {
-            var context = Scenario.Define<Context>()
-                .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, c) =>
+            var context = await Scenario.Define<Context>()
+                .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
                     {
                         var id = Guid.NewGuid().ToString();
                         var options = new SendOptions();
@@ -45,13 +46,11 @@
             {
                 public Context Context { get; set; }
 
-                public IBus Bus { get; set; }
-
-                public void Handle(MyRequest request)
+                public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
                     Assert.False(Context.CallbackFired);
 
-                    Bus.Reply(new MyResponse());
+                    return context.Reply(new MyResponse());
                 }
             }
         }

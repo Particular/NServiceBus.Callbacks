@@ -5,12 +5,13 @@
     using System.Linq;
     using System.Reflection;
     using AcceptanceTesting.Support;
-    using Hosting.Helpers;
+    using NServiceBus.Hosting.Helpers;
+    using NServiceBus.Settings;
     using NServiceBus.Transports;
 
     public class AllTransports : ScenarioDescriptor
     {
-        public AllTransports()
+        protected AllTransports()
         {
             AddRange(ActiveTransports);
         }
@@ -25,7 +26,7 @@
                     activeTransports = new List<RunDescriptor>
                     {
                         Transports.Default
-                    }; 
+                    };
                 }
 
                 return activeTransports;
@@ -39,24 +40,15 @@
     {
         public AllDtcTransports()
         {
-            AllTransportsFilter.Run(t => t.HasSupportForDistributedTransactions.HasValue
-                                         && !t.HasSupportForDistributedTransactions.Value, Remove);
+            AllTransportsFilter.Run(t => t.GetTransactionSupport() != TransactionSupport.Distributed, Remove);
         }
     }
-    
+
     public class AllNativeMultiQueueTransactionTransports : AllTransports
     {
         public AllNativeMultiQueueTransactionTransports()
         {
-            AllTransportsFilter.Run(t => !t.HasSupportForMultiQueueNativeTransactions, Remove);
-        }
-    }
-
-    public class AllBrokerTransports : AllTransports
-    {
-        public AllBrokerTransports()
-        {
-            AllTransportsFilter.Run(t => !t.HasNativePubSubSupport, Remove);
+            AllTransportsFilter.Run(t => t.GetTransactionSupport() < TransactionSupport.MultiQueue, Remove);
         }
     }
 
@@ -64,7 +56,7 @@
     {
         public AllTransportsWithCentralizedPubSubSupport()
         {
-            AllTransportsFilter.Run(t => !t.HasSupportForCentralizedPubSub, Remove);
+            AllTransportsFilter.Run(t => t.GetOutboundRoutingPolicy(new SettingsHolder()).Publishes == OutboundRoutingType.Unicast, Remove);
         }
     }
 
@@ -72,18 +64,7 @@
     {
         public AllTransportsWithMessageDrivenPubSub()
         {
-            AllTransportsFilter.Run(t => t.HasNativePubSubSupport, Remove);
-        }
-    }
-
-    public class MsmqOnly : ScenarioDescriptor
-    {
-        public MsmqOnly()
-        {
-            if (Transports.Default == Transports.Msmq)
-            {
-                Add(Transports.Msmq);
-            }
+            AllTransportsFilter.Run(t => t.GetOutboundRoutingPolicy(new SettingsHolder()).Publishes == OutboundRoutingType.Multicast, Remove);
         }
     }
 
@@ -93,7 +74,7 @@
         public static IEnumerable<Type> GetAllTypesAssignableTo<T>()
         {
             return AvailableAssemblies.SelectMany(a => a.GetTypes())
-                                      .Where(t => typeof (T).IsAssignableFrom(t) && t != typeof(T))
+                                      .Where(t => typeof(T).IsAssignableFrom(t) && t != typeof(T))
                                       .ToList();
         }
 
@@ -112,7 +93,7 @@
                         return references.All(an => an.Name != "nunit.framework");
                     }).ToList();
                 }
-                    
+
                 return assemblies;
             }
         }

@@ -1,6 +1,7 @@
 ﻿namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System;
+    using System.Threading.Tasks;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTesting.Support;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
@@ -11,34 +12,33 @@
     public class When_using_callbacks_in_a_scaleout : NServiceBusAcceptanceTest
     {
         [Test]
-        public void Each_client_should_have_a_unique_input_queue()
+        public async Task Each_client_should_have_a_unique_input_queue()
         {
             //to avoid processing each others callbacks
-            Scenario.Define(() => new Context { Id = Guid.NewGuid() })
+            await Scenario.Define<Context>(c => { c.Id = Guid.NewGuid(); })
                     .WithEndpoint<Client>(b => b.CustomConfig(c => RuntimeEnvironment.MachineNameAction = () => "ClientA")
-                        .Given((bus, context) =>
+                        .When(async (bus, context) =>
                         {
-                            bus.Request<MyResponse>(new MyRequest
+                            await bus.Request<MyResponse>(new MyRequest
                             {
                                 Id = context.Id,
                                 Client = RuntimeEnvironment.MachineName
-                            }, new SendOptions())
-                                .ContinueWith(t => context.CallbackAFired = true);
+                            }, new SendOptions());
+                            context.CallbackAFired = true;
                         }))
                     .WithEndpoint<Client>(b => b.CustomConfig(c => RuntimeEnvironment.MachineNameAction = () => "ClientB")
-                        .Given((bus, context) =>
+                        .When(async (bus, context) =>
                         {
-                            bus.Request<MyResponse>(new MyRequest
+                            await bus.Request<MyResponse>(new MyRequest
                             {
                                 Id = context.Id,
                                 Client = RuntimeEnvironment.MachineName
-                            }, new SendOptions())
-                                .ContinueWith(t => context.CallbackBFired = true);
+                            }, new SendOptions());
+                            context.CallbackBFired = true;
                         }))
                     .WithEndpoint<Server>()
                     .Done(c => c.ClientAGotResponse && c.ClientBGotResponse)
-                    .Repeat(r => r.For<AllBrokerTransports>()
-                    )
+                    .Repeat(r => r.For<AllTransportsWithCentralizedPubSubSupport>())
                     .Should(c =>
                         {
                             Assert.True(c.CallbackAFired, "Callback on ClientA should fire");
@@ -67,7 +67,7 @@
         {
             public Client()
             {
-                EndpointSetup<DefaultServer>(c => c.ScaleOut().UseUniqueBrokerQueuePerMachine())
+                EndpointSetup<DefaultServer>(c => c.UniquelyIdentifyRunningInstance())
                     .AddMapping<MyRequest>(typeof(Server));
             }
 
@@ -75,13 +75,12 @@
             {
                 public Context Context { get; set; }
 
-                public IBus Bus { get; set; }
 
-                public void Handle(MyResponse response)
+                public Task Handle(MyResponse message, IMessageHandlerContext context)
                 {
-                    if (Context.Id != response.Id)
+                    if (Context.Id != message.Id)
                     {
-                        return;
+                        return Task.FromResult(0);
                     }
 
                     if (RuntimeEnvironment.MachineName == "ClientA")
@@ -91,10 +90,12 @@
                         Context.ClientBGotResponse = true;
                     }
 
-                    if (RuntimeEnvironment.MachineName != response.Client)
+                    if (RuntimeEnvironment.MachineName != message.Client)
                     {
                         Context.ResponseEndedUpAtTheWrongClient = true;
                     }
+
+                    return Task.FromResult(0);
                 }
             }
         }
@@ -110,16 +111,14 @@
             {
                 public Context Context { get; set; }
 
-                public IBus Bus { get; set; }
-
-                public void Handle(MyRequest request)
+                public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    if (Context.Id != request.Id)
+                    if (Context.Id != message.Id)
                     {
-                        return;
+                        return Task.FromResult(0);
                     }
 
-                    Bus.Reply(new MyResponse { Id = request.Id, Client = request.Client });
+                    return context.Reply(new MyResponse { Id = message.Id, Client = message.Client });
                 }
             }
         }

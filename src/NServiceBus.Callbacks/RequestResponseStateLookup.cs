@@ -13,7 +13,13 @@ namespace NServiceBus
 
         public bool TryGet(string messageId, out TaskCompletionSourceAdapter state)
         {
-            return messageIdToCompletionSource.TryRemove(messageId, out state);
+            return messageIdToCompletionSource.TryGetValue(messageId, out state);
+        }
+
+        public void RemoveState(string messageId)
+        {
+            TaskCompletionSourceAdapter state;
+            messageIdToCompletionSource.TryRemove(messageId, out state);
         }
     }
 }

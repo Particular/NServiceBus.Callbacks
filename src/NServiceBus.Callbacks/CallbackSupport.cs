@@ -10,7 +10,8 @@
         protected override void Setup(FeatureConfigurationContext context)
         {
             context.Container.ConfigureComponent<RequestResponseStateLookup>(DependencyLifecycle.SingleInstance);
-            context.Pipeline.Register<RequestResponseInvocationBehavior.Registration>();
+            context.Pipeline.Register<RequestResponseInvocationForControlMessagesBehavior.Registration>();
+            context.Pipeline.Register<RequestResponseInvocationForMessagesBehavior.Registration>();
             context.Pipeline.Register<UpdateRequestResponseCorrelationTableBehavior.Registration>();
             context.Pipeline.Register<SetCallbackResponseReturnCodeBehavior.Registration>();
             context.Pipeline.Register<SkipBestPracticesForReplyIntEnumBehavior.Registration>();

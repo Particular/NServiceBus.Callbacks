@@ -1,18 +1,19 @@
 ﻿namespace NServiceBus
 {
     using System;
+    using System.Threading.Tasks;
     using NServiceBus.OutgoingPipeline;
     using NServiceBus.Pipeline;
 
     class SkipBestPracticesForReplyIntEnumBehavior : Behavior<OutgoingReplyContext>
     {
-        public override void Invoke(OutgoingReplyContext context, Action next)
+        public override Task Invoke(OutgoingReplyContext context, Func<Task> next)
         {
-            if (context.GetMessageType().IsIntOrEnum())
+            if (context.Message.MessageType.IsIntOrEnum())
             {
                 context.DoNotEnforceBestPractices();
             }
-            next();
+            return next();
         }
 
         public class Registration : RegisterStep

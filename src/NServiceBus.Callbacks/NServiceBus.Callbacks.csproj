@@ -27,6 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\binaries\NServiceBus.Callbacks.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,7 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NServiceBus.6.0.0-unstable0658\lib\net451\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\packages\NServiceBus.6.0.0-unstable1237\lib\net452\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -51,6 +52,8 @@
     <Compile Include="CallbackSupportTypeExtensions.cs" />
     <Compile Include="ExtendableOptionsExtensions.cs" />
     <Compile Include="CallbackSupport.cs" />
+    <Compile Include="IncomingLogicalMessageContextExtensions.cs" />
+    <Compile Include="RequestResponseInvocationForControlMessagesBehavior.cs" />
     <Compile Include="SendOptionsExtensions.cs" />
     <Compile Include="CallbackResponseHelper.cs" />
     <Compile Include="AssemblyInfo.cs" />
@@ -58,7 +61,7 @@
     <Compile Include="SetCallbackResponseReturnCodeBehavior.cs" />
     <Compile Include="TaskCompletionSourceAdapter.cs" />
     <Compile Include="RequestResponseExtensions.cs" />
-    <Compile Include="RequestResponseInvocationBehavior.cs" />
+    <Compile Include="RequestResponseInvocationForMessagesBehavior.cs" />
     <Compile Include="RequestResponseStateLookup.cs" />
     <Compile Include="UpdateRequestResponseCorrelationTableBehavior.cs" />
   </ItemGroup>

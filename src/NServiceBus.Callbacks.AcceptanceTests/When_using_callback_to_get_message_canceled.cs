@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading;
+    using System.Threading.Tasks;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
@@ -9,13 +10,12 @@
     public class When_using_callback_to_get_message_canceled : NServiceBusAcceptanceTest
     {
         [Test]
-        public void ShouldNot_trigger_the_callback_when_canceled()
+        public async Task ShouldNot_trigger_the_callback_when_canceled()
         {
             OperationCanceledException exception = null;
-            var context = new Context();
 
-            Scenario.Define(context)
-                .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, ctx) =>
+            var context = await Scenario.Define<Context>()
+                .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, ctx) =>
                 {
                     var cs = new CancellationTokenSource();
                     ctx.TokenSource = cs;
@@ -24,11 +24,9 @@
 
                     options.RegisterCancellationToken(cs.Token);
 
-                    var response = bus.Request<MyResponse>(new MyRequest(), options);
-
                     try
                     {
-                        ctx.Response = await response;
+                        ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options);
                         ctx.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)
@@ -68,14 +66,12 @@
             {
                 public Context Context { get; set; }
 
-                public IBus Bus { get; set; }
-
-                public void Handle(MyRequest request)
+                public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
                     Context.HandlerGotTheRequest = true;
                     Context.TokenSource.Cancel();
 
-                    Bus.Reply(new MyResponse());
+                    return context.Reply(new MyResponse());
                 }
             }
         }

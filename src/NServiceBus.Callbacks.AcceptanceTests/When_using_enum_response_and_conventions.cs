@@ -1,6 +1,7 @@
 ﻿namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System;
+    using System.Threading.Tasks;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
@@ -8,15 +9,12 @@
     public class When_using_enum_response_and_conventions : NServiceBusAcceptanceTest
     {
         [Test]
-        public void Should_send_back_old_style_control_message()
+        public async Task Should_send_back_old_style_control_message()
         {
-            var context = new Context();
-
-            Scenario.Define(context)
-                .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, c) =>
+            var context = await Scenario.Define<Context>()
+                .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
                 {
-                    var response = bus.Request<OldEnum>(new MyRequest(), new SendOptions());
-                    c.Response = await response;
+                    c.Response = await bus.Request<OldEnum>(new MyRequest(), new SendOptions());
                     c.CallbackFired = true;
                 }))
                 .WithEndpoint<Replier>()
@@ -51,11 +49,9 @@
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
-                public IBus Bus { get; set; }
-
-                public void Handle(MyRequest request)
+                public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Bus.Reply(OldEnum.Success);
+                    return context.Reply(OldEnum.Success);
                 }
             }
         }

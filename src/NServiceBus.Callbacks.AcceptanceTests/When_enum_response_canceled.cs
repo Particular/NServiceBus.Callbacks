@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading;
+    using System.Threading.Tasks;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
@@ -9,25 +10,23 @@
     public class When_enum_response_canceled : NServiceBusAcceptanceTest
     {
         [Test]
-        public void ShouldNot_trigger_the_callback_when_canceled()
+        public async Task ShouldNot_trigger_the_callback_when_canceled()
         {
             OperationCanceledException exception = null;
-            var context = new Context();
 
-            Scenario.Define(context)
-                .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, c) =>
+            var context = await Scenario.Define<Context>()
+                .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
                 {
                     var cs = new CancellationTokenSource();
-                    context.TokenSource = cs;
+                    c.TokenSource = cs;
 
                     var options = new SendOptions();
 
                     options.RegisterCancellationToken(cs.Token);
 
-                    var response = bus.Request<OldEnum>(new MyRequest(), options);
                     try
                     {
-                        c.Response = await response;
+                        c.Response = await bus.Request<OldEnum>(new MyRequest(), options);
                         c.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)
@@ -64,14 +63,13 @@
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
                 public Context Context { get; set; }
-                public IBus Bus { get; set; }
 
-                public void Handle(MyRequest request)
+                public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
                     Context.HandlerGotTheRequest = true;
                     Context.TokenSource.Cancel();
 
-                    Bus.Reply(OldEnum.Success);
+                    return context.Reply(OldEnum.Success);
                 }
             }
         }

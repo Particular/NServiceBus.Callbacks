@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Threading.Tasks;
     using NServiceBus.Configuration.AdvanceExtensibility;
     using ScenarioDescriptors;
 
@@ -18,7 +19,7 @@
             return dictionary[key];
         }
 
-        public static void DefineTransport(this BusConfiguration config, IDictionary<string, string> settings, Type endpointBuilderType)
+        public static async Task DefineTransport(this BusConfiguration config, IDictionary<string, string> settings, Type endpointBuilderType)
         {
             if (!settings.ContainsKey("Transport"))
             {
@@ -39,7 +40,7 @@
 
                 dynamic dc = configurer;
 
-                dc.Configure(config);
+                await dc.Configure(config);
                 var cleanupMethod = configurer.GetType().GetMethod("Cleanup", BindingFlags.Public | BindingFlags.Instance);
                 config.GetSettings().Set("CleanupTransport", cleanupMethod != null ? configurer : new Cleaner());
                 return;
@@ -54,13 +55,9 @@
             {
                 config.Transactions().Disable();
             }
-            if (settings.ContainsKey("Transactions.SuppressDistributedTransactions"))
-            {
-                config.Transactions().DisableDistributedTransactions();
-            }
         }
 
-        public static void DefinePersistence(this BusConfiguration config, IDictionary<string, string> settings)
+        public static async Task DefinePersistence(this BusConfiguration config, IDictionary<string, string> settings)
         {
             if (!settings.ContainsKey("Persistence"))
             { 
@@ -80,7 +77,7 @@
 
                 dynamic dc = configurer;
 
-                dc.Configure(config);
+                await dc.Configure(config);
 
                 var cleanupMethod = configurer.GetType().GetMethod("Cleanup", BindingFlags.Public | BindingFlags.Instance);
                 config.GetSettings().Set("CleanupPersistence", cleanupMethod != null ? configurer : new Cleaner());
@@ -90,10 +87,11 @@
             config.UsePersistence(persistenceType);
         }
 
-        private class Cleaner
+        class Cleaner
         {
-            public void Cleanup()
+            public Task Cleanup()
             {
+                return Task.FromResult(0);
             }
         }
 

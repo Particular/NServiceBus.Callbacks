@@ -1,5 +1,6 @@
 ﻿namespace NServiceBus.AcceptanceTests.Callbacks
 {
+    using System.Threading.Tasks;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
@@ -7,16 +8,12 @@
     public class When_using_callback_to_get_message : NServiceBusAcceptanceTest
     {
         [Test]
-        public void Should_receive_message()
+        public async Task Should_receive_message()
         {
-            var context = new Context();
-
-            Scenario.Define(context)
-                .WithEndpoint<EndpointWithLocalCallback>(b => b.Given(async (bus, c) =>
+            var context = await Scenario.Define<Context>()
+                .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
                 {
-                    var response = bus.Request<MyResponse>(new MyRequest(), new SendOptions());
-
-                    c.Response = await response;
+                    c.Response = await bus.Request<MyResponse>(new MyRequest(), new SendOptions());
                     c.CallbackFired = true;
                 }))
                 .WithEndpoint<Replier>()
@@ -41,11 +38,9 @@
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
-                public IBus Bus { get; set; }
-
-                public void Handle(MyRequest request)
+                public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Bus.Reply(new MyResponse());
+                    return context.Reply(new MyResponse());
                 }
             }
         }

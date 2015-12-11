@@ -2,10 +2,11 @@
 {
     using System;
     using System.Threading;
+    using System.Threading.Tasks;
     using NServiceBus.OutgoingPipeline;
     using NServiceBus.Pipeline;
 
-    class UpdateRequestResponseCorrelationTableBehavior : PhysicalOutgoingContextStageBehavior
+    class UpdateRequestResponseCorrelationTableBehavior : Behavior<OutgoingPhysicalMessageContext>
     {
         RequestResponseStateLookup lookup;
 
@@ -14,13 +15,13 @@
             this.lookup = lookup;
         }
 
-        public override void Invoke(Context context, Action next)
+        public override Task Invoke(OutgoingPhysicalMessageContext context, Func<Task> next)
         {
             RequestResponseParameters parameters;
 
-            if (context.TryGet(out parameters) && !parameters.CancellationToken.IsCancellationRequested)
+            if (context.Extensions.TryGet(out parameters) && !parameters.CancellationToken.IsCancellationRequested)
             {
-                var messageId = context.GetMessageId();
+                var messageId = context.MessageId;
                 parameters.CancellationToken.Register(() =>
                 {
                     TaskCompletionSourceAdapter tcs;
@@ -32,7 +33,7 @@
                 lookup.RegisterState(messageId, parameters.TaskCompletionSource);
             }
 
-            next();
+            return next();
         }
 
         public class RequestResponseParameters
