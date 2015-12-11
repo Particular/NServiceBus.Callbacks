@@ -24,39 +24,16 @@
 
         void AssignResultIfPossible(IncomingMessage incomingMessage, IncomingLogicalMessageContext context)
         {
-            var correlationId = context.GetCorrelationId();
-
-            if (correlationId == null)
+            var result = context.GetCorrelationIdAndCompletionSource(incomingMessage, requestResponseStateLookup);
+            if (!result.HasValue)
             {
                 return;
             }
 
-            string version;
-            var checkMessageIntent = true;
-
-            if (incomingMessage.Headers.TryGetValue(Headers.NServiceBusVersion, out version))
-            {
-                if (version.StartsWith("3."))
-                {
-                    checkMessageIntent = false;
-                }
-            }
-
-            if (checkMessageIntent && incomingMessage.GetMesssageIntent() != MessageIntentEnum.Reply)
-            {
-                return;
-            }
-
-            TaskCompletionSourceAdapter tcs;
-            if (!requestResponseStateLookup.TryGet(correlationId, out tcs))
-            {
-                return;
-            }
-
-            tcs.SetResult(context.Message.Instance);
+            result.TaskCompletionSource.SetResult(context.Message.Instance);
 
             context.MessageHandled = true;
-            requestResponseStateLookup.RemoveState(correlationId);
+            requestResponseStateLookup.RemoveState(result.CorrelationId);
         }
 
         public class Registration : RegisterStep

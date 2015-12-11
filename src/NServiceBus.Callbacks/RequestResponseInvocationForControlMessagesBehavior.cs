@@ -23,42 +23,21 @@ namespace NServiceBus
 
         void AssignResultIfPossible(IncomingMessage incomingMessage, IncomingPhysicalMessageContext context)
         {
-            var correlationId = context.GetCorrelationId();
-
-            if (correlationId == null)
+            if (!IsControlMessage(incomingMessage))
             {
                 return;
             }
 
-            string version;
-            var checkMessageIntent = true;
-
-            if (incomingMessage.Headers.TryGetValue(Headers.NServiceBusVersion, out version))
-            {
-                if (version.StartsWith("3."))
-                {
-                    checkMessageIntent = false;
-                }
-            }
-
-            if (checkMessageIntent && incomingMessage.GetMesssageIntent() != MessageIntentEnum.Reply)
+            var result = context.GetCorrelationIdAndCompletionSource(incomingMessage, requestResponseStateLookup);
+            if (!result.HasValue)
             {
                 return;
             }
 
-            TaskCompletionSourceAdapter tcs;
-            if (!requestResponseStateLookup.TryGet(correlationId, out tcs))
-            {
-                return;
-            }
-
-            if (IsControlMessage(incomingMessage))
-            {
-                var responseType = tcs.ResponseType;
-                var errorCode = incomingMessage.Headers[Headers.ReturnMessageErrorCodeHeader];
-                tcs.SetResult(errorCode.ConvertFromReturnCode(responseType));
-                requestResponseStateLookup.RemoveState(correlationId);
-            }
+            var responseType = result.TaskCompletionSource.ResponseType;
+            var errorCode = incomingMessage.Headers[Headers.ReturnMessageErrorCodeHeader];
+            result.TaskCompletionSource.SetResult(errorCode.ConvertFromReturnCode(responseType));
+            requestResponseStateLookup.RemoveState(result.CorrelationId);
         }
 
         static bool IsControlMessage(IncomingMessage incomingMessage)

@@ -52,7 +52,7 @@
     <Compile Include="CallbackSupportTypeExtensions.cs" />
     <Compile Include="ExtendableOptionsExtensions.cs" />
     <Compile Include="CallbackSupport.cs" />
-    <Compile Include="IncomingLogicalMessageContextExtensions.cs" />
+    <Compile Include="IncomingContextExtensions.cs" />
     <Compile Include="RequestResponseInvocationForControlMessagesBehavior.cs" />
     <Compile Include="SendOptionsExtensions.cs" />
     <Compile Include="CallbackResponseHelper.cs" />
