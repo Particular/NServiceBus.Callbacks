@@ -41,7 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NServiceBus.6.0.0-unstable1237\lib\net452\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\packages\NServiceBus.6.0.0-unstable1291\lib\net452\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -52,7 +52,7 @@
     <Compile Include="CallbackSupportTypeExtensions.cs" />
     <Compile Include="ExtendableOptionsExtensions.cs" />
     <Compile Include="CallbackSupport.cs" />
-    <Compile Include="IncomingLogicalMessageContextExtensions.cs" />
+    <Compile Include="IncomingContextExtensions.cs" />
     <Compile Include="RequestResponseInvocationForControlMessagesBehavior.cs" />
     <Compile Include="SendOptionsExtensions.cs" />
     <Compile Include="CallbackResponseHelper.cs" />

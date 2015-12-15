@@ -6,7 +6,7 @@
     using NServiceBus.Pipeline.Contexts;
     using NServiceBus.Transports;
 
-    class RequestResponseInvocationForMessagesBehavior : Behavior<IncomingLogicalMessageContext>
+    class RequestResponseInvocationForMessagesBehavior : Behavior<IIncomingLogicalMessageContext>
     {
         RequestResponseStateLookup requestResponseStateLookup;
 
@@ -15,48 +15,25 @@
             this.requestResponseStateLookup = requestResponseStateLookup;
         }
 
-        public override Task Invoke(IncomingLogicalMessageContext context, Func<Task> next)
+        public override Task Invoke(IIncomingLogicalMessageContext context, Func<Task> next)
         {
             AssignResultIfPossible(context.Extensions.Get<IncomingMessage>(), context);
 
             return next();
         }
 
-        void AssignResultIfPossible(IncomingMessage incomingMessage, IncomingLogicalMessageContext context)
+        void AssignResultIfPossible(IncomingMessage incomingMessage, IIncomingLogicalMessageContext context)
         {
-            var correlationId = context.GetCorrelationId();
-
-            if (correlationId == null)
+            var result = context.GetCorrelationIdAndCompletionSource(incomingMessage, requestResponseStateLookup);
+            if (!result.HasValue)
             {
                 return;
             }
 
-            string version;
-            var checkMessageIntent = true;
-
-            if (incomingMessage.Headers.TryGetValue(Headers.NServiceBusVersion, out version))
-            {
-                if (version.StartsWith("3."))
-                {
-                    checkMessageIntent = false;
-                }
-            }
-
-            if (checkMessageIntent && incomingMessage.GetMesssageIntent() != MessageIntentEnum.Reply)
-            {
-                return;
-            }
-
-            TaskCompletionSourceAdapter tcs;
-            if (!requestResponseStateLookup.TryGet(correlationId, out tcs))
-            {
-                return;
-            }
-
-            tcs.SetResult(context.Message.Instance);
+            result.TaskCompletionSource.SetResult(context.Message.Instance);
 
             context.MessageHandled = true;
-            requestResponseStateLookup.RemoveState(correlationId);
+            requestResponseStateLookup.RemoveState(result.CorrelationId);
         }
 
         public class Registration : RegisterStep

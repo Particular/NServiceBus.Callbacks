@@ -30,7 +30,7 @@
 
         public async Task<BusConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointConfiguration endpointConfiguration, IConfigurationSource configSource, Action<BusConfiguration> configurationBuilderCustomization)
         {
-            var settings = runDescriptor.Settings;            
+            var settings = runDescriptor.Settings;
 
             var types = GetTypesScopedByTestClass(endpointConfiguration);
 
@@ -48,7 +48,7 @@
             builder.DisableFeature<FirstLevelRetries>();
 
             await builder.DefineTransport(settings, endpointConfiguration.BuilderType);
-            builder.DefineTransactions(settings);
+
             builder.DefineBuilder(settings);
             builder.RegisterComponents(r => { RegisterInheritanceHierarchyOfContextOnContainer(runDescriptor, r); });
 
@@ -82,7 +82,7 @@
             var assemblies = new AssemblyScanner().GetScannableAssemblies();
 
             var types = assemblies.Assemblies
-                //exclude all test types by default
+                                  //exclude all test types by default
                                   .Where(a =>
                                   {
                                       var references = a.GetReferencedAssemblies();
@@ -103,7 +103,7 @@
         {
             if (rootType == null)
             {
-                throw new InvalidOperationException("Make sure you nest the endpoint infrastructure inside the TestFixture as nested classes");    
+                throw new InvalidOperationException("Make sure you nest the endpoint infrastructure inside the TestFixture as nested classes");
             }
 
             yield return rootType;
