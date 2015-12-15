@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using System.Threading.Tasks;
+    using NServiceBus.AcceptanceTesting.Support;
     using NServiceBus.Configuration.AdvanceExtensibility;
     using ScenarioDescriptors;
 
@@ -19,72 +19,63 @@
             return dictionary[key];
         }
 
-        public static async Task DefineTransport(this BusConfiguration config, IDictionary<string, string> settings, Type endpointBuilderType)
+        public static Task DefineTransport(this BusConfiguration config, IDictionary<string, string> settings, Type endpointBuilderType)
         {
             if (!settings.ContainsKey("Transport"))
             {
                 settings = Transports.Default.Settings;
             }
 
-            const string typeName = "ConfigureTransport";
+            return ConfigureTestExecution(TestDependencyType.Transport, config, settings);
 
-            var transportType = Type.GetType(settings["Transport"]);
-            var transportTypeName = "Configure" + transportType.Name;
 
-            var configurerType = endpointBuilderType.GetNestedType(typeName) ??
-                                 Type.GetType(transportTypeName, false);
-
-            if (configurerType != null)
-            {
-                var configurer = Activator.CreateInstance(configurerType);
-
-                dynamic dc = configurer;
-
-                await dc.Configure(config);
-                var cleanupMethod = configurer.GetType().GetMethod("Cleanup", BindingFlags.Public | BindingFlags.Instance);
-                config.GetSettings().Set("CleanupTransport", cleanupMethod != null ? configurer : new Cleaner());
-                return;
-            }
-
-            config.UseTransport(transportType).ConnectionString(settings["Transport.ConnectionString"]);
         }
 
-        public static void DefineTransactions(this BusConfiguration config, IDictionary<string, string> settings)
-        {
-            if (settings.ContainsKey("Transactions.Disable"))
-            {
-                config.Transactions().Disable();
-            }
-        }
-
-        public static async Task DefinePersistence(this BusConfiguration config, IDictionary<string, string> settings)
+        public static Task DefinePersistence(this BusConfiguration config, IDictionary<string, string> settings)
         {
             if (!settings.ContainsKey("Persistence"))
-            { 
+            {
                 settings = Persistence.Default.Settings;
             }
 
-            var persistenceType = Type.GetType(settings["Persistence"]);
+            return ConfigureTestExecution(TestDependencyType.Persistence, config, settings);
+        }
 
+        enum TestDependencyType
+        {
+            Transport,
+            Persistence
+        }
 
-            var typeName = "Configure" + persistenceType.Name;
+        private static async Task ConfigureTestExecution(TestDependencyType type, BusConfiguration config, IDictionary<string, string> settings)
+        {
+            var dependencyTypeString = type.ToString();
+
+            var dependencyType = Type.GetType(settings[dependencyTypeString]);
+
+            var typeName = "Configure" + dependencyType.Name;
 
             var configurerType = Type.GetType(typeName, false);
 
-            if (configurerType != null)
+            if (configurerType == null)
+                throw new InvalidOperationException($"Acceptance Test project must include a non-namespaced class named '{typeName}' implementing {typeof(IConfigureTestExecution).Name}. See {typeof(ConfigureMsmqTransport).FullName} for an example.");
+
+            var configurer = Activator.CreateInstance(configurerType) as IConfigureTestExecution;
+
+            if (configurer == null)
+                throw new InvalidOperationException($"{typeName} does not implement {typeof(IConfigureTestExecution).Name}.");
+
+            await configurer.Configure(config, settings).ConfigureAwait(false);
+
+            var configSettings = config.GetSettings();
+
+            List<IConfigureTestExecution> cleaners;
+            if (!configSettings.TryGet("Cleaners", out cleaners))
             {
-                var configurer = Activator.CreateInstance(configurerType);
-
-                dynamic dc = configurer;
-
-                await dc.Configure(config);
-
-                var cleanupMethod = configurer.GetType().GetMethod("Cleanup", BindingFlags.Public | BindingFlags.Instance);
-                config.GetSettings().Set("CleanupPersistence", cleanupMethod != null ? configurer : new Cleaner());
-                return;
+                cleaners = new List<IConfigureTestExecution>();
+                configSettings.Set("Cleaners", cleaners);
             }
-
-            config.UsePersistence(persistenceType);
+            cleaners.Add(configurer);
         }
 
         class Cleaner

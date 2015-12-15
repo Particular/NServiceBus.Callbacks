@@ -3,9 +3,10 @@ namespace NServiceBus
     using System;
     using System.Threading.Tasks;
     using NServiceBus.Pipeline;
+    using NServiceBus.Pipeline.Contexts;
     using NServiceBus.Transports;
 
-    class RequestResponseInvocationForControlMessagesBehavior : Behavior<IncomingPhysicalMessageContext>
+    class RequestResponseInvocationForControlMessagesBehavior : Behavior<IIncomingPhysicalMessageContext>
     {
         RequestResponseStateLookup requestResponseStateLookup;
 
@@ -14,14 +15,14 @@ namespace NServiceBus
             this.requestResponseStateLookup = requestResponseStateLookup;
         }
 
-        public override Task Invoke(IncomingPhysicalMessageContext context, Func<Task> next)
+        public override Task Invoke(IIncomingPhysicalMessageContext context, Func<Task> next)
         {
             AssignResultIfPossible(context.Extensions.Get<IncomingMessage>(), context);
 
             return next();
         }
 
-        void AssignResultIfPossible(IncomingMessage incomingMessage, IncomingPhysicalMessageContext context)
+        void AssignResultIfPossible(IncomingMessage incomingMessage, IIncomingContext context)
         {
             if (!IsControlMessage(incomingMessage))
             {

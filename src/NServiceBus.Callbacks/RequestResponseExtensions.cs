@@ -16,11 +16,11 @@
         /// Messages can still arrive to the requesting endpoint but in that case no handling code will be attached to consume
         ///  that response message and therefore the message will be moved to the error queue.</remarks>
         /// <typeparam name="TResponse">The response type.</typeparam>
-        /// <param name="context">Object being extended.</param>
+        /// <param name="session">The session.</param>
         /// <param name="requestMessage">The request message.</param>
         /// <param name="options">The options for the send.</param>
         /// <returns>A task which contains the response when it is completed.</returns>
-        public static async Task<TResponse> Request<TResponse>(this IBusContext context, object requestMessage, SendOptions options)
+        public static async Task<TResponse> Request<TResponse>(this IBusSession session, object requestMessage, SendOptions options)
         {
             if (requestMessage == null)
             {
@@ -32,9 +32,9 @@
                 throw new ArgumentNullException(nameof(options));
             }
 
-            if (context == null)
+            if (session == null)
             {
-                throw new ArgumentNullException(nameof(context));
+                throw new ArgumentNullException(nameof(session));
             }
 
             options.SetHeader("$Routing.RouteReplyToSpecificEndpointInstance", bool.TrueString);
@@ -44,7 +44,7 @@
             var adapter = new TaskCompletionSourceAdapter(tcs);
             options.RegisterTokenSource(adapter);
 
-            await context.Send(requestMessage, options).ConfigureAwait(false);
+            await session.Send(requestMessage, options).ConfigureAwait(false);
             
             return await tcs.Task.ConfigureAwait(false);
         }

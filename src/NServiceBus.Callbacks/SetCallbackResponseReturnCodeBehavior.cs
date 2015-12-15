@@ -5,9 +5,9 @@
     using NServiceBus.Pipeline;
     using NServiceBus.Pipeline.OutgoingPipeline;
 
-    class SetCallbackResponseReturnCodeBehavior : Behavior<OutgoingLogicalMessageContext>
+    class SetCallbackResponseReturnCodeBehavior : Behavior<IOutgoingLogicalMessageContext>
     {
-        public override Task Invoke(OutgoingLogicalMessageContext context, Func<Task> next)
+        public override Task Invoke(IOutgoingLogicalMessageContext context, Func<Task> next)
         {
             if (context.Message.MessageType.IsIntOrEnum())
             {

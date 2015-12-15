@@ -6,7 +6,7 @@
     using NServiceBus.Pipeline.Contexts;
     using NServiceBus.Transports;
 
-    class RequestResponseInvocationForMessagesBehavior : Behavior<IncomingLogicalMessageContext>
+    class RequestResponseInvocationForMessagesBehavior : Behavior<IIncomingLogicalMessageContext>
     {
         RequestResponseStateLookup requestResponseStateLookup;
 
@@ -15,14 +15,14 @@
             this.requestResponseStateLookup = requestResponseStateLookup;
         }
 
-        public override Task Invoke(IncomingLogicalMessageContext context, Func<Task> next)
+        public override Task Invoke(IIncomingLogicalMessageContext context, Func<Task> next)
         {
             AssignResultIfPossible(context.Extensions.Get<IncomingMessage>(), context);
 
             return next();
         }
 
-        void AssignResultIfPossible(IncomingMessage incomingMessage, IncomingLogicalMessageContext context)
+        void AssignResultIfPossible(IncomingMessage incomingMessage, IIncomingLogicalMessageContext context)
         {
             var result = context.GetCorrelationIdAndCompletionSource(incomingMessage, requestResponseStateLookup);
             if (!result.HasValue)

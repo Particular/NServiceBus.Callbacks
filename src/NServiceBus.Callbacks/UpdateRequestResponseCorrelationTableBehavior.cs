@@ -6,7 +6,7 @@
     using NServiceBus.OutgoingPipeline;
     using NServiceBus.Pipeline;
 
-    class UpdateRequestResponseCorrelationTableBehavior : Behavior<OutgoingPhysicalMessageContext>
+    class UpdateRequestResponseCorrelationTableBehavior : Behavior<IOutgoingPhysicalMessageContext>
     {
         RequestResponseStateLookup lookup;
 
@@ -15,7 +15,7 @@
             this.lookup = lookup;
         }
 
-        public override Task Invoke(OutgoingPhysicalMessageContext context, Func<Task> next)
+        public override Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
         {
             RequestResponseParameters parameters;
 

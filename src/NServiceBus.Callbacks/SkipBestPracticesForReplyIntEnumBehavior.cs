@@ -5,9 +5,9 @@
     using NServiceBus.OutgoingPipeline;
     using NServiceBus.Pipeline;
 
-    class SkipBestPracticesForReplyIntEnumBehavior : Behavior<OutgoingReplyContext>
+    class SkipBestPracticesForReplyIntEnumBehavior : Behavior<IOutgoingReplyContext>
     {
-        public override Task Invoke(OutgoingReplyContext context, Func<Task> next)
+        public override Task Invoke(IOutgoingReplyContext context, Func<Task> next)
         {
             if (context.Message.MessageType.IsIntOrEnum())
             {
