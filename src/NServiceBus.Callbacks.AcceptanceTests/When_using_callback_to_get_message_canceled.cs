@@ -15,6 +15,7 @@
             OperationCanceledException exception = null;
 
             var context = await Scenario.Define<Context>()
+                .WithEndpoint<Replier>()
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, ctx) =>
                 {
                     var cs = new CancellationTokenSource();
@@ -34,7 +35,6 @@
                         exception = e;
                     }
                 }))
-                .WithEndpoint<Replier>()
                 .Done(c => exception != null)
                 .Run();
 
