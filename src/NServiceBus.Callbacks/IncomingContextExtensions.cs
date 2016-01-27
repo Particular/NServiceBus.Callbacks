@@ -1,6 +1,6 @@
 namespace NServiceBus
 {
-    using NServiceBus.Pipeline.Contexts;
+    using NServiceBus.Pipeline;
     using NServiceBus.Transports;
 
     internal static class IncomingContextExtensions
