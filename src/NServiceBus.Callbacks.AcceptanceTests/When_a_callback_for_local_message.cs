@@ -16,7 +16,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
                         {
                             var options = new SendOptions();
 
-                            options.RouteToLocalEndpointInstance();
+                            options.RouteToThisEndpoint();
 
                             await bus.Request<MyResponse>(new MyRequest(), options);
                             

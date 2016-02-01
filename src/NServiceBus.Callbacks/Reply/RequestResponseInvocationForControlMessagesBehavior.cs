@@ -36,7 +36,7 @@ namespace NServiceBus
 
             var responseType = result.TaskCompletionSource.ResponseType;
             var errorCode = incomingMessage.Headers[Headers.ReturnMessageErrorCodeHeader];
-            result.TaskCompletionSource.SetResult(errorCode.ConvertFromReturnCode(responseType));
+            result.TaskCompletionSource.TrySetResult(errorCode.ConvertFromReturnCode(responseType));
             requestResponseStateLookup.RemoveState(result.CorrelationId);
         }
 

@@ -23,7 +23,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
                             var options = new SendOptions();
 
-                            options.RouteToLocalEndpointInstance();
+                            options.RouteToThisEndpoint();
                             options.RegisterCancellationToken(cs.Token);
 
                             try
