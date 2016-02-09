@@ -10,18 +10,18 @@ using NServiceBus.Transports;
 
 public class ConfigureMsmqTransport : IConfigureTestExecution
 {
-    BusConfiguration busConfiguration;
+    EndpointConfiguration configuration;
 
-    public Task Configure(BusConfiguration configuration, IDictionary<string, string> settings)
+    public Task Configure(EndpointConfiguration configuration, IDictionary<string, string> settings)
     {
-        busConfiguration = configuration;
+        this.configuration = configuration;
         configuration.UseTransport<MsmqTransport>().ConnectionString(settings["Transport.ConnectionString"]);
         return Task.FromResult(0);
     }
 
     public Task Cleanup()
     {
-        var bindings = busConfiguration.GetSettings().Get<QueueBindings>();
+        var bindings = configuration.GetSettings().Get<QueueBindings>();
         var allQueues = MessageQueue.GetPrivateQueuesByMachine("localhost");
         var queuesToBeDeleted = new List<string>();
 
