@@ -6,7 +6,7 @@ using NServiceBus.AcceptanceTesting.Support;
 
 public class ConfigureInMemoryPersistence : IConfigureTestExecution
 {
-    public Task Configure(BusConfiguration configuration, IDictionary<string, string> settings)
+    public Task Configure(EndpointConfiguration configuration, IDictionary<string, string> settings)
     {
         configuration.UsePersistence<InMemoryPersistence>();
         return Task.FromResult(0);

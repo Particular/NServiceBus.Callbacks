@@ -20,7 +20,7 @@
         /// <param name="requestMessage">The request message.</param>
         /// <param name="options">The options for the send.</param>
         /// <returns>A task which contains the response when it is completed.</returns>
-        public static async Task<TResponse> Request<TResponse>(this IBusSession session, object requestMessage, SendOptions options)
+        public static async Task<TResponse> Request<TResponse>(this IMessageSession session, object requestMessage, SendOptions options)
         {
             if (requestMessage == null)
             {
