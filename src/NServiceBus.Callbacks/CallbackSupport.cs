@@ -22,7 +22,6 @@
             context.Pipeline.Register<UpdateRequestResponseCorrelationTableBehavior.Registration>();
             context.Pipeline.Register<SetCallbackResponseReturnCodeBehavior.Registration>();
             context.Pipeline.Register<SkipBestPracticesForReplyIntEnumBehavior.Registration>();
-
         }
     }
 }

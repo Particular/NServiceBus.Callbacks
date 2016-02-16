@@ -3,7 +3,7 @@ namespace NServiceBus
     using NServiceBus.Pipeline;
     using NServiceBus.Transports;
 
-    internal static class IncomingContextExtensions
+    static class IncomingContextExtensions
     {
         public static CorrelationIdAndTaskCompletionSource GetCorrelationIdAndCompletionSource(this IIncomingContext context, IncomingMessage message, RequestResponseStateLookup lookup)
         {
@@ -35,7 +35,7 @@ namespace NServiceBus
             return !lookup.TryGet(correlationId, out tcs) ? emptyResult : new CorrelationIdAndTaskCompletionSource(correlationId, tcs);
         }
 
-        private static string GetCorrelationId(this IMessageProcessingContext context)
+        static string GetCorrelationId(this IMessageProcessingContext context)
         {
             string str;
             return context.MessageHeaders.TryGetValue(Headers.CorrelationId, out str) ? str : null;

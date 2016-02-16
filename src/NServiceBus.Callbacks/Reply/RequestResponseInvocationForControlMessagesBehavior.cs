@@ -7,8 +7,6 @@ namespace NServiceBus
 
     class RequestResponseInvocationForControlMessagesBehavior : Behavior<IIncomingPhysicalMessageContext>
     {
-        RequestResponseStateLookup requestResponseStateLookup;
-
         public RequestResponseInvocationForControlMessagesBehavior(RequestResponseStateLookup requestResponseStateLookup)
         {
             this.requestResponseStateLookup = requestResponseStateLookup;
@@ -45,6 +43,8 @@ namespace NServiceBus
             return incomingMessage.Headers != null &&
                    incomingMessage.Headers.ContainsKey(Headers.ControlMessageHeader);
         }
+
+        RequestResponseStateLookup requestResponseStateLookup;
 
         public class Registration : RegisterStep
         {

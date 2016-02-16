@@ -7,8 +7,6 @@
 
     class RequestResponseInvocationForMessagesBehavior : Behavior<IIncomingLogicalMessageContext>
     {
-        RequestResponseStateLookup requestResponseStateLookup;
-
         public RequestResponseInvocationForMessagesBehavior(RequestResponseStateLookup requestResponseStateLookup)
         {
             this.requestResponseStateLookup = requestResponseStateLookup;
@@ -34,6 +32,8 @@
             context.MessageHandled = true;
             requestResponseStateLookup.RemoveState(result.CorrelationId);
         }
+
+        RequestResponseStateLookup requestResponseStateLookup;
 
         public class Registration : RegisterStep
         {

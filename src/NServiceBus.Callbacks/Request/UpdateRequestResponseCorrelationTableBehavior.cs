@@ -1,14 +1,13 @@
 ﻿namespace NServiceBus
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using NServiceBus.Pipeline;
 
     class UpdateRequestResponseCorrelationTableBehavior : Behavior<IOutgoingPhysicalMessageContext>
     {
-        RequestResponseStateLookup lookup;
-
         public UpdateRequestResponseCorrelationTableBehavior(RequestResponseStateLookup lookup)
         {
             this.lookup = lookup;
@@ -21,7 +20,7 @@
             if (context.Extensions.TryGet(out parameters) && !parameters.CancellationToken.IsCancellationRequested)
             {
                 var messageId = context.MessageId;
-                parameters.CancellationToken.Register(() =>
+                parameters.Register(() =>
                 {
                     TaskCompletionSourceAdapter tcs;
                     if (lookup.TryGet(messageId, out tcs))
@@ -35,16 +34,32 @@
             return next();
         }
 
-        public class RequestResponseParameters
+        RequestResponseStateLookup lookup;
+
+        public class RequestResponseParameters : IDisposable
         {
             public RequestResponseParameters()
             {
                 CancellationToken = CancellationToken.None;
             }
 
-            public TaskCompletionSourceAdapter TaskCompletionSource;
+            public void Dispose()
+            {
+                foreach (var registration in registrations)
+                {
+                    registration.Dispose();
+                }
+            }
+
+            public void Register(Action action)
+            {
+                registrations.Add(CancellationToken.Register(action));
+            }
 
             public CancellationToken CancellationToken;
+
+            public TaskCompletionSourceAdapter TaskCompletionSource;
+            List<CancellationTokenRegistration> registrations = new List<CancellationTokenRegistration>();
         }
 
         public class Registration : RegisterStep
