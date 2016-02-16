@@ -13,24 +13,15 @@ namespace NServiceBus
 
         public Type ResponseType => taskCompletionSource.GetType().GenericTypeArguments[0];
 
-        public void SetResult(object result)
+        public void TrySetResult(object result)
         {
-            var method = taskCompletionSource.GetType().GetMethod("SetResult");
+            var method = taskCompletionSource.GetType().GetMethod("TrySetResult");
             method.Invoke(taskCompletionSource, new[]
             {
                 result
             });
         }
-
-        public void SetException(Exception exception)
-        {
-            var methodSetException = taskCompletionSource.GetType().GetMethod("SetException");
-            methodSetException.Invoke(taskCompletionSource, new object[]
-            {
-                exception
-            });
-        }
-
+        
         public void SetCancelled()
         {
             var method = taskCompletionSource.GetType().GetMethod("SetCanceled");

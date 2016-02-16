@@ -29,7 +29,7 @@
                 return;
             }
 
-            result.TaskCompletionSource.SetResult(context.Message.Instance);
+            result.TaskCompletionSource.TrySetResult(context.Message.Instance);
 
             context.MessageHandled = true;
             requestResponseStateLookup.RemoveState(result.CorrelationId);

@@ -37,13 +37,11 @@
                 throw new ArgumentNullException(nameof(session));
             }
 
-            options.SetHeader("$Routing.RouteReplyToSpecificEndpointInstance", bool.TrueString);
-
             var tcs = new TaskCompletionSource<TResponse>();
 
             var adapter = new TaskCompletionSourceAdapter(tcs);
             options.RegisterTokenSource(adapter);
-
+            options.RouteReplyToThisInstance();
             await session.Send(requestMessage, options).ConfigureAwait(false);
             
             return await tcs.Task.ConfigureAwait(false);

@@ -41,7 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NServiceBus.6.0.0-unstable1509\lib\net452\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\packages\NServiceBus.6.0.0-unstable1543\lib\net452\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -53,17 +53,18 @@
     <Compile Include="ExtendableOptionsExtensions.cs" />
     <Compile Include="CallbackSupport.cs" />
     <Compile Include="IncomingContextExtensions.cs" />
-    <Compile Include="RequestResponseInvocationForControlMessagesBehavior.cs" />
+    <Compile Include="InternalsVisibleTo.cs" />
+    <Compile Include="Reply\RequestResponseInvocationForControlMessagesBehavior.cs" />
     <Compile Include="SendOptionsExtensions.cs" />
     <Compile Include="CallbackResponseHelper.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="SkipBestPracticesForReplyIntEnumBehavior.cs" />
-    <Compile Include="SetCallbackResponseReturnCodeBehavior.cs" />
+    <Compile Include="Request\SkipBestPracticesForReplyIntEnumBehavior.cs" />
+    <Compile Include="Reply\SetCallbackResponseReturnCodeBehavior.cs" />
     <Compile Include="TaskCompletionSourceAdapter.cs" />
     <Compile Include="RequestResponseExtensions.cs" />
-    <Compile Include="RequestResponseInvocationForMessagesBehavior.cs" />
+    <Compile Include="Reply\RequestResponseInvocationForMessagesBehavior.cs" />
     <Compile Include="RequestResponseStateLookup.cs" />
-    <Compile Include="UpdateRequestResponseCorrelationTableBehavior.cs" />
+    <Compile Include="Request\UpdateRequestResponseCorrelationTableBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\packaging\nuget\nservicebus.callbacks.nuspec">

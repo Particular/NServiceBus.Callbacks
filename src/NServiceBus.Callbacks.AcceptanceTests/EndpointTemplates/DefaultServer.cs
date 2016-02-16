@@ -8,7 +8,6 @@
     using AcceptanceTesting.Support;
     using NServiceBus.AcceptanceTesting.Customization;
     using NServiceBus.Config.ConfigurationSource;
-    using NServiceBus.Configuration.AdvanceExtensibility;
     using NServiceBus.Features;
     using NServiceBus.Hosting.Helpers;
     using NServiceBus.ObjectBuilder;
@@ -60,7 +59,7 @@
             }
             await builder.DefinePersistence(settings).ConfigureAwait(false);
 
-            builder.GetSettings().SetDefault("ScaleOut.UseSingleBrokerQueue", true);
+            builder.ScaleOut().InstanceDiscriminator("X");
             configurationBuilderCustomization(builder);
 
 
