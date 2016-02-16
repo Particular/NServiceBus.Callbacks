@@ -5,16 +5,19 @@
     using NServiceBus.Extensibility;
 
     /// <summary>
-    ///  Request/response extension methods.
+    /// Request/response extension methods.
     /// </summary>
     public static class RequestResponseExtensions
     {
         /// <summary>
-        /// Sends a <paramref name="requestMessage"/> to the configured destination and returns back a <see cref="Task{TResponse}"/> which can be awaited.
+        /// Sends a <paramref name="requestMessage" /> to the configured destination and returns back a
+        /// <see cref="Task{TResponse}" /> which can be awaited.
         /// </summary>
-        /// <remarks> The task returned is non durable. When the AppDomain is unloaded or the response task is canceled. 
+        /// <remarks>
+        /// The task returned is non durable. When the AppDomain is unloaded or the response task is canceled.
         /// Messages can still arrive to the requesting endpoint but in that case no handling code will be attached to consume
-        ///  that response message and therefore the message will be moved to the error queue.</remarks>
+        /// that response message and therefore the message will be moved to the error queue.
+        /// </remarks>
         /// <typeparam name="TResponse">The response type.</typeparam>
         /// <param name="session">The session.</param>
         /// <param name="requestMessage">The request message.</param>
@@ -40,15 +43,17 @@
             var tcs = new TaskCompletionSource<TResponse>();
 
             var adapter = new TaskCompletionSourceAdapter(tcs);
-            options.RegisterTokenSource(adapter);
             options.RouteReplyToThisInstance();
-            await session.Send(requestMessage, options).ConfigureAwait(false);
-            
-            return await tcs.Task.ConfigureAwait(false);
+            using (options.RegisterTokenSource(adapter))
+            {
+                await session.Send(requestMessage, options).ConfigureAwait(false);
+
+                return await tcs.Task.ConfigureAwait(false);
+            }
         }
 
-        
-        static void RegisterTokenSource(this ExtendableOptions options, TaskCompletionSourceAdapter adapter)
+
+        static IDisposable RegisterTokenSource(this ExtendableOptions options, TaskCompletionSourceAdapter adapter)
         {
             var extensions = options.GetExtensions();
             UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters data;
@@ -58,9 +63,13 @@
             }
             else
             {
-                data = new UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters { TaskCompletionSource = adapter };
+                data = new UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters
+                {
+                    TaskCompletionSource = adapter
+                };
                 extensions.Set(data);
             }
+            return data;
         }
     }
 }

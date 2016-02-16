@@ -4,8 +4,6 @@ namespace NServiceBus
 
     class TaskCompletionSourceAdapter
     {
-        object taskCompletionSource;
-
         public TaskCompletionSourceAdapter(object taskCompletionSource)
         {
             this.taskCompletionSource = taskCompletionSource;
@@ -21,11 +19,15 @@ namespace NServiceBus
                 result
             });
         }
-        
+
         public void SetCancelled()
         {
             var method = taskCompletionSource.GetType().GetMethod("SetCanceled");
-            method.Invoke(taskCompletionSource, new object[] { });
+            method.Invoke(taskCompletionSource, new object[]
+            {
+            });
         }
+
+        object taskCompletionSource;
     }
 }
