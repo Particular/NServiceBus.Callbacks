@@ -61,4 +61,6 @@ public class ConfigureMsmqTransport : IConfigureTestExecution
 
         return Task.FromResult(0);
     }
+
+    public IEnumerable<Type> UnsupportedScenarioDescriptorTypes => new List<Type>();
 }
