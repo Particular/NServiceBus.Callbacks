@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.AcceptanceTesting.Support;
@@ -17,4 +18,6 @@ public class ConfigureInMemoryPersistence : IConfigureTestExecution
         // Nothing required for in-memory persistence
         return Task.FromResult(0);
     }
+
+    public IEnumerable<Type> UnsupportedScenarioDescriptorTypes => new List<Type>();
 }
