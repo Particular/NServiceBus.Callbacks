@@ -5,23 +5,30 @@ using System.Messaging;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.AcceptanceTesting.Support;
+using NServiceBus.AcceptanceTests.ScenarioDescriptors;
 using NServiceBus.Configuration.AdvanceExtensibility;
 using NServiceBus.Transports;
 
-public class ConfigureMsmqTransport : IConfigureTestExecution
+public class ConfigureScenariosForMsmqTransport : IConfigureSupportedScenariosForTestExecution
 {
-    EndpointConfiguration configuration;
-
-    public Task Configure(EndpointConfiguration configuration, IDictionary<string, string> settings)
+    public IEnumerable<Type> UnsupportedScenarioDescriptorTypes { get; } = new[]
     {
-        this.configuration = configuration;
-        configuration.UseTransport<MsmqTransport>().ConnectionString(settings["Transport.ConnectionString"]);
+        typeof(AllTransportsWithCentralizedPubSubSupport)
+    };
+}
+
+public class ConfigureEndpointMsmqTransport : IConfigureEndpointTestExecution
+{
+    public Task Configure(string endpointName, EndpointConfiguration configuration, RunSettings settings)
+    {
+        queueBindings = configuration.GetSettings().Get<QueueBindings>();
+        var connectionString = settings.Get<string>("Transport.ConnectionString");
+        configuration.UseTransport<MsmqTransport>().ConnectionString(connectionString);
         return Task.FromResult(0);
     }
 
     public Task Cleanup()
     {
-        var bindings = configuration.GetSettings().Get<QueueBindings>();
         var allQueues = MessageQueue.GetPrivateQueuesByMachine("localhost");
         var queuesToBeDeleted = new List<string>();
 
@@ -29,7 +36,7 @@ public class ConfigureMsmqTransport : IConfigureTestExecution
         {
             using (messageQueue)
             {
-                if (bindings.ReceivingAddresses.Any(ra =>
+                if (queueBindings.ReceivingAddresses.Any(ra =>
                 {
                     var indexOfAt = ra.IndexOf("@", StringComparison.Ordinal);
                     if (indexOfAt >= 0)
@@ -62,5 +69,5 @@ public class ConfigureMsmqTransport : IConfigureTestExecution
         return Task.FromResult(0);
     }
 
-    public IEnumerable<Type> UnsupportedScenarioDescriptorTypes => new List<Type>();
+    QueueBindings queueBindings;
 }

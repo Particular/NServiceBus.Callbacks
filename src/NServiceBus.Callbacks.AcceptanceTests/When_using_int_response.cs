@@ -33,7 +33,8 @@
         {
             public Replier()
             {
-                EndpointSetup<DefaultServer>();
+                EndpointSetup<DefaultServer>(c =>
+                    c.ScaleOut().InstanceDiscriminator("1"));
             }
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
@@ -49,7 +50,8 @@
         {
             public EndpointWithLocalCallback()
             {
-                EndpointSetup<DefaultServer>()
+                EndpointSetup<DefaultServer>(c =>
+                    c.ScaleOut().InstanceDiscriminator("1"))
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }

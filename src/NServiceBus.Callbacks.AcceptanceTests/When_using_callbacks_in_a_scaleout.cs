@@ -64,7 +64,8 @@
         {
             public Client()
             {
-                EndpointSetup<DefaultServer>()
+                EndpointSetup<DefaultServer>(c =>
+                    c.ScaleOut().InstanceDiscriminator("1"))
                     .AddMapping<MyRequest>(typeof(Server));
             }
         }
@@ -73,7 +74,8 @@
         {
             public Server()
             {
-                EndpointSetup<DefaultServer>();
+                EndpointSetup<DefaultServer>(c =>
+                    c.ScaleOut().InstanceDiscriminator("1"));
             }
 
             public class MyMessageHandler : IHandleMessages<MyRequest>
