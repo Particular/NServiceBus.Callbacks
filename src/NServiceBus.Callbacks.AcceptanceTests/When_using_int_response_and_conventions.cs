@@ -38,6 +38,7 @@
                 {
                     var conventions = busConfiguration.Conventions();
                     conventions.DefiningCommandsAs(DefinesCommandType);
+                    busConfiguration.ScaleOut().InstanceDiscriminator("1");
                 });
             }
 
@@ -58,7 +59,8 @@
         {
             public EndpointWithLocalCallback()
             {
-                EndpointSetup<DefaultServer>()
+                EndpointSetup<DefaultServer>(c => 
+                    c.ScaleOut().InstanceDiscriminator("1"))
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }
