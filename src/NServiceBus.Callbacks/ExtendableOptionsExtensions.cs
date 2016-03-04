@@ -1,7 +1,7 @@
 ﻿namespace NServiceBus
 {
     using System.Threading;
-    using NServiceBus.Extensibility;
+    using Extensibility;
 
     static class ExtendableOptionsExtensions
     {

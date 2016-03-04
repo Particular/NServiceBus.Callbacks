@@ -1,12 +1,18 @@
 ﻿namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System.Threading.Tasks;
-    using NServiceBus.AcceptanceTesting;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using AcceptanceTesting;
+    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_enum_response : NServiceBusAcceptanceTest
     {
+        public enum OldEnum
+        {
+            Fail,
+            Success
+        }
+
         [Test]
         public async Task Should_send_back_old_style_control_message()
         {
@@ -57,12 +63,8 @@
             }
         }
 
-        public class MyRequest : IMessage { }
-
-        public enum OldEnum
+        public class MyRequest : IMessage
         {
-            Fail,
-            Success,
         }
     }
 }

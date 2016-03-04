@@ -2,8 +2,8 @@
 {
     using System;
     using System.Threading.Tasks;
-    using NServiceBus.AcceptanceTesting;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using AcceptanceTesting;
+    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_callbacks_with_messageid_eq_cid : NServiceBusAcceptanceTest
@@ -13,17 +13,17 @@
         {
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
-                    {
-                        var id = Guid.NewGuid().ToString();
-                        var options = new SendOptions();
+                {
+                    var id = Guid.NewGuid().ToString();
+                    var options = new SendOptions();
 
-                        options.SetMessageId(id);
-                        options.RouteToThisEndpoint();
+                    options.SetMessageId(id);
+                    options.RouteToThisEndpoint();
 
-                        await bus.Request<MyResponse>(new MyRequest(), options);
+                    await bus.Request<MyResponse>(new MyRequest(), options);
 
-                        c.CallbackFired = true;
-                    }))
+                    c.CallbackFired = true;
+                }))
                 .Done(c => c.CallbackFired)
                 .Run();
 
@@ -55,8 +55,13 @@
                 }
             }
         }
-        public class MyRequest : IMessage { }
 
-        public class MyResponse : IMessage { }
+        public class MyRequest : IMessage
+        {
+        }
+
+        public class MyResponse : IMessage
+        {
+        }
     }
 }

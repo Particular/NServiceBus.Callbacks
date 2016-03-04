@@ -3,8 +3,8 @@ namespace NServiceBus.AcceptanceTests.Callbacks
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using NServiceBus.AcceptanceTesting;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using AcceptanceTesting;
+    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_int_response_canceled : NServiceBusAcceptanceTest
@@ -50,7 +50,6 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             public bool HandlerGotTheRequest { get; set; }
             public bool CallbackFired { get; set; }
             public int Response { get; set; }
-
         }
 
         public class Replier : EndpointConfigurationBuilder
@@ -85,7 +84,8 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             }
         }
 
-        public class MyRequest : IMessage { }
-
+        public class MyRequest : IMessage
+        {
+        }
     }
 }

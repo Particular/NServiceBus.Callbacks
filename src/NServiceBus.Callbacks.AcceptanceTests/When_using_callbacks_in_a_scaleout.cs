@@ -2,9 +2,9 @@
 {
     using System;
     using System.Threading.Tasks;
-    using NServiceBus.AcceptanceTesting;
-    using NServiceBus.AcceptanceTesting.Support;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using AcceptanceTesting;
+    using AcceptanceTesting.Support;
+    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_callbacks_in_a_scaleout : NServiceBusAcceptanceTest
@@ -84,7 +84,10 @@
 
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    return context.Reply(new MyResponse { Client = message.Client });
+                    return context.Reply(new MyResponse
+                    {
+                        Client = message.Client
+                    });
                 }
             }
         }

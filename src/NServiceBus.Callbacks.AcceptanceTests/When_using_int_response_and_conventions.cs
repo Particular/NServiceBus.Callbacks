@@ -2,8 +2,8 @@
 {
     using System;
     using System.Threading.Tasks;
-    using NServiceBus.AcceptanceTesting;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using AcceptanceTesting;
+    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_int_response_and_conventions : NServiceBusAcceptanceTest
@@ -46,6 +46,7 @@
             {
                 return typeof(int) == type;
             }
+
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
@@ -59,7 +60,7 @@
         {
             public EndpointWithLocalCallback()
             {
-                EndpointSetup<DefaultServer>(c => 
+                EndpointSetup<DefaultServer>(c =>
                     c.ScaleOut().InstanceDiscriminator("1"))
                     .AddMapping<MyRequest>(typeof(Replier));
             }
@@ -68,6 +69,5 @@
         public class MyRequest : IMessage
         {
         }
-
     }
 }

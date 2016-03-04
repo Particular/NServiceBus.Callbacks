@@ -1,8 +1,8 @@
 ﻿namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System.Threading.Tasks;
-    using NServiceBus.AcceptanceTesting;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using AcceptanceTesting;
+    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_int_response : NServiceBusAcceptanceTest
@@ -59,6 +59,5 @@
         public class MyRequest : IMessage
         {
         }
-
     }
 }
