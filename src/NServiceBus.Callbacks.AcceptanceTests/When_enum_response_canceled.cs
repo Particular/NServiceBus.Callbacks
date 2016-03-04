@@ -3,12 +3,18 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using NServiceBus.AcceptanceTesting;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using AcceptanceTesting;
+    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_enum_response_canceled : NServiceBusAcceptanceTest
     {
+        public enum OldEnum
+        {
+            Fail,
+            Success
+        }
+
         [Test]
         public async Task ShouldNot_trigger_the_callback_when_canceled()
         {
@@ -50,7 +56,6 @@
             public bool HandlerGotTheRequest { get; set; }
             public bool CallbackFired { get; set; }
             public OldEnum Response { get; set; }
-
         }
 
         public class Replier : EndpointConfigurationBuilder
@@ -85,12 +90,8 @@
             }
         }
 
-        public class MyRequest : IMessage { }
-
-        public enum OldEnum
+        public class MyRequest : IMessage
         {
-            Fail,
-            Success,
         }
     }
 }

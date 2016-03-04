@@ -32,6 +32,5 @@
                 .Where(l => !string.IsNullOrWhiteSpace(l))
                 );
         }
-
     }
 }

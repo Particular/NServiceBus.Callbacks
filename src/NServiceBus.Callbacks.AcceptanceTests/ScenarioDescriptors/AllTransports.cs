@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using NServiceBus.AcceptanceTesting.Support;
-    using NServiceBus.Hosting.Helpers;
+    using AcceptanceTesting.Support;
+    using Hosting.Helpers;
 
     public class AllTransports : ScenarioDescriptor
     {
@@ -14,7 +14,10 @@
             AddRange(ActiveTransports);
         }
 
-        static IEnumerable<RunDescriptor> ActiveTransports => new List<RunDescriptor> { Transports.Default };
+        static IEnumerable<RunDescriptor> ActiveTransports => new List<RunDescriptor>
+        {
+            Transports.Default
+        };
     }
 
     public class AllDtcTransports : AllTransports

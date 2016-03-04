@@ -1,10 +1,10 @@
 namespace NServiceBus.AcceptanceTests.Callbacks
 {
     using System.Threading.Tasks;
-    using NServiceBus.AcceptanceTesting;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NServiceBus.AcceptanceTests.ScenarioDescriptors;
+    using AcceptanceTesting;
+    using EndpointTemplates;
     using NUnit.Framework;
+    using ScenarioDescriptors;
 
     public class When_a_callback_for_local_message : NServiceBusAcceptanceTest
     {
@@ -12,25 +12,25 @@ namespace NServiceBus.AcceptanceTests.Callbacks
         public async Task Should_trigger_the_callback_when_the_response_comes_back()
         {
             await Scenario.Define<Context>()
-                    .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, context) =>
-                        {
-                            var options = new SendOptions();
+                .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, context) =>
+                {
+                    var options = new SendOptions();
 
-                            options.RouteToThisEndpoint();
+                    options.RouteToThisEndpoint();
 
-                            await bus.Request<MyResponse>(new MyRequest(), options);
-                            
-                            Assert.True(context.HandlerGotTheRequest);
-                            context.CallbackFired = true;
-                        }))
-                    .Done(c => c.CallbackFired)
-                    .Repeat(r => r.For(Transports.Default))
-                    .Should(c =>
-                    {
-                        Assert.True(c.CallbackFired);
-                        Assert.True(c.HandlerGotTheRequest);
-                    })
-                    .Run();
+                    await bus.Request<MyResponse>(new MyRequest(), options);
+
+                    Assert.True(context.HandlerGotTheRequest);
+                    context.CallbackFired = true;
+                }))
+                .Done(c => c.CallbackFired)
+                .Repeat(r => r.For(Transports.Default))
+                .Should(c =>
+                {
+                    Assert.True(c.CallbackFired);
+                    Assert.True(c.HandlerGotTheRequest);
+                })
+                .Run();
         }
 
         public class Context : ScenarioContext
@@ -62,8 +62,12 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             }
         }
 
-        public class MyRequest : IMessage { }
+        public class MyRequest : IMessage
+        {
+        }
 
-        public class MyResponse : IMessage { }
+        public class MyResponse : IMessage
+        {
+        }
     }
 }
