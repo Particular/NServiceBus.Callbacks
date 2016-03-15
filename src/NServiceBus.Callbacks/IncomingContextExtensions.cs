@@ -1,5 +1,6 @@
 namespace NServiceBus
 {
+    using System;
     using Pipeline;
     using Transports;
 
@@ -20,13 +21,18 @@ namespace NServiceBus
 
             if (message.Headers.TryGetValue(Headers.NServiceBusVersion, out version))
             {
-                if (version.StartsWith("3."))
+                Version parsedVersion;
+                if (Version.TryParse(version, out parsedVersion))
                 {
-                    checkMessageIntent = false;
+                    if (parsedVersion < minimumVersionThatSupportMessageIntent_Reply)
+                    {
+                        checkMessageIntent = false;
+                    }
                 }
             }
 
-            if (checkMessageIntent && message.GetMesssageIntent() != MessageIntentEnum.Reply)
+            var messageIntentEnum = message.GetMesssageIntent();
+            if (checkMessageIntent && messageIntentEnum != MessageIntentEnum.Reply)
             {
                 return emptyResult;
             }
@@ -40,6 +46,8 @@ namespace NServiceBus
             string str;
             return context.MessageHeaders.TryGetValue(Headers.CorrelationId, out str) ? str : null;
         }
+
+        static Version minimumVersionThatSupportMessageIntent_Reply = new Version(4, 3);
 
         internal class CorrelationIdAndTaskCompletionSource
         {
