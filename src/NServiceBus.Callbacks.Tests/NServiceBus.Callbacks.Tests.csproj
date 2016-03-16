@@ -81,6 +81,7 @@
     <Compile Include="ApprovalTestConfig.cs" />
     <Compile Include="App_Packages\ApiApprover.3.0.1\PublicApiApprover.cs" />
     <Compile Include="App_Packages\ApiApprover.3.0.1\PublicApiGenerator.cs" />
+    <Compile Include="When_sending_reply_to_the_request.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
