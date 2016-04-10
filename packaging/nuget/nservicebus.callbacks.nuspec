@@ -13,7 +13,7 @@
     <description>The most popular open-source service bus for .net</description>
     <releaseNotes></releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>nservicebus servicebus msmq cqrs publish subscribe</tags>
+    <tags>$tags$</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="net452" />
       <frameworkAssembly assemblyName="System.Core" targetFramework="net452" />
