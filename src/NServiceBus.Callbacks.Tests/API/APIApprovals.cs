@@ -16,6 +16,7 @@
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void ApproveCallbacks()
         {
+            Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
             var assemblyPath = Path.GetFullPath(typeof(RequestResponseExtensions).Assembly.Location);
             var asm = AssemblyDefinition.ReadAssembly(assemblyPath);
             var publicApi = Filter(PublicApiGenerator.CreatePublicApiForAssembly(asm));
