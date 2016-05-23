@@ -58,7 +58,6 @@
     <Compile Include="IncomingContextExtensions.cs" />
     <Compile Include="InternalsVisibleTo.cs" />
     <Compile Include="Reply\RequestResponseInvocationForControlMessagesBehavior.cs" />
-    <Compile Include="SendOptionsExtensions.cs" />
     <Compile Include="CallbackResponseHelper.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Request\SkipBestPracticesForReplyIntEnumBehavior.cs" />

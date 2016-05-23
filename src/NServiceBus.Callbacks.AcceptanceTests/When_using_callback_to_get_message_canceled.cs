@@ -23,11 +23,9 @@
 
                     var options = new SendOptions();
 
-                    options.RegisterCancellationToken(cs.Token);
-
                     try
                     {
-                        ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options);
+                        ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options, cs.Token);
                         ctx.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)
