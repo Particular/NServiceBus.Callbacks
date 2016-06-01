@@ -6,10 +6,7 @@ namespace NServiceBus
 {
     public class static RequestResponseExtensions
     {
-        public static async System.Threading.Tasks.Task<TResponse> Request<TResponse>(this NServiceBus.IMessageSession session, object requestMessage, NServiceBus.SendOptions options) { }
-    }
-    public class static SendOptionsExtensions
-    {
-        public static NServiceBus.SendOptions RegisterCancellationToken(this NServiceBus.SendOptions options, System.Threading.CancellationToken cancellationToken) { }
+        public static System.Threading.Tasks.Task<TResponse> Request<TResponse>(this NServiceBus.IMessageSession session, object requestMessage, NServiceBus.SendOptions options) { }
+        public static async System.Threading.Tasks.Task<TResponse> Request<TResponse>(this NServiceBus.IMessageSession session, object requestMessage, NServiceBus.SendOptions options, System.Threading.CancellationToken cancellationToken) { }
     }
 }

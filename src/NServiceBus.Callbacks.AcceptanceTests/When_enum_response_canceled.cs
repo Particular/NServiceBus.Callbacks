@@ -28,11 +28,9 @@
 
                     var options = new SendOptions();
 
-                    options.RegisterCancellationToken(cs.Token);
-
                     try
                     {
-                        c.Response = await bus.Request<OldEnum>(new MyRequest(), options);
+                        c.Response = await bus.Request<OldEnum>(new MyRequest(), options, cs.Token);
                         c.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)

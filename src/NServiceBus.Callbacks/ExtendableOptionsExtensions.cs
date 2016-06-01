@@ -5,7 +5,7 @@
 
     static class ExtendableOptionsExtensions
     {
-        public static void RegisterTokenInternal(this ExtendableOptions options, CancellationToken cancellationToken)
+        public static void RegisterCancellationToken(this ExtendableOptions options, CancellationToken cancellationToken)
         {
             var extensions = options.GetExtensions();
             UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters data;
