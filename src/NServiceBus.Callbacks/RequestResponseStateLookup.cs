@@ -4,6 +4,16 @@ namespace NServiceBus
 
     class RequestResponseStateLookup
     {
+        public RequestResponseStateLookup() : this(new ConcurrentDictionary<string, TaskCompletionSourceAdapter>())
+        {
+        }
+
+        // For testing purposes
+        internal RequestResponseStateLookup(ConcurrentDictionary<string, TaskCompletionSourceAdapter> dictionary)
+        {
+            messageIdToCompletionSource = dictionary;
+        }
+
         public void RegisterState(string messageId, TaskCompletionSourceAdapter state)
         {
             messageIdToCompletionSource[messageId] = state;
@@ -20,6 +30,6 @@ namespace NServiceBus
             messageIdToCompletionSource.TryRemove(messageId, out state);
         }
 
-        ConcurrentDictionary<string, TaskCompletionSourceAdapter> messageIdToCompletionSource = new ConcurrentDictionary<string, TaskCompletionSourceAdapter>();
+        ConcurrentDictionary<string, TaskCompletionSourceAdapter> messageIdToCompletionSource;
     }
 }
