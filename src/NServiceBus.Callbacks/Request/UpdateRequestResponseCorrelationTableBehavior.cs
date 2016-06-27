@@ -1,7 +1,6 @@
 ﻿namespace NServiceBus
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Pipeline;
@@ -19,16 +18,19 @@
 
             if (context.Extensions.TryGet(out parameters) && !parameters.CancellationToken.IsCancellationRequested)
             {
-                var messageId = context.MessageId;
-                parameters.Register(() =>
+                parameters.Register(state =>
                 {
+                    var s = (Tuple<RequestResponseStateLookup, string>) state;
+                    var stateLookup = s.Item1;
+                    var messageId = s.Item2;
+
                     TaskCompletionSourceAdapter tcs;
-                    if (lookup.TryGet(messageId, out tcs))
+                    if (stateLookup.TryGet(messageId, out tcs))
                     {
-                        tcs.SetCancelled();
+                        tcs.TrySetCanceled();
                     }
-                });
-                lookup.RegisterState(messageId, parameters.TaskCompletionSource);
+                }, Tuple.Create(lookup, context.MessageId));
+                lookup.RegisterState(context.MessageId, parameters.TaskCompletionSource);
             }
 
             return next();
@@ -36,30 +38,21 @@
 
         RequestResponseStateLookup lookup;
 
-        public class RequestResponseParameters : IDisposable
+        public struct RequestResponseParameters : IDisposable
         {
-            public RequestResponseParameters()
-            {
-                CancellationToken = CancellationToken.None;
-            }
-
             public void Dispose()
             {
-                foreach (var registration in registrations)
-                {
-                    registration.Dispose();
-                }
+                Registrations.Dispose();
             }
 
-            public void Register(Action action)
+            public void Register(Action<object> action, object state)
             {
-                registrations.Add(CancellationToken.Register(action));
+                Registrations = CancellationToken.Register(action, state);
             }
 
             public CancellationToken CancellationToken;
-
             public TaskCompletionSourceAdapter TaskCompletionSource;
-            List<CancellationTokenRegistration> registrations = new List<CancellationTokenRegistration>();
+            CancellationTokenRegistration Registrations;
         }
 
         public class Registration : RegisterStep

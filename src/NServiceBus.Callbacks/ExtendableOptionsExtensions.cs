@@ -17,10 +17,10 @@
             {
                 data = new UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters
                 {
-                    CancellationToken = cancellationToken
+                    CancellationToken = cancellationToken,
                 };
-                extensions.Set(data);
             }
+            extensions.Set(data);
         }
     }
 }
