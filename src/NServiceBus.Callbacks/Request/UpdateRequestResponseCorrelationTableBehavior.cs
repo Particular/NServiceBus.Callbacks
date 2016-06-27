@@ -1,7 +1,6 @@
 ﻿namespace NServiceBus
 {
     using System;
-    using System.Threading;
     using System.Threading.Tasks;
     using Pipeline;
 
@@ -14,46 +13,29 @@
 
         public override Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
         {
-            RequestResponseParameters parameters;
+            RequestResponseStateLookup.State requestResponseState;
 
-            if (context.Extensions.TryGet(out parameters) && !parameters.CancellationToken.IsCancellationRequested)
+            if (context.Extensions.TryGet(out requestResponseState) && !requestResponseState.CancellationToken.IsCancellationRequested)
             {
-                parameters.Register(state =>
+                requestResponseState.Register(state =>
                 {
                     var s = (Tuple<RequestResponseStateLookup, string>) state;
                     var stateLookup = s.Item1;
                     var messageId = s.Item2;
 
-                    TaskCompletionSourceAdapter tcs;
-                    if (stateLookup.TryGet(messageId, out tcs))
+                    RequestResponseStateLookup.State responseState;
+                    if (stateLookup.TryRemove(messageId, out responseState))
                     {
-                        tcs.TrySetCanceled();
+                        responseState.TaskCompletionSource.TrySetCanceled();
                     }
                 }, Tuple.Create(lookup, context.MessageId));
-                lookup.RegisterState(context.MessageId, parameters.TaskCompletionSource);
+                lookup.RegisterState(context.MessageId, requestResponseState);
             }
 
             return next();
         }
 
         RequestResponseStateLookup lookup;
-
-        public struct RequestResponseParameters : IDisposable
-        {
-            public void Dispose()
-            {
-                Registrations.Dispose();
-            }
-
-            public void Register(Action<object> action, object state)
-            {
-                Registrations = CancellationToken.Register(action, state);
-            }
-
-            public CancellationToken CancellationToken;
-            public TaskCompletionSourceAdapter TaskCompletionSource;
-            CancellationTokenRegistration Registrations;
-        }
 
         public class Registration : RegisterStep
         {

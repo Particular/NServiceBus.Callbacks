@@ -62,7 +62,6 @@
             }
 
             var tcs = new TaskCompletionSource<TResponse>();
-
             var adapter = new TaskCompletionSourceAdapter(tcs);
             options.RouteReplyToThisInstance();
             options.RegisterCancellationToken(cancellationToken);
@@ -76,24 +75,24 @@
         }
 
 
-        static IDisposable RegisterTokenSource(this ExtendableOptions options, TaskCompletionSourceAdapter adapter)
+        static RequestResponseStateLookup.State RegisterTokenSource(this ExtendableOptions options, TaskCompletionSourceAdapter adapter)
         {
             var extensions = options.GetExtensions();
-            UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters data;
-            if (extensions.TryGet(out data))
+            RequestResponseStateLookup.State state;
+            if (extensions.TryGet(out state))
             {
-                data.TaskCompletionSource = adapter;
+                state.TaskCompletionSource = adapter;
             }
             else
             {
-                data = new UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters
+                state = new RequestResponseStateLookup.State
                 {
                     TaskCompletionSource = adapter,
                     CancellationToken = CancellationToken.None
                 };
             }
-            extensions.Set(data);
-            return data;
+            extensions.Set(state);
+            return state;
         }
     }
 }

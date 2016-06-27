@@ -12,14 +12,14 @@
         [Test]
         public async Task Should_not_leak_state_when_request_canceled()
         {
-            var dictionary = new ConcurrentDictionary<string, TaskCompletionSourceAdapter>();
+            var dictionary = new ConcurrentDictionary<string, RequestResponseStateLookup.State>();
             var requestResponseStateLookup = new RequestResponseStateLookup(dictionary);
 
             var tcs = new TaskCompletionSource<object>();
             var adapter = new TaskCompletionSourceAdapter(tcs);
             var tokenSource = new CancellationTokenSource();
             var outgoingPhysicalMessageContext = new TestableOutgoingPhysicalMessageContext();
-            outgoingPhysicalMessageContext.Extensions.Set(new UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters
+            outgoingPhysicalMessageContext.Extensions.Set(new RequestResponseStateLookup.State
             {
                 CancellationToken = tokenSource.Token,
                 TaskCompletionSource = adapter

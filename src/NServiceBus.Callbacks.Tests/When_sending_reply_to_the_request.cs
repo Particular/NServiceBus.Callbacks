@@ -20,12 +20,12 @@
         {
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
-            lookup.RegisterState(correlationId, new TaskCompletionSourceAdapter(new object()));
+            lookup.RegisterState(correlationId, new RequestResponseStateLookup.State());
             Transports.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
             var incomingContext = new TestableIncomingLogicalMessageContext();
             incomingContext.MessageHeaders.Add(Headers.CorrelationId, correlationId);
 
-            var result = incomingContext.GetCorrelationIdAndCompletionSource(message, lookup);
+            var result = incomingContext.TryRemoveResponseStateBasedOnCorrelationId(message, lookup);
 
             Assert.AreEqual(expectedNonEmptyResult, result.HasValue);
         }
@@ -43,12 +43,12 @@
         {
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
-            lookup.RegisterState(correlationId, new TaskCompletionSourceAdapter(new object()));
+            lookup.RegisterState(correlationId, new RequestResponseStateLookup.State());
             Transports.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
             var incomingContext = new TestableIncomingLogicalMessageContext();
             incomingContext.MessageHeaders.Add(Headers.CorrelationId, correlationId);
 
-            var result = incomingContext.GetCorrelationIdAndCompletionSource(message, lookup);
+            var result = incomingContext.TryRemoveResponseStateBasedOnCorrelationId(message, lookup);
 
             Assert.IsTrue(result.HasValue);
         }
