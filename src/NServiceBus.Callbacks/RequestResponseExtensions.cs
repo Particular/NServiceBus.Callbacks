@@ -88,10 +88,11 @@
             {
                 data = new UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters
                 {
-                    TaskCompletionSource = adapter
+                    TaskCompletionSource = adapter,
+                    CancellationToken = CancellationToken.None
                 };
-                extensions.Set(data);
             }
+            extensions.Set(data);
             return data;
         }
     }
