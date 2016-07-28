@@ -21,7 +21,7 @@
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
             lookup.RegisterState(correlationId, new RequestResponseStateLookup.State());
-            Transports.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
+            Transport.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
             var incomingContext = new TestableIncomingLogicalMessageContext();
             incomingContext.MessageHeaders.Add(Headers.CorrelationId, correlationId);
 
@@ -44,7 +44,7 @@
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
             lookup.RegisterState(correlationId, new RequestResponseStateLookup.State());
-            Transports.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
+            Transport.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
             var incomingContext = new TestableIncomingLogicalMessageContext();
             incomingContext.MessageHeaders.Add(Headers.CorrelationId, correlationId);
 
@@ -53,7 +53,7 @@
             Assert.IsTrue(result.HasValue);
         }
 
-        class IncomingMessage : Transports.IncomingMessage
+        class IncomingMessage : Transport.IncomingMessage
         {
             public IncomingMessage(string nsbVersion, MessageIntentEnum msgIntent)
                 : base(
