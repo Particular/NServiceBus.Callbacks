@@ -34,11 +34,11 @@
         {
             public Replier()
             {
-                EndpointSetup<DefaultServer>(endpointConfiguration =>
+                EndpointSetup<DefaultServer>(c =>
                 {
-                    var conventions = endpointConfiguration.Conventions();
+                    var conventions = c.Conventions();
                     conventions.DefiningCommandsAs(DefinesCommandType);
-                    endpointConfiguration.MakeInstanceUniquelyAddressable("1");
+                    c.MakeInstanceUniquelyAddressable("1");
                 });
             }
 
