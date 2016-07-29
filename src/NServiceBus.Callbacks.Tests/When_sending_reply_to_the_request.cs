@@ -63,7 +63,7 @@
                         {NServiceBus.Headers.NServiceBusVersion, nsbVersion},
                         {NServiceBus.Headers.MessageIntent, msgIntent.ToString()}
                     },
-                    new MemoryStream())
+                    new byte[0])
             {
             }
         }
