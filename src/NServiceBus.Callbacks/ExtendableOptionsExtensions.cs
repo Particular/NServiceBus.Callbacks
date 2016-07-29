@@ -5,22 +5,22 @@
 
     static class ExtendableOptionsExtensions
     {
-        public static void RegisterTokenInternal(this ExtendableOptions options, CancellationToken cancellationToken)
+        public static void RegisterCancellationToken(this ExtendableOptions options, CancellationToken cancellationToken)
         {
             var extensions = options.GetExtensions();
-            UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters data;
-            if (extensions.TryGet(out data))
+            RequestResponseStateLookup.State state;
+            if (extensions.TryGet(out state))
             {
-                data.CancellationToken = cancellationToken;
+                state.CancellationToken = cancellationToken;
             }
             else
             {
-                data = new UpdateRequestResponseCorrelationTableBehavior.RequestResponseParameters
+                state = new RequestResponseStateLookup.State
                 {
                     CancellationToken = cancellationToken
                 };
-                extensions.Set(data);
             }
+            extensions.Set(state);
         }
     }
 }

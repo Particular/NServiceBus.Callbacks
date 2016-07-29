@@ -13,7 +13,7 @@
         {
             if (!context.Settings.HasSetting("EndpointInstanceDiscriminator"))
             {
-                throw new Exception("In order to use the callbacks feature you need to specify an endpoint instance ID via EndpointConfiguration.ScaleOut().InstanceDiscriminator(string discriminator)");
+                throw new Exception("In order to use the callbacks feature you need to specify an endpoint instance ID via EndpointConfiguration.MakeInstanceUniquelyAddressable(string discriminator)");
             }
 
             context.Container.ConfigureComponent<RequestResponseStateLookup>(DependencyLifecycle.SingleInstance);

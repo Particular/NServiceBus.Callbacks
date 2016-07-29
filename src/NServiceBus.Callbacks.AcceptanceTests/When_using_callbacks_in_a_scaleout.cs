@@ -14,7 +14,7 @@
         {
             //to avoid processing each others callbacks
             var ctx = await Scenario.Define<Context>(c => { c.Id = Guid.NewGuid(); })
-                .WithEndpoint<Client>(b => b.CustomConfig(c => c.ScaleOut().InstanceDiscriminator("A"))
+                .WithEndpoint<Client>(b => b.CustomConfig(c => c.MakeInstanceUniquelyAddressable("A"))
                     .When(async (bus, context) =>
                     {
                         var response = await bus.Request<MyResponse>(new MyRequest
@@ -27,7 +27,7 @@
                             context.ResponseEndedUpAtTheWrongClient = true;
                         }
                     }))
-                .WithEndpoint<Client>(b => b.CustomConfig(c => c.ScaleOut().InstanceDiscriminator("B"))
+                .WithEndpoint<Client>(b => b.CustomConfig(c => c.MakeInstanceUniquelyAddressable("B"))
                     .When(async (bus, context) =>
                     {
                         var response = await bus.Request<MyResponse>(new MyRequest
@@ -65,7 +65,7 @@
             public Client()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"))
+                    c.MakeInstanceUniquelyAddressable("1"))
                     .AddMapping<MyRequest>(typeof(Server));
             }
         }
@@ -75,7 +75,7 @@
             public Server()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"));
+                    c.MakeInstanceUniquelyAddressable("1"));
             }
 
             public class MyMessageHandler : IHandleMessages<MyRequest>

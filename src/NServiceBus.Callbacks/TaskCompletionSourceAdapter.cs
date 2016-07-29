@@ -1,6 +1,7 @@
 namespace NServiceBus
 {
     using System;
+    using System.Threading;
 
     class TaskCompletionSourceAdapter
     {
@@ -20,14 +21,21 @@ namespace NServiceBus
             });
         }
 
-        public void SetCancelled()
+        public void TrySetCanceled()
         {
-            var method = taskCompletionSource.GetType().GetMethod("SetCanceled");
-            method.Invoke(taskCompletionSource, new object[]
-            {
-            });
+            var method = taskCompletionSource.GetType().GetMethod("TrySetCanceled", TrySetCancelledArgumentTypes);
+            method.Invoke(taskCompletionSource, TrySetCancelledArguments);
         }
 
         object taskCompletionSource;
+
+        static Type[] TrySetCancelledArgumentTypes = {
+            typeof(CancellationToken)
+        };
+
+        static object[] TrySetCancelledArguments =
+        {
+            CancellationToken.None
+        };
     }
 }

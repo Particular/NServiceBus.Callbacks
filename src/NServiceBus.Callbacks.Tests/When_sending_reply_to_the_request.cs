@@ -3,11 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Threading.Tasks;
-    using Extensibility;
     using NUnit.Framework;
-    using ObjectBuilder;
-    using Pipeline;
+    using Testing;
 
     [TestFixture]
     class When_sending_reply_to_the_request
@@ -23,11 +20,12 @@
         {
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
-            lookup.RegisterState(correlationId, new TaskCompletionSourceAdapter(new object()));
-            Transports.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
-            var incomingContext = new IncomingContext(correlationId);
+            lookup.RegisterState(correlationId, new RequestResponseStateLookup.State());
+            Transport.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
+            var incomingContext = new TestableIncomingLogicalMessageContext();
+            incomingContext.MessageHeaders.Add(Headers.CorrelationId, correlationId);
 
-            var result = incomingContext.GetCorrelationIdAndCompletionSource(message, lookup);
+            var result = incomingContext.TryRemoveResponseStateBasedOnCorrelationId(message, lookup);
 
             Assert.AreEqual(expectedNonEmptyResult, result.HasValue);
         }
@@ -45,81 +43,29 @@
         {
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
-            lookup.RegisterState(correlationId, new TaskCompletionSourceAdapter(new object()));
-            Transports.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
-            var incomingContext = new IncomingContext(correlationId);
+            lookup.RegisterState(correlationId, new RequestResponseStateLookup.State());
+            Transport.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
+            var incomingContext = new TestableIncomingLogicalMessageContext();
+            incomingContext.MessageHeaders.Add(Headers.CorrelationId, correlationId);
 
-            var result = incomingContext.GetCorrelationIdAndCompletionSource(message, lookup);
+            var result = incomingContext.TryRemoveResponseStateBasedOnCorrelationId(message, lookup);
 
             Assert.IsTrue(result.HasValue);
         }
 
-        class IncomingMessage : Transports.IncomingMessage
+        class IncomingMessage : Transport.IncomingMessage
         {
-            public IncomingMessage(string nsbVersion, MessageIntentEnum msgIntent) 
+            public IncomingMessage(string nsbVersion, MessageIntentEnum msgIntent)
                 : base(
-                      new Guid().ToString(), 
-                      new Dictionary<string, string> {
-                        { NServiceBus.Headers.NServiceBusVersion, nsbVersion },
-                        { NServiceBus.Headers.MessageIntent, msgIntent.ToString() }}, 
-                      new MemoryStream()) { }
-        }
-
-        //TODO: replace this class when mocks are provided for context
-        //https://github.com/Particular/NServiceBus.Testing/issues/29
-        class IncomingContext : IIncomingContext
-        {
-            public IncomingContext(string correlationId) : 
-                this(new Dictionary<string, string>{ {Headers.CorrelationId, correlationId} })
-            { 
-            }
-
-            IncomingContext(IReadOnlyDictionary<string, string> headers)
+                    new Guid().ToString(),
+                    new Dictionary<string, string>
+                    {
+                        {NServiceBus.Headers.NServiceBusVersion, nsbVersion},
+                        {NServiceBus.Headers.MessageIntent, msgIntent.ToString()}
+                    },
+                    new byte[0])
             {
-                MessageHeaders = headers;
             }
-
-            public IReadOnlyDictionary<string, string> MessageHeaders { get; }
-            
-            public ContextBag Extensions { get; }
-            public IBuilder Builder { get; }
-            public Task Send(object message, SendOptions options)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task Send<T>(Action<T> messageConstructor, SendOptions options)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task Publish(object message, PublishOptions options)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task Publish<T>(Action<T> messageConstructor, PublishOptions publishOptions)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task Reply(object message, ReplyOptions options)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task Reply<T>(Action<T> messageConstructor, ReplyOptions options)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task ForwardCurrentMessageTo(string destination)
-            {
-                throw new NotImplementedException();
-            }
-
-            public string MessageId { get; }
-            public string ReplyToAddress { get; }
         }
     }
 }

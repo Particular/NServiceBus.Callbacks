@@ -1,8 +1,6 @@
 ﻿namespace NServiceBus
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
     using System.Threading.Tasks;
     using Pipeline;
 
@@ -15,20 +13,23 @@
 
         public override Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
         {
-            RequestResponseParameters parameters;
+            RequestResponseStateLookup.State requestResponseState;
 
-            if (context.Extensions.TryGet(out parameters) && !parameters.CancellationToken.IsCancellationRequested)
+            if (context.Extensions.TryGet(out requestResponseState) && !requestResponseState.CancellationToken.IsCancellationRequested)
             {
-                var messageId = context.MessageId;
-                parameters.Register(() =>
+                requestResponseState.Register(state =>
                 {
-                    TaskCompletionSourceAdapter tcs;
-                    if (lookup.TryGet(messageId, out tcs))
+                    var s = (Tuple<RequestResponseStateLookup, string>) state;
+                    var stateLookup = s.Item1;
+                    var messageId = s.Item2;
+
+                    RequestResponseStateLookup.State responseState;
+                    if (stateLookup.TryRemove(messageId, out responseState))
                     {
-                        tcs.SetCancelled();
+                        responseState.TaskCompletionSource.TrySetCanceled();
                     }
-                });
-                lookup.RegisterState(messageId, parameters.TaskCompletionSource);
+                }, Tuple.Create(lookup, context.MessageId));
+                lookup.RegisterState(context.MessageId, requestResponseState);
             }
 
             return next();
@@ -36,38 +37,12 @@
 
         RequestResponseStateLookup lookup;
 
-        public class RequestResponseParameters : IDisposable
-        {
-            public RequestResponseParameters()
-            {
-                CancellationToken = CancellationToken.None;
-            }
-
-            public void Dispose()
-            {
-                foreach (var registration in registrations)
-                {
-                    registration.Dispose();
-                }
-            }
-
-            public void Register(Action action)
-            {
-                registrations.Add(CancellationToken.Register(action));
-            }
-
-            public CancellationToken CancellationToken;
-
-            public TaskCompletionSourceAdapter TaskCompletionSource;
-            List<CancellationTokenRegistration> registrations = new List<CancellationTokenRegistration>();
-        }
-
         public class Registration : RegisterStep
         {
             public Registration()
                 : base("UpdateRequestResponseCorrelationTable", typeof(UpdateRequestResponseCorrelationTableBehavior), "Updates the correlation table that keeps track of synchronous request/response callbacks")
             {
-                InsertAfterIfExists(WellKnownStep.MutateOutgoingTransportMessage);
+                InsertAfterIfExists("MutateOutgoingTransportMessage");
             }
         }
     }

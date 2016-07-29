@@ -24,11 +24,10 @@ namespace NServiceBus.AcceptanceTests.Callbacks
                     var options = new SendOptions();
 
                     options.RouteToThisEndpoint();
-                    options.RegisterCancellationToken(cs.Token);
 
                     try
                     {
-                        ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options);
+                        ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options, cs.Token);
                         ctx.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)
@@ -64,7 +63,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"));
+                    c.MakeInstanceUniquelyAddressable("1"));
             }
 
             public class MyRequestHandler : IHandleMessages<MyRequest>

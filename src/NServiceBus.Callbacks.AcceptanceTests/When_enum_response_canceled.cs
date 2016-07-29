@@ -28,11 +28,9 @@
 
                     var options = new SendOptions();
 
-                    options.RegisterCancellationToken(cs.Token);
-
                     try
                     {
-                        c.Response = await bus.Request<OldEnum>(new MyRequest(), options);
+                        c.Response = await bus.Request<OldEnum>(new MyRequest(), options, cs.Token);
                         c.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)
@@ -63,7 +61,7 @@
             public Replier()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"));
+                    c.MakeInstanceUniquelyAddressable("1"));
             }
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
@@ -85,7 +83,7 @@
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"))
+                    c.MakeInstanceUniquelyAddressable("1"))
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }
