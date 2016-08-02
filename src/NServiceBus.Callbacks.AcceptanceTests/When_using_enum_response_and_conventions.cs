@@ -41,11 +41,11 @@
         {
             public Replier()
             {
-                EndpointSetup<DefaultServer>(busConfiguration =>
+                EndpointSetup<DefaultServer>(c =>
                 {
-                    var conventions = busConfiguration.Conventions();
+                    var conventions = c.Conventions();
                     conventions.DefiningCommandsAs(DefinesCommandType);
-                    busConfiguration.ScaleOut().InstanceDiscriminator("1");
+                    c.MakeInstanceUniquelyAddressable("1");
                 });
             }
 
@@ -68,7 +68,7 @@
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"))
+                    c.MakeInstanceUniquelyAddressable("1"))
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }

@@ -2,7 +2,7 @@ namespace NServiceBus
 {
     using System;
     using Pipeline;
-    using Transports;
+    using Transport;
 
     static class IncomingContextExtensions
     {

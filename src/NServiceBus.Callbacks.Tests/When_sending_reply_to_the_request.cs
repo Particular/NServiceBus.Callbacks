@@ -2,9 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using NUnit.Framework;
     using Testing;
+    using Transport;
 
     [TestFixture]
     class When_sending_reply_to_the_request
@@ -21,7 +21,7 @@
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
             lookup.RegisterState(correlationId, new RequestResponseStateLookup.State());
-            Transports.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
+            var message = new IncomingMessageFromLegacyEndpoint(nsbVersion, intent);
             var incomingContext = new TestableIncomingLogicalMessageContext();
             incomingContext.MessageHeaders.Add(Headers.CorrelationId, correlationId);
 
@@ -44,7 +44,7 @@
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
             lookup.RegisterState(correlationId, new RequestResponseStateLookup.State());
-            Transports.IncomingMessage message = new IncomingMessage(nsbVersion, intent);
+            var message = new IncomingMessageFromLegacyEndpoint(nsbVersion, intent);
             var incomingContext = new TestableIncomingLogicalMessageContext();
             incomingContext.MessageHeaders.Add(Headers.CorrelationId, correlationId);
 
@@ -53,9 +53,9 @@
             Assert.IsTrue(result.HasValue);
         }
 
-        class IncomingMessage : Transports.IncomingMessage
+        class IncomingMessageFromLegacyEndpoint : IncomingMessage
         {
-            public IncomingMessage(string nsbVersion, MessageIntentEnum msgIntent)
+            public IncomingMessageFromLegacyEndpoint(string nsbVersion, MessageIntentEnum msgIntent)
                 : base(
                     new Guid().ToString(),
                     new Dictionary<string, string>
@@ -63,7 +63,7 @@
                         {NServiceBus.Headers.NServiceBusVersion, nsbVersion},
                         {NServiceBus.Headers.MessageIntent, msgIntent.ToString()}
                     },
-                    new MemoryStream())
+                    new byte[0])
             {
             }
         }
