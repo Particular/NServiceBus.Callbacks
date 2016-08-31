@@ -39,8 +39,8 @@
 
         public class Registration : RegisterStep
         {
-            public Registration()
-                : base("UpdateRequestResponseCorrelationTable", typeof(UpdateRequestResponseCorrelationTableBehavior), "Updates the correlation table that keeps track of synchronous request/response callbacks")
+            public Registration(RequestResponseStateLookup lookup)
+                : base("UpdateRequestResponseCorrelationTable", typeof(UpdateRequestResponseCorrelationTableBehavior), "Updates the correlation table that keeps track of synchronous request/response callbacks", b => new UpdateRequestResponseCorrelationTableBehavior(lookup))
             {
                 InsertAfterIfExists("MutateOutgoingTransportMessage");
             }
