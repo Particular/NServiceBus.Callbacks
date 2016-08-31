@@ -49,7 +49,7 @@
             Assert.False(ctx.ResponseEndedUpAtTheWrongClient, "One of the responses ended up at the wrong client");
         }
 
-        public class Context : ScenarioContext
+        class Context : ScenarioContext
         {
             public Guid Id { get; set; }
 
@@ -60,7 +60,7 @@
             public bool CallbackBFired { get; set; }
         }
 
-        public class Client : EndpointConfigurationBuilder
+        class Client : EndpointConfigurationBuilder
         {
             public Client()
             {
@@ -70,7 +70,7 @@
             }
         }
 
-        public class Server : EndpointConfigurationBuilder
+        class Server : EndpointConfigurationBuilder
         {
             public Server()
             {

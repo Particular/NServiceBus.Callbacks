@@ -18,13 +18,5 @@
             }
             return next();
         }
-
-        public class Registration : RegisterStep
-        {
-            public Registration()
-                : base("SetCallbackResponseReturnCodeBehavior", typeof(SetCallbackResponseReturnCodeBehavior), "Promotes the callback response return code to a header in order to be backwards compatible with v5 and below")
-            {
-            }
-        }
     }
 }

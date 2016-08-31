@@ -32,13 +32,5 @@
         }
 
         RequestResponseStateLookup requestResponseStateLookup;
-
-        public class Registration : RegisterStep
-        {
-            public Registration()
-                : base("RequestResponseInvocationForMessagesBehavior", typeof(RequestResponseInvocationForMessagesBehavior), "Invokes the callback of a synchronous request/response")
-            {
-            }
-        }
     }
 }

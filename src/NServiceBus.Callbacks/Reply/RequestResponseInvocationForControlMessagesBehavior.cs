@@ -44,13 +44,5 @@ namespace NServiceBus
         }
 
         RequestResponseStateLookup requestResponseStateLookup;
-
-        public class Registration : RegisterStep
-        {
-            public Registration()
-                : base("RequestResponseInvocationForControlMessagesBehavior", typeof(RequestResponseInvocationForControlMessagesBehavior), "Invokes the callback of a synchronous request/response for control messages")
-            {
-            }
-        }
     }
 }

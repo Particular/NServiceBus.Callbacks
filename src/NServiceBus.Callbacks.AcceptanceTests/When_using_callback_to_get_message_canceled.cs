@@ -42,7 +42,7 @@
             Assert.IsInstanceOf<OperationCanceledException>(exception);
         }
 
-        public class Context : ScenarioContext
+        class Context : ScenarioContext
         {
             public CancellationTokenSource TokenSource { get; set; }
 
@@ -53,7 +53,7 @@
             public MyResponse Response { get; set; }
         }
 
-        public class Replier : EndpointConfigurationBuilder
+        class Replier : EndpointConfigurationBuilder
         {
             public Replier()
             {
@@ -75,7 +75,7 @@
             }
         }
 
-        public class EndpointWithLocalCallback : EndpointConfigurationBuilder
+        class EndpointWithLocalCallback : EndpointConfigurationBuilder
         {
             public EndpointWithLocalCallback()
             {
