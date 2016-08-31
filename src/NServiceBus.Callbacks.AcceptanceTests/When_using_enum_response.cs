@@ -30,13 +30,13 @@
             Assert.AreEqual(OldEnum.Success, context.Response);
         }
 
-        public class Context : ScenarioContext
+        class Context : ScenarioContext
         {
             public bool CallbackFired { get; set; }
             public OldEnum Response { get; set; }
         }
 
-        public class Replier : EndpointConfigurationBuilder
+        class Replier : EndpointConfigurationBuilder
         {
             public Replier()
             {
@@ -53,7 +53,7 @@
             }
         }
 
-        public class EndpointWithLocalCallback : EndpointConfigurationBuilder
+        class EndpointWithLocalCallback : EndpointConfigurationBuilder
         {
             public EndpointWithLocalCallback()
             {

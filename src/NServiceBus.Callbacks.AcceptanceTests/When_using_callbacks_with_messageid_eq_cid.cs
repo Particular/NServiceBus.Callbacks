@@ -30,12 +30,12 @@
             Assert.True(context.CallbackFired);
         }
 
-        public class Context : ScenarioContext
+        class Context : ScenarioContext
         {
             public bool CallbackFired { get; set; }
         }
 
-        public class EndpointWithLocalCallback : EndpointConfigurationBuilder
+        class EndpointWithLocalCallback : EndpointConfigurationBuilder
         {
             public EndpointWithLocalCallback()
             {
