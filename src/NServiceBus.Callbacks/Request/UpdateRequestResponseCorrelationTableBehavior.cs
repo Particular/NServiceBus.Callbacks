@@ -15,11 +15,13 @@
         {
             RequestResponseStateLookup.State requestResponseState;
 
-            if (context.Extensions.TryGet(out requestResponseState) && !requestResponseState.CancellationToken.IsCancellationRequested)
+            if (context.Extensions.TryGet(out requestResponseState))
             {
+                lookup.RegisterState(context.MessageId, requestResponseState);
+
                 requestResponseState.Register(state =>
                 {
-                    var s = (Tuple<RequestResponseStateLookup, string>) state;
+                    var s = (Tuple<RequestResponseStateLookup, string>)state;
                     var stateLookup = s.Item1;
                     var messageId = s.Item2;
 
@@ -29,7 +31,6 @@
                         responseState.TaskCompletionSource.TrySetCanceled();
                     }
                 }, Tuple.Create(lookup, context.MessageId));
-                lookup.RegisterState(context.MessageId, requestResponseState);
             }
 
             return next();
