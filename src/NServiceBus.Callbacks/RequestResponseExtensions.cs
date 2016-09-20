@@ -98,6 +98,8 @@
                 throw new ArgumentNullException(nameof(session));
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             var tcs = new TaskCompletionSource<TResponse>();
             var adapter = new TaskCompletionSourceAdapter(tcs);
             options.RouteReplyToThisInstance();
