@@ -8,8 +8,9 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
     public class When_a_callback_for_local_message : NServiceBusAcceptanceTest
     {
-        [Test]
-        public async Task Should_trigger_the_callback_when_the_response_comes_back()
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task Should_trigger_the_callback_when_the_response_comes_back(bool useAction)
         {
             await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, context) =>
@@ -18,7 +19,10 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
                     options.RouteToThisEndpoint();
 
-                    await bus.Request<MyResponse>(new MyRequest(), options);
+                    if (useAction)
+                        await bus.Request<MyRequest, MyResponse>(x => { }, options);
+                    else
+                        await bus.Request<MyResponse>(new MyRequest(), options);
 
                     Assert.True(context.HandlerGotTheRequest);
                     context.CallbackFired = true;

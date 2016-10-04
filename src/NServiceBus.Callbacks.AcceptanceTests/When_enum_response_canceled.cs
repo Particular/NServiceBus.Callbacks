@@ -15,8 +15,9 @@
             Success
         }
 
-        [Test]
-        public async Task ShouldNot_trigger_the_callback_when_canceled()
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task ShouldNot_trigger_the_callback_when_canceled(bool useAction)
         {
             OperationCanceledException exception = null;
 
@@ -30,7 +31,10 @@
 
                     try
                     {
-                        c.Response = await bus.Request<OldEnum>(new MyRequest(), options, cs.Token);
+                        if (useAction)
+                            c.Response = await bus.Request<MyRequest, OldEnum>(x => { }, options, cs.Token);
+                        else
+                            c.Response = await bus.Request<OldEnum>(new MyRequest(), options, cs.Token);
                         c.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)

@@ -10,8 +10,9 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
     public class When_a_callback_for_local_message_canceled : NServiceBusAcceptanceTest
     {
-        [Test]
-        public async Task ShouldNot_trigger_the_callback_when_canceled()
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task ShouldNot_trigger_the_callback_when_canceled(bool useAction)
         {
             OperationCanceledException exception = null;
 
@@ -27,7 +28,10 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
                     try
                     {
-                        ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options, cs.Token);
+                        if (useAction)
+                            ctx.Response = await bus.Request<MyRequest, MyResponse>(x => { }, options, cs.Token);
+                        else
+                            ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options, cs.Token);
                         ctx.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)

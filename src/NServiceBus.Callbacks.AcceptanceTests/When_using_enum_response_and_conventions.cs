@@ -14,13 +14,17 @@
             Success
         }
 
-        [Test]
-        public async Task Should_send_back_old_style_control_message()
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task Should_send_back_old_style_control_message(bool useAction)
         {
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
                 {
-                    c.Response = await bus.Request<OldEnum>(new MyRequest(), new SendOptions());
+                    if (useAction)
+                        c.Response = await bus.Request<MyRequest, OldEnum>(x => { }, new SendOptions());
+                    else
+                        c.Response = await bus.Request<OldEnum>(new MyRequest(), new SendOptions());
                     c.CallbackFired = true;
                 }))
                 .WithEndpoint<Replier>()

@@ -9,18 +9,26 @@
 
     public class When_using_callbacks_in_a_scaleout : NServiceBusAcceptanceTest
     {
-        [Test]
-        public async Task Each_client_should_have_a_unique_input_queue()
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task Each_client_should_have_a_unique_input_queue(bool useAction)
         {
             //to avoid processing each others callbacks
             var ctx = await Scenario.Define<Context>(c => { c.Id = Guid.NewGuid(); })
                 .WithEndpoint<Client>(b => b.CustomConfig(c => c.MakeInstanceUniquelyAddressable("A"))
                     .When(async (bus, context) =>
                     {
-                        var response = await bus.Request<MyResponse>(new MyRequest
-                        {
-                            Client = "A"
-                        }, new SendOptions());
+                        MyResponse response;
+                        if (useAction)
+                            response = await bus.Request<MyRequest, MyResponse>(x =>
+                            {
+                                x.Client = "A";
+                            }, new SendOptions());
+                        else
+                            response = await bus.Request<MyResponse>(new MyRequest
+                            {
+                                Client = "A"
+                            }, new SendOptions());
                         context.CallbackAFired = true;
                         if (response.Client != "A")
                         {
@@ -30,10 +38,17 @@
                 .WithEndpoint<Client>(b => b.CustomConfig(c => c.MakeInstanceUniquelyAddressable("B"))
                     .When(async (bus, context) =>
                     {
-                        var response = await bus.Request<MyResponse>(new MyRequest
-                        {
-                            Client = "B"
-                        }, new SendOptions());
+                        MyResponse response;
+                        if (useAction)
+                            response = await bus.Request<MyRequest, MyResponse>(x =>
+                            {
+                                x.Client = "B";
+                            }, new SendOptions());
+                        else
+                            response = await bus.Request<MyResponse>(new MyRequest
+                            {
+                                Client = "B"
+                            }, new SendOptions());
                         context.CallbackBFired = true;
                         if (response.Client != "B")
                         {

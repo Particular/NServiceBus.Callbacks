@@ -8,8 +8,9 @@
 
     public class When_using_callbacks_with_messageid_eq_cid : NServiceBusAcceptanceTest
     {
-        [Test]
-        public async Task Should_trigger_the_callback()
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task Should_trigger_the_callback(bool useAction)
         {
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
@@ -20,7 +21,10 @@
                     options.SetMessageId(id);
                     options.RouteToThisEndpoint();
 
-                    await bus.Request<MyResponse>(new MyRequest(), options);
+                    if (useAction)
+                        await bus.Request<MyRequest, MyResponse>(x => { }, options);
+                    else
+                        await bus.Request<MyResponse>(new MyRequest(), options);
 
                     c.CallbackFired = true;
                 }))

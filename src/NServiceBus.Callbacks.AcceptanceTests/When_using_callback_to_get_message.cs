@@ -7,13 +7,17 @@
 
     public class When_using_callback_to_get_message : NServiceBusAcceptanceTest
     {
-        [Test]
-        public async Task Should_receive_message()
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task Should_receive_message(bool useAction)
         {
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
                 {
-                    c.Response = await bus.Request<MyResponse>(new MyRequest(), new SendOptions());
+                    if (useAction)
+                        c.Response = await bus.Request<MyRequest, MyResponse>(x => { }, new SendOptions());
+                    else
+                        c.Response = await bus.Request<MyResponse>(new MyRequest(), new SendOptions());
                     c.CallbackFired = true;
                 }))
                 .WithEndpoint<Replier>()
