@@ -24,21 +24,21 @@
             Assert.AreEqual(200, context.Response);
         }
 
-        public class Context : ScenarioContext
+        class Context : ScenarioContext
         {
             public bool CallbackFired { get; set; }
             public int Response { get; set; }
         }
 
-        public class Replier : EndpointConfigurationBuilder
+        class Replier : EndpointConfigurationBuilder
         {
             public Replier()
             {
-                EndpointSetup<DefaultServer>(busConfiguration =>
+                EndpointSetup<DefaultServer>(c =>
                 {
-                    var conventions = busConfiguration.Conventions();
+                    var conventions = c.Conventions();
                     conventions.DefiningCommandsAs(DefinesCommandType);
-                    busConfiguration.ScaleOut().InstanceDiscriminator("1");
+                    c.MakeInstanceUniquelyAddressable("1");
                 });
             }
 
@@ -56,12 +56,12 @@
             }
         }
 
-        public class EndpointWithLocalCallback : EndpointConfigurationBuilder
+        class EndpointWithLocalCallback : EndpointConfigurationBuilder
         {
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"))
+                    c.MakeInstanceUniquelyAddressable("1"))
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }

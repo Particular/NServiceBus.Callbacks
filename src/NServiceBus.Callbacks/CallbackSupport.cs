@@ -13,14 +13,14 @@
         {
             if (!context.Settings.HasSetting("EndpointInstanceDiscriminator"))
             {
-                throw new Exception("In order to use the callbacks feature you need to specify an endpoint instance ID via EndpointConfiguration.ScaleOut().InstanceDiscriminator(string discriminator)");
+                throw new Exception("In order to use the callbacks feature you need to specify an endpoint instance ID via EndpointConfiguration.MakeInstanceUniquelyAddressable(string discriminator)");
             }
 
-            context.Container.ConfigureComponent<RequestResponseStateLookup>(DependencyLifecycle.SingleInstance);
-            context.Pipeline.Register<RequestResponseInvocationForControlMessagesBehavior.Registration>();
-            context.Pipeline.Register<RequestResponseInvocationForMessagesBehavior.Registration>();
-            context.Pipeline.Register<UpdateRequestResponseCorrelationTableBehavior.Registration>();
-            context.Pipeline.Register<SetCallbackResponseReturnCodeBehavior.Registration>();
+            var lookup = new RequestResponseStateLookup();
+            context.Pipeline.Register("RequestResponseInvocationForControlMessagesBehavior", new RequestResponseInvocationForControlMessagesBehavior(lookup), "Invokes the callback of a synchronous request/response for control messages");
+            context.Pipeline.Register("RequestResponseInvocationForMessagesBehavior", new RequestResponseInvocationForMessagesBehavior(lookup), "Invokes the callback of a synchronous request/response");
+            context.Pipeline.Register(new UpdateRequestResponseCorrelationTableBehavior.Registration(lookup));
+            context.Pipeline.Register("SetCallbackResponseReturnCodeBehavior", new SetCallbackResponseReturnCodeBehavior(), "Promotes the callback response return code to a header in order to be backwards compatible with v5 and below");
             context.Pipeline.Register<SkipBestPracticesForReplyIntEnumBehavior.Registration>();
         }
     }

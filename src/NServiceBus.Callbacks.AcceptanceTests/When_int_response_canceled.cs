@@ -22,11 +22,9 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
                     var options = new SendOptions();
 
-                    options.RegisterCancellationToken(cs.Token);
-
                     try
                     {
-                        c.Response = await bus.Request<int>(new MyRequest(), options);
+                        c.Response = await bus.Request<int>(new MyRequest(), options, cs.Token);
                         c.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)
@@ -57,7 +55,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             public Replier()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"));
+                    c.MakeInstanceUniquelyAddressable("1"));
             }
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
@@ -79,7 +77,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"))
+                    c.MakeInstanceUniquelyAddressable("1"))
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }

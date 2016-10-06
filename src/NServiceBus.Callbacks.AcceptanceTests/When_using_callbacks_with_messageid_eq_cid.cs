@@ -30,17 +30,17 @@
             Assert.True(context.CallbackFired);
         }
 
-        public class Context : ScenarioContext
+        class Context : ScenarioContext
         {
             public bool CallbackFired { get; set; }
         }
 
-        public class EndpointWithLocalCallback : EndpointConfigurationBuilder
+        class EndpointWithLocalCallback : EndpointConfigurationBuilder
         {
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"));
+                    c.MakeInstanceUniquelyAddressable("1"));
             }
 
             public class MyRequestHandler : IHandleMessages<MyRequest>

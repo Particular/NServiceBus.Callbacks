@@ -3,7 +3,7 @@ namespace NServiceBus
     using System;
     using System.Threading.Tasks;
     using Pipeline;
-    using Transports;
+    using Transport;
 
     class RequestResponseInvocationForControlMessagesBehavior : Behavior<IIncomingPhysicalMessageContext>
     {
@@ -26,16 +26,15 @@ namespace NServiceBus
                 return;
             }
 
-            var result = context.GetCorrelationIdAndCompletionSource(incomingMessage, requestResponseStateLookup);
+            var result = context.TryRemoveResponseStateBasedOnCorrelationId(incomingMessage, requestResponseStateLookup);
             if (!result.HasValue)
             {
                 return;
             }
 
-            var responseType = result.TaskCompletionSource.ResponseType;
+            var responseType = result.Value.TaskCompletionSource.ResponseType;
             var errorCode = incomingMessage.Headers[Headers.ReturnMessageErrorCodeHeader];
-            result.TaskCompletionSource.TrySetResult(errorCode.ConvertFromReturnCode(responseType));
-            requestResponseStateLookup.RemoveState(result.CorrelationId);
+            result.Value.TaskCompletionSource.TrySetResult(errorCode.ConvertFromReturnCode(responseType));
         }
 
         static bool IsControlMessage(IncomingMessage incomingMessage)
@@ -45,13 +44,5 @@ namespace NServiceBus
         }
 
         RequestResponseStateLookup requestResponseStateLookup;
-
-        public class Registration : RegisterStep
-        {
-            public Registration()
-                : base("RequestResponseInvocationForControlMessagesBehavior", typeof(RequestResponseInvocationForControlMessagesBehavior), "Invokes the callback of a synchronous request/response for control messages")
-            {
-            }
-        }
     }
 }

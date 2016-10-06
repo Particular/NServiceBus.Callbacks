@@ -1,25 +1,48 @@
 namespace NServiceBus
 {
+    using System;
     using System.Collections.Concurrent;
+    using System.Threading;
 
     class RequestResponseStateLookup
     {
-        public void RegisterState(string messageId, TaskCompletionSourceAdapter state)
+        public RequestResponseStateLookup() : this(new ConcurrentDictionary<string, State>())
+        {
+        }
+
+        // For testing purposes
+        internal RequestResponseStateLookup(ConcurrentDictionary<string, State> dictionary)
+        {
+            messageIdToCompletionSource = dictionary;
+        }
+
+        public void RegisterState(string messageId, State state)
         {
             messageIdToCompletionSource[messageId] = state;
         }
 
-        public bool TryGet(string messageId, out TaskCompletionSourceAdapter state)
+        public bool TryRemove(string messageId, out State state)
         {
-            return messageIdToCompletionSource.TryGetValue(messageId, out state);
+            return messageIdToCompletionSource.TryRemove(messageId, out state);
         }
 
-        public void RemoveState(string messageId)
-        {
-            TaskCompletionSourceAdapter state;
-            messageIdToCompletionSource.TryRemove(messageId, out state);
-        }
+        ConcurrentDictionary<string, State> messageIdToCompletionSource;
 
-        ConcurrentDictionary<string, TaskCompletionSourceAdapter> messageIdToCompletionSource = new ConcurrentDictionary<string, TaskCompletionSourceAdapter>();
+        public struct State : IDisposable
+        {
+            public void Dispose()
+            {
+                Registrations.Dispose();
+            }
+
+            public void Register(Action<object> action, object state)
+            {
+                Registrations = CancellationToken.Register(action, state);
+            }
+
+            public CancellationToken CancellationToken;
+            public TaskCompletionSourceAdapter TaskCompletionSource;
+            CancellationTokenRegistration Registrations;
+        }
     }
 }

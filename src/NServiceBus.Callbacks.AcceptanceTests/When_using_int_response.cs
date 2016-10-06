@@ -23,22 +23,24 @@
             Assert.AreEqual(200, context.Response);
         }
 
-        public class Context : ScenarioContext
+        class Context : ScenarioContext
         {
             public bool CallbackFired { get; set; }
             public int Response { get; set; }
         }
 
-        public class Replier : EndpointConfigurationBuilder
+        class Replier : EndpointConfigurationBuilder
         {
             public Replier()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"));
+                    c.MakeInstanceUniquelyAddressable("1"));
             }
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
+                public Context Context { get; set; }
+
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
                     return context.Reply(200);
@@ -46,12 +48,12 @@
             }
         }
 
-        public class EndpointWithLocalCallback : EndpointConfigurationBuilder
+        class EndpointWithLocalCallback : EndpointConfigurationBuilder
         {
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"))
+                    c.MakeInstanceUniquelyAddressable("1"))
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }

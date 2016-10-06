@@ -23,11 +23,9 @@
 
                     var options = new SendOptions();
 
-                    options.RegisterCancellationToken(cs.Token);
-
                     try
                     {
-                        ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options);
+                        ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options, cs.Token);
                         ctx.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)
@@ -44,7 +42,7 @@
             Assert.IsInstanceOf<OperationCanceledException>(exception);
         }
 
-        public class Context : ScenarioContext
+        class Context : ScenarioContext
         {
             public CancellationTokenSource TokenSource { get; set; }
 
@@ -55,12 +53,12 @@
             public MyResponse Response { get; set; }
         }
 
-        public class Replier : EndpointConfigurationBuilder
+        class Replier : EndpointConfigurationBuilder
         {
             public Replier()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"));
+                    c.MakeInstanceUniquelyAddressable("1"));
             }
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
@@ -77,12 +75,12 @@
             }
         }
 
-        public class EndpointWithLocalCallback : EndpointConfigurationBuilder
+        class EndpointWithLocalCallback : EndpointConfigurationBuilder
         {
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.ScaleOut().InstanceDiscriminator("1"))
+                    c.MakeInstanceUniquelyAddressable("1"))
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }

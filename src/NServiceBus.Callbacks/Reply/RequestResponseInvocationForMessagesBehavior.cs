@@ -3,7 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using Pipeline;
-    using Transports;
+    using Transport;
 
     class RequestResponseInvocationForMessagesBehavior : Behavior<IIncomingLogicalMessageContext>
     {
@@ -21,26 +21,16 @@
 
         void AssignResultIfPossible(IncomingMessage incomingMessage, IIncomingLogicalMessageContext context)
         {
-            var result = context.GetCorrelationIdAndCompletionSource(incomingMessage, requestResponseStateLookup);
+            var result = context.TryRemoveResponseStateBasedOnCorrelationId(incomingMessage, requestResponseStateLookup);
             if (!result.HasValue)
             {
                 return;
             }
 
-            result.TaskCompletionSource.TrySetResult(context.Message.Instance);
-
+            result.Value.TaskCompletionSource.TrySetResult(context.Message.Instance);
             context.MessageHandled = true;
-            requestResponseStateLookup.RemoveState(result.CorrelationId);
         }
 
         RequestResponseStateLookup requestResponseStateLookup;
-
-        public class Registration : RegisterStep
-        {
-            public Registration()
-                : base("RequestResponseInvocationForMessagesBehavior", typeof(RequestResponseInvocationForMessagesBehavior), "Invokes the callback of a synchronous request/response")
-            {
-            }
-        }
     }
 }

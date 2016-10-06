@@ -21,9 +21,10 @@
                 : base(
                     "SkipBestPracticesForReplyIntEnumBehavior",
                     typeof(SkipBestPracticesForReplyIntEnumBehavior),
-                    "Skip BestPractices message validation for int and enum Reply")
+                    "Skip BestPractices message validation for int and enum Reply",
+                    b => new SkipBestPracticesForReplyIntEnumBehavior())
             {
-                InsertBefore(WellKnownStep.EnforceReplyBestPractices);
+                InsertBefore("EnforceReplyBestPractices");
             }
         }
     }

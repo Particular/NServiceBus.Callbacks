@@ -2,18 +2,17 @@ namespace NServiceBus
 {
     using System;
     using Pipeline;
-    using Transports;
+    using Transport;
 
     static class IncomingContextExtensions
     {
-        public static CorrelationIdAndTaskCompletionSource GetCorrelationIdAndCompletionSource(this IIncomingContext context, IncomingMessage message, RequestResponseStateLookup lookup)
+        public static RequestResponseStateLookup.State? TryRemoveResponseStateBasedOnCorrelationId(this IIncomingContext context, IncomingMessage message, RequestResponseStateLookup lookup)
         {
             var correlationId = context.GetCorrelationId();
 
-            var emptyResult = new CorrelationIdAndTaskCompletionSource();
             if (correlationId == null)
             {
-                return emptyResult;
+                return null;
             }
 
             string version;
@@ -34,11 +33,11 @@ namespace NServiceBus
             var messageIntentEnum = message.GetMesssageIntent();
             if (checkMessageIntent && messageIntentEnum != MessageIntentEnum.Reply)
             {
-                return emptyResult;
+                return null;
             }
 
-            TaskCompletionSourceAdapter tcs;
-            return !lookup.TryGet(correlationId, out tcs) ? emptyResult : new CorrelationIdAndTaskCompletionSource(correlationId, tcs);
+            RequestResponseStateLookup.State state;
+            return lookup.TryRemove(correlationId, out state) ? (RequestResponseStateLookup.State?) state : null;
         }
 
         static string GetCorrelationId(this IMessageProcessingContext context)
@@ -48,26 +47,5 @@ namespace NServiceBus
         }
 
         static Version minimumVersionThatSupportMessageIntent_Reply = new Version(4, 3);
-
-        internal class CorrelationIdAndTaskCompletionSource
-        {
-            public CorrelationIdAndTaskCompletionSource()
-            {
-                HasValue = false;
-            }
-
-            public CorrelationIdAndTaskCompletionSource(string correlationId, TaskCompletionSourceAdapter taskCompletionSource)
-            {
-                CorrelationId = correlationId;
-                TaskCompletionSource = taskCompletionSource;
-                HasValue = true;
-            }
-
-            public bool HasValue { get; }
-
-            public string CorrelationId { get; }
-
-            public TaskCompletionSourceAdapter TaskCompletionSource { get; }
-        }
     }
 }
