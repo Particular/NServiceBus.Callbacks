@@ -3,7 +3,7 @@ namespace NServiceBus.AcceptanceTests.EndpointTemplates
     using System;
     using System.Threading.Tasks;
     using AcceptanceTesting.Support;
-    using Config.ConfigurationSource;
+    using NServiceBus.Config.ConfigurationSource;
 
     public class DefaultPublisher : IEndpointSetupTemplate
     {
