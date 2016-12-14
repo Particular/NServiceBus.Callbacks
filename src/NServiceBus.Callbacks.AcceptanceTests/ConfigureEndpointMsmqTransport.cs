@@ -23,7 +23,20 @@ public class ConfigureEndpointMsmqTransport : IConfigureEndpointTestExecution
     {
         queueBindings = configuration.GetSettings().Get<QueueBindings>();
         var connectionString = settings.Get<string>("Transport.ConnectionString");
-        configuration.UseTransport<MsmqTransport>().ConnectionString(connectionString);
+        var transportConfig = configuration.UseTransport<MsmqTransport>();
+
+        transportConfig.ConnectionString(connectionString);
+
+        var routingConfig = transportConfig.Routing();
+
+        foreach (var publisher in publisherMetadata.Publishers)
+        {
+            foreach (var eventType in publisher.Events)
+            {
+                routingConfig.RegisterPublisher(eventType, publisher.PublisherName);
+            }
+        }
+
         return Task.FromResult(0);
     }
 

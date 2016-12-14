@@ -5,10 +5,10 @@
     using System.Threading.Tasks;
     using AcceptanceTesting.Customization;
     using AcceptanceTesting.Support;
+    using Config.ConfigurationSource;
     using Configuration.AdvanceExtensibility;
     using Features;
-    using NServiceBus.Config.ConfigurationSource;
-    using NServiceBus.Serialization;
+    using Serialization;
 
     public class DefaultServer : IEndpointSetupTemplate
     {
@@ -50,7 +50,7 @@
             Type serializerType;
             if (settings.TryGet("Serializer", out serializerType))
             {
-                configuration.UseSerialization((SerializationDefinition)Activator.CreateInstance(serializerType));
+                configuration.UseSerialization((SerializationDefinition) Activator.CreateInstance(serializerType));
             }
             await configuration.DefinePersistence(settings, endpointConfiguration).ConfigureAwait(false);
 
