@@ -1,12 +1,16 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callbacks", "NServiceBus.Callbacks\NServiceBus.Callbacks.csproj", "{B465A2EF-27A9-402B-BAC7-A660BE93C931}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callbacks.AcceptanceTests", "NServiceBus.Callbacks.AcceptanceTests\NServiceBus.Callbacks.AcceptanceTests.csproj", "{43A533C4-AAEF-449C-A1C9-4BF00EB063BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callbacks.Tests", "NServiceBus.Callbacks.Tests\NServiceBus.Callbacks.Tests.csproj", "{AE0CB75D-1052-4715-97A0-0099B36BD597}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callbacks.Testing", "NServiceBus.Callbacks.Testing\NServiceBus.Callbacks.Testing.csproj", "{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callback.Testing.Tests", "NServiceBus.Callback.Testing.Tests\NServiceBus.Callback.Testing.Tests.csproj", "{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +52,30 @@ Global
 		{AE0CB75D-1052-4715-97A0-0099B36BD597}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AE0CB75D-1052-4715-97A0-0099B36BD597}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AE0CB75D-1052-4715-97A0-0099B36BD597}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Debug|x86.Build.0 = Debug|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}.Release|x86.Build.0 = Release|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Debug|x86.Build.0 = Debug|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Release|x86.ActiveCfg = Release|Any CPU
+		{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
