@@ -11,4 +11,12 @@ To get started, install the package via NuGet:
 Install-Package NServiceBus.Callbacks
 ``` 
 
+### Testing callbacks
+
+To test callbacks, install the testing package via NuGet:
+
+```
+Install-Package NServiceBus.Callbacks.Testing
+``` 
+
 For more information please read our documentation about [Handling Responses on the Client Side](http://docs.particular.net/nservicebus/messaging/handling-responses-on-the-client-side) and the [Callbacks sample project](http://docs.particular.net/samples/callbacks/).
