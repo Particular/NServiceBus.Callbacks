@@ -20,6 +20,7 @@
     </frameworkAssemblies>
     <dependencies>
       <dependency id="NServiceBus.Callbacks" version="$version$" />
+      <dependency id="NServiceBus.Testing" version="[6.0.0, 7.0.0)" />
     </dependencies>
   </metadata>
   <files>
