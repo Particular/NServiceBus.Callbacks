@@ -16,7 +16,7 @@
             var requestResponseStateLookup = new RequestResponseStateLookup(dictionary);
 
             var tcs = new TaskCompletionSource<object>();
-            var adapter = new TaskCompletionSourceAdapter(tcs);
+            var adapter = new TaskCompletionSourceAdapter<object>(tcs);
             var tokenSource = new CancellationTokenSource();
             var outgoingPhysicalMessageContext = new TestableOutgoingPhysicalMessageContext();
             outgoingPhysicalMessageContext.Extensions.Set(new RequestResponseStateLookup.State
@@ -43,7 +43,7 @@
             var requestResponseStateLookup = new RequestResponseStateLookup(dictionary);
 
             var tcs = new TaskCompletionSource<object>();
-            var adapter = new TaskCompletionSourceAdapter(tcs);
+            var adapter = new TaskCompletionSourceAdapter<object>(tcs);
             var tokenSource = new CancellationTokenSource();
             tokenSource.Cancel();
             var outgoingPhysicalMessageContext = new TestableOutgoingPhysicalMessageContext();
