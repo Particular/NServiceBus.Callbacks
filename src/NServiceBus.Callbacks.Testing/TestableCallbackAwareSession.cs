@@ -45,7 +45,7 @@
                         {
                             state.TaskCompletionSource.TrySetResult(matcher.Item2);
                         }
-                        catch (ArgumentException exception)
+                        catch (InvalidCastException exception)
                         {
                             throw new InvalidOperationException($"Matcher matched but response type '{matcher.Item2?.GetType()}' is incompatible with expected response type of '{state.TaskCompletionSource.ResponseType}'.", exception);
                         }

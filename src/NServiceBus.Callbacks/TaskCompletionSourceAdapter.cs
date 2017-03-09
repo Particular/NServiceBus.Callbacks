@@ -1,41 +1,37 @@
 namespace NServiceBus
 {
     using System;
-    using System.Threading;
+    using System.Threading.Tasks;
 
-    class TaskCompletionSourceAdapter
+    interface TaskCompletionSourceAdapter
     {
-        public TaskCompletionSourceAdapter(object taskCompletionSource)
+        Type ResponseType { get; }
+
+        void TrySetResult(object result);
+
+        void TrySetCanceled();
+    }
+
+    class TaskCompletionSourceAdapter<TResult> : TaskCompletionSourceAdapter
+    {
+        TaskCompletionSource<TResult> taskCompletionSource;
+
+        public TaskCompletionSourceAdapter(TaskCompletionSource<TResult> tcs)
         {
-            this.taskCompletionSource = taskCompletionSource;
+            taskCompletionSource = tcs;
+            ResponseType = typeof(TResult);
         }
 
-        public Type ResponseType => taskCompletionSource.GetType().GenericTypeArguments[0];
+        public Type ResponseType { get; }
 
         public void TrySetResult(object result)
         {
-            var method = taskCompletionSource.GetType().GetMethod("TrySetResult");
-            method.Invoke(taskCompletionSource, new[]
-            {
-                result
-            });
+            taskCompletionSource.TrySetResult((TResult) result);
         }
 
         public void TrySetCanceled()
         {
-            var method = taskCompletionSource.GetType().GetMethod("TrySetCanceled", TrySetCancelledArgumentTypes);
-            method.Invoke(taskCompletionSource, TrySetCancelledArguments);
+            taskCompletionSource.TrySetCanceled();
         }
-
-        object taskCompletionSource;
-
-        static Type[] TrySetCancelledArgumentTypes = {
-            typeof(CancellationToken)
-        };
-
-        static object[] TrySetCancelledArguments =
-        {
-            CancellationToken.None
-        };
     }
 }
