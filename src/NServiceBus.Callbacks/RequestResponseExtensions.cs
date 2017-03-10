@@ -101,7 +101,7 @@
             cancellationToken.ThrowIfCancellationRequested();
 
             var tcs = new TaskCompletionSource<TResponse>();
-            var adapter = new TaskCompletionSourceAdapter(tcs);
+            var adapter = new TaskCompletionSourceAdapter<TResponse>(tcs);
             options.RouteReplyToThisInstance();
             options.RegisterCancellationToken(cancellationToken);
 
