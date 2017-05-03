@@ -84,10 +84,13 @@
     <Compile Include="When_using_callbacks_with_messageid_eq_cid.cs" />
     <Compile Include="When_using_callback_to_get_message.cs" />
     <Compile Include="When_using_callback_to_get_message_canceled.cs" />
+    <Compile Include="When_using_callback_with_reply_only_to_get_message.cs" />
     <Compile Include="When_using_enum_response_and_conventions.cs" />
     <Compile Include="When_using_enum_response.cs" />
+    <Compile Include="When_using_enum_response_with_reply_only.cs" />
     <Compile Include="When_using_int_response_and_conventions.cs" />
     <Compile Include="When_using_int_response.cs" />
+    <Compile Include="When_using_int_response_with_reply_only.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj">
