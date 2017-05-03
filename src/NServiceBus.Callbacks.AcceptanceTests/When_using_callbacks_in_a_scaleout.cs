@@ -64,8 +64,7 @@
         {
             public Client()
             {
-                EndpointSetup<DefaultServer>(c =>
-                    c.MakeInstanceUniquelyAddressable("1"))
+                EndpointSetup<DefaultServer>(c => c.EnableCallbacks())
                     .AddMapping<MyRequest>(typeof(Server));
             }
         }
@@ -74,8 +73,7 @@
         {
             public Server()
             {
-                EndpointSetup<DefaultServer>(c =>
-                    c.MakeInstanceUniquelyAddressable("1"));
+                EndpointSetup<DefaultServer>();
             }
 
             public class MyMessageHandler : IHandleMessages<MyRequest>
