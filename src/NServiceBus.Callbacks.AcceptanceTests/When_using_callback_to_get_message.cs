@@ -33,8 +33,7 @@
         {
             public Replier()
             {
-                EndpointSetup<DefaultServer>(c =>
-                    c.MakeInstanceUniquelyAddressable("1"));
+                EndpointSetup<DefaultServer>();
             }
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
@@ -51,7 +50,10 @@
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.MakeInstanceUniquelyAddressable("1"))
+                    {
+                        c.MakeInstanceUniquelyAddressable("1");
+                        c.EnableCallbacks();
+                    })
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }
