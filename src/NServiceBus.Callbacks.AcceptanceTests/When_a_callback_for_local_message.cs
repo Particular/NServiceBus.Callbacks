@@ -45,7 +45,10 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.MakeInstanceUniquelyAddressable("1"));
+                {
+                    c.MakeInstanceUniquelyAddressable("1");
+                    c.EnableCallbacks();
+                });
             }
 
             public class MyRequestHandler : IHandleMessages<MyRequest>

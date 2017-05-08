@@ -45,7 +45,7 @@
                 {
                     var conventions = c.Conventions();
                     conventions.DefiningCommandsAs(DefinesCommandType);
-                    c.MakeInstanceUniquelyAddressable("1");
+                    c.EnableCallbacks(makesRequests: false);
                 });
             }
 
@@ -68,7 +68,10 @@
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    c.MakeInstanceUniquelyAddressable("1"))
+                    {
+                        c.MakeInstanceUniquelyAddressable("1");
+                        c.EnableCallbacks();
+                    })
                     .AddMapping<MyRequest>(typeof(Replier));
             }
         }
