@@ -1,12 +1,14 @@
 ﻿[assembly: System.CLSCompliantAttribute(true)]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5.2", FrameworkDisplayName=".NET Framework 4.5.2")]
+
 namespace NServiceBus.Callbacks.Testing
 {
+    
     public class TestableCallbackAwareSession : NServiceBus.Testing.TestableMessageSession
     {
         public TestableCallbackAwareSession() { }
-        public override async System.Threading.Tasks.Task Send(object message, NServiceBus.SendOptions options) { }
+        public override System.Threading.Tasks.Task Send(object message, NServiceBus.SendOptions options) { }
         public void When<TRequest, TResult>(System.Func<TRequest, bool> matcher, TResult response)
             where TRequest :  class { }
         public void When<TRequest, TResult>(System.Func<TRequest, NServiceBus.SendOptions, bool> matcher, TResult response)

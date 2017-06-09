@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using NServiceBus.Testing;
     using NUnit.Framework;
-    using Testing;
     using Transport;
 
     [TestFixture]
