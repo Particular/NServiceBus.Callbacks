@@ -3,8 +3,8 @@
     using System.Collections.Concurrent;
     using System.Threading;
     using System.Threading.Tasks;
+    using NServiceBus.Testing;
     using NUnit.Framework;
-    using Testing;
 
     [TestFixture]
     public class UpdateRequestResponseCorrelationTableBehaviorTests
