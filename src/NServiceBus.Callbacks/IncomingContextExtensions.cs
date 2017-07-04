@@ -46,6 +46,6 @@ namespace NServiceBus
             return context.MessageHeaders.TryGetValue(Headers.CorrelationId, out str) ? str : null;
         }
 
-        static Version minimumVersionThatSupportMessageIntent_Reply = new Version(4, 3);
+        static Version minimumVersionThatSupportMessageIntent_Reply = new Version(5, 0);
     }
 }
