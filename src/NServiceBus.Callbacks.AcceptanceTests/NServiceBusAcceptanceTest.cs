@@ -1,5 +1,7 @@
 namespace NServiceBus.AcceptanceTests
 {
+    using System;
+    using System.IO;
     using System.Linq;
     using System.Threading;
     using AcceptanceTesting.Customization;
@@ -32,6 +34,17 @@ namespace NServiceBus.AcceptanceTests
 
                 return testName + "." + endpointBuilder;
             };
+        }
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            var storageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".acpttests");
+
+            if (Directory.Exists(storageDir))
+            {
+                Directory.Delete(storageDir, true);
+            }
         }
     }
 }

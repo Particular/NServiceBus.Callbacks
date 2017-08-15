@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading.Tasks;
     using AcceptanceTesting.Customization;
     using AcceptanceTesting.Support;
@@ -32,18 +33,24 @@
             recoverability.Delayed(delayed => delayed.NumberOfRetries(0));
             recoverability.Immediate(immediate => immediate.NumberOfRetries(0));
 
-            configuration.UseTransport<LearningTransport>();
-            
+            var storageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".acpttests"); //, NUnit.Framework.TestContext.CurrentContext.Test.ID);
+
+            configuration.UseTransport<LearningTransport>()
+                .StorageDirectory(storageDir);
+
             configuration.RegisterComponentsAndInheritanceHierarchy(runDescriptor);
-            
+
             configurationBuilderCustomization(configuration);
 
-            runDescriptor.OnTestCompleted(rst =>
-            {
-                //todo
+            //runDescriptor.OnTestCompleted(rst =>
+            //{
+            //    //if (Directory.Exists(storageDir))
+            //    //{
+            //    //    Directory.Delete(storageDir, true);
+            //    //}
 
-                return Task.FromResult(0);
-            });
+            //    return Task.FromResult(0);
+            //});
 
             return Task.FromResult(configuration);
         }
