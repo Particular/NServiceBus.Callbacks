@@ -5,6 +5,7 @@
     using AcceptanceTesting;
     using AcceptanceTesting.Support;
     using EndpointTemplates;
+    using NServiceBus.AcceptanceTests.Callbacks;
     using NUnit.Framework;
 
     public class When_using_callbacks_in_a_scaleout : NServiceBusAcceptanceTest
@@ -64,8 +65,12 @@
         {
             public Client()
             {
-                EndpointSetup<DefaultServer>(c => c.EnableCallbacks())
-                    .AddMapping<MyRequest>(typeof(Server));
+                EndpointSetup<DefaultServer>(c =>
+                {
+                    c.EnableCallbacks();
+                    c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Server));
+                    c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Server));
+                });
             }
         }
 

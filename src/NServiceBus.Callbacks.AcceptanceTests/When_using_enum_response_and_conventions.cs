@@ -68,11 +68,11 @@
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    {
-                        c.MakeInstanceUniquelyAddressable("1");
-                        c.EnableCallbacks();
-                    })
-                    .AddMapping<MyRequest>(typeof(Replier));
+                {
+                    c.MakeInstanceUniquelyAddressable("1");
+                    c.EnableCallbacks();
+                    c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Replier));
+                });
             }
         }
 

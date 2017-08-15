@@ -2,13 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AcceptanceTesting.Customization;
     using AcceptanceTesting.Support;
-    using Config.ConfigurationSource;
-    using Configuration.AdvanceExtensibility;
-    using Features;
-    using Serialization;
 
     public class DefaultServer : IEndpointSetupTemplate
     {
@@ -22,10 +19,8 @@
             this.typesToInclude = typesToInclude;
         }
 
-        public async Task<EndpointConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointCustomizationConfiguration endpointConfiguration, IConfigurationSource configSource, Action<EndpointConfiguration> configurationBuilderCustomization)
+        public Task<EndpointConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointCustomizationConfiguration endpointConfiguration, Action<EndpointConfiguration> configurationBuilderCustomization)
         {
-            var settings = runDescriptor.Settings;
-
             var types = endpointConfiguration.GetTypesScopedByTestClass();
 
             typesToInclude.AddRange(types);
@@ -33,31 +28,25 @@
             var configuration = new EndpointConfiguration(endpointConfiguration.EndpointName);
 
             configuration.TypesToIncludeInScan(typesToInclude);
-            configuration.CustomConfigurationSource(configSource);
-            configuration.EnableInstallers();
-
-            configuration.DisableFeature<TimeoutManager>();
 
             var recoverability = configuration.Recoverability();
             recoverability.Delayed(delayed => delayed.NumberOfRetries(0));
             recoverability.Immediate(immediate => immediate.NumberOfRetries(0));
 
-            await configuration.DefineTransport(settings, endpointConfiguration).ConfigureAwait(false);
-
-            configuration.DefineBuilder(settings);
+            configuration.UseTransport<LearningTransport>();
+            
             configuration.RegisterComponentsAndInheritanceHierarchy(runDescriptor);
-
-            Type serializerType;
-            if (settings.TryGet("Serializer", out serializerType))
-            {
-                configuration.UseSerialization((SerializationDefinition) Activator.CreateInstance(serializerType));
-            }
-            await configuration.DefinePersistence(settings, endpointConfiguration).ConfigureAwait(false);
-
-            configuration.GetSettings().SetDefault("ScaleOut.UseSingleBrokerQueue", true);
+            
             configurationBuilderCustomization(configuration);
 
-            return configuration;
+            runDescriptor.OnTestCompleted(rst =>
+            {
+                //todo
+
+                return Task.FromResult(0);
+            });
+
+            return Task.FromResult(configuration);
         }
 
         List<Type> typesToInclude;

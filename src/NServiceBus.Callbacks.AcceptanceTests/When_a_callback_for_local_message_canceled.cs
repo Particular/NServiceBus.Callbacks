@@ -6,7 +6,6 @@ namespace NServiceBus.AcceptanceTests.Callbacks
     using AcceptanceTesting;
     using EndpointTemplates;
     using NUnit.Framework;
-    using ScenarioDescriptors;
 
     public class When_a_callback_for_local_message_canceled : NServiceBusAcceptanceTest
     {
@@ -15,7 +14,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
         {
             OperationCanceledException exception = null;
 
-            await Scenario.Define<Context>()
+            var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, ctx) =>
                 {
                     var cs = new CancellationTokenSource();
@@ -36,15 +35,12 @@ namespace NServiceBus.AcceptanceTests.Callbacks
                     }
                 }))
                 .Done(c => exception != null)
-                .Repeat(r => r.For(Transports.Default))
-                .Should(c =>
-                {
-                    Assert.IsNull(c.Response);
-                    Assert.False(c.CallbackFired);
-                    Assert.True(c.HandlerGotTheRequest);
-                    Assert.IsInstanceOf<OperationCanceledException>(exception);
-                })
                 .Run();
+
+            Assert.IsNull(context.Response);
+            Assert.False(context.CallbackFired);
+            Assert.True(context.HandlerGotTheRequest);
+            Assert.IsInstanceOf<OperationCanceledException>(exception);
         }
 
         public class Context : ScenarioContext

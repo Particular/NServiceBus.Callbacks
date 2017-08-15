@@ -85,8 +85,8 @@
                     {
                         c.MakeInstanceUniquelyAddressable("1");
                         c.EnableCallbacks();
-                    })
-                    .AddMapping<MyRequest>(typeof(Replier));
+                        c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Replier));
+                    });
             }
         }
 
