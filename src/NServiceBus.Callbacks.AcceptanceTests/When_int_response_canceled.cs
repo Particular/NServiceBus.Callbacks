@@ -5,7 +5,6 @@ namespace NServiceBus.AcceptanceTests.Callbacks
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using EndpointTemplates;
-    using NServiceBus.AcceptanceTests.Callbacks;
     using NUnit.Framework;
 
     public class When_int_response_canceled : NServiceBusAcceptanceTest
