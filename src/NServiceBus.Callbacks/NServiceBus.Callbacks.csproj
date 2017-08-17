@@ -14,6 +14,7 @@
     <NoWarn>CS0419</NoWarn>
     <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>TODO</Description>
   </PropertyGroup>
   
   <ItemGroup>
