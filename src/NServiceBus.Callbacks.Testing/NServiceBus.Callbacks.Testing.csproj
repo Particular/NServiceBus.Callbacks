@@ -13,14 +13,13 @@
     <OutputPath>..\..\binaries\</OutputPath>
     <NoWarn>CS0419;CS1591</NoWarn>
     <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="7.0.0-alpharelease0051" />
     <PackageReference Include="NServiceBus.Testing" Version="6.0.0" />
-    <PackageReference Include="NuGetPackager" Version="0.6.3" />
     <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" />
     <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
-    <None Include="..\..\packaging\nuget\NServiceBus.Callbacks.Testing.nuspec" Link="NServiceBus.Callbacks.Testing.nuspec" />
     <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
   </ItemGroup>
 </Project>

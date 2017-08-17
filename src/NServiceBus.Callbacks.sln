@@ -1,16 +1,21 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callbacks", "NServiceBus.Callbacks\NServiceBus.Callbacks.csproj", "{B465A2EF-27A9-402B-BAC7-A660BE93C931}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Callbacks", "NServiceBus.Callbacks\NServiceBus.Callbacks.csproj", "{B465A2EF-27A9-402B-BAC7-A660BE93C931}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callbacks.AcceptanceTests", "NServiceBus.Callbacks.AcceptanceTests\NServiceBus.Callbacks.AcceptanceTests.csproj", "{43A533C4-AAEF-449C-A1C9-4BF00EB063BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Callbacks.AcceptanceTests", "NServiceBus.Callbacks.AcceptanceTests\NServiceBus.Callbacks.AcceptanceTests.csproj", "{43A533C4-AAEF-449C-A1C9-4BF00EB063BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callbacks.Tests", "NServiceBus.Callbacks.Tests\NServiceBus.Callbacks.Tests.csproj", "{AE0CB75D-1052-4715-97A0-0099B36BD597}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Callbacks.Tests", "NServiceBus.Callbacks.Tests\NServiceBus.Callbacks.Tests.csproj", "{AE0CB75D-1052-4715-97A0-0099B36BD597}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callbacks.Testing", "NServiceBus.Callbacks.Testing\NServiceBus.Callbacks.Testing.csproj", "{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Callbacks.Testing", "NServiceBus.Callbacks.Testing\NServiceBus.Callbacks.Testing.csproj", "{1A547350-AEAA-46A1-9FCD-A10BC4FAFBA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Callback.Testing.Tests", "NServiceBus.Callback.Testing.Tests\NServiceBus.Callback.Testing.Tests.csproj", "{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Callback.Testing.Tests", "NServiceBus.Callback.Testing.Tests\NServiceBus.Callback.Testing.Tests.csproj", "{D5BBDC24-229F-41DC-828F-D2DE97FFC6B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{839AF52F-46FA-4284-8199-F097A95C8F21}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.targets = Directory.Build.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,5 +84,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6CBB4D3F-46BC-44FA-BA93-45785CE9D9CD}
 	EndGlobalSection
 EndGlobal
