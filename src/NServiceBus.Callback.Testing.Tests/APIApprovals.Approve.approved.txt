@@ -1,42 +1,15 @@
-﻿[assembly: ApprovalTests.Reporters.UseReporterAttribute(new System.Type[] {
-        typeof(ApprovalTests.Reporters.AllFailingTestsClipboardReporter),
-        typeof(ApprovalTests.Reporters.DiffReporter)})]
+﻿[assembly: System.CLSCompliantAttribute(true)]
+[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5.2", FrameworkDisplayName=".NET Framework 4.5.2")]
-[NUnit.Framework.TestFixtureAttribute()]
-public class APIApprovals
+namespace NServiceBus.Callbacks.Testing
 {
-    public APIApprovals() { }
-    [NUnit.Framework.TestAttribute()]
-    public void Approve() { }
-}
-namespace NServiceBus.Callback.Testing.Tests
-{
-    [NUnit.Framework.TestFixtureAttribute()]
-    public class TestablecallbackAwareSessionTests
+    public class TestableCallbackAwareSession : NServiceBus.Testing.TestableMessageSession
     {
-        public TestablecallbackAwareSessionTests() { }
-        [NUnit.Framework.TestAttribute()]
-        public void When_request_matcher_does_not_match_should_honor_cancellation() { }
-        [NUnit.Framework.TestAttribute()]
-        public System.Threading.Tasks.Task When_request_matcher_matches_should_not_honor_cancellation() { }
-        [NUnit.Framework.TestAttribute()]
-        public System.Threading.Tasks.Task When_request_matcher_matches_should_return_response() { }
-        [NUnit.Framework.TestAttribute()]
-        public void When_request_matcher_matches_with_wrong_response_type() { }
-        [NUnit.Framework.TestAttribute()]
-        public void When_request_option_matcher_does_not_match_should_honor_cancellation() { }
-        [NUnit.Framework.TestAttribute()]
-        public System.Threading.Tasks.Task When_request_option_matcher_matches_should_not_honor_cancellation() { }
-        [NUnit.Framework.TestAttribute()]
-        public System.Threading.Tasks.Task When_request_option_matcher_matches_should_return_response() { }
-        [NUnit.Framework.TestAttribute()]
-        public void When_request_option_matcher_matches_with_wrong_response_type() { }
-    }
-}
-namespace PublicApiGenerator
-{
-    public class static ApiGenerator
-    {
-        public static string GeneratePublicApi(System.Reflection.Assembly assemby, System.Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = True) { }
+        public TestableCallbackAwareSession() { }
+        public override System.Threading.Tasks.Task Send(object message, NServiceBus.SendOptions options) { }
+        public void When<TRequest, TResult>(System.Func<TRequest, bool> matcher, TResult response)
+            where TRequest :  class { }
+        public void When<TRequest, TResult>(System.Func<TRequest, NServiceBus.SendOptions, bool> matcher, TResult response)
+            where TRequest :  class { }
     }
 }

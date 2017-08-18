@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using ApprovalTests;
+using NServiceBus.Callbacks.Testing;
 using NUnit.Framework;
 using PublicApiGenerator;
 
@@ -14,7 +15,7 @@ public class APIApprovals
     [MethodImpl(MethodImplOptions.NoInlining)]
     public void Approve()
     {
-        var combine = Path.Combine(TestContext.CurrentContext.TestDirectory, Path.GetFileName(typeof(APIApprovals).Assembly.Location));
+        var combine = Path.Combine(TestContext.CurrentContext.TestDirectory, Path.GetFileName(typeof(TestableCallbackAwareSession).Assembly.Location));
         var assembly = Assembly.LoadFile(combine);
         var publicApi = Filter(ApiGenerator.GeneratePublicApi(assembly));
         Approvals.Verify(publicApi);
