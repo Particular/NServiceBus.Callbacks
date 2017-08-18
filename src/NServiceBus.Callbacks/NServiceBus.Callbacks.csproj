@@ -14,7 +14,7 @@
     <NoWarn>CS0419</NoWarn>
     <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>TODO</Description>
+    <Description>NServiceBus Callbacks</Description>
   </PropertyGroup>
   
   <ItemGroup>

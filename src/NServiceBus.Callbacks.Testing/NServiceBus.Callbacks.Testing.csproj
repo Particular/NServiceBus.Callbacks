@@ -14,7 +14,7 @@
     <NoWarn>CS0419;CS1591</NoWarn>
     <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>TODO</Description>
+    <Description>NServiceBus Callbacks Testing</Description>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="7.0.0-alpharelease0051" />
