@@ -1,4 +1,4 @@
-﻿namespace NServiceBus.AcceptanceTests.EndpointTemplates
+﻿namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System;
     using System.Collections.Generic;
@@ -33,7 +33,7 @@
             recoverability.Delayed(delayed => delayed.NumberOfRetries(0));
             recoverability.Immediate(immediate => immediate.NumberOfRetries(0));
 
-            var storageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".acpttests"); //, NUnit.Framework.TestContext.CurrentContext.Test.ID);
+            var storageDir = Path.Combine(NServiceBusAcceptanceTest.StorageRootDir, NUnit.Framework.TestContext.CurrentContext.Test.ID);
 
             configuration.UseTransport<LearningTransport>()
                 .StorageDirectory(storageDir);
@@ -41,16 +41,6 @@
             configuration.RegisterComponentsAndInheritanceHierarchy(runDescriptor);
 
             configurationBuilderCustomization(configuration);
-
-            //runDescriptor.OnTestCompleted(rst =>
-            //{
-            //    //if (Directory.Exists(storageDir))
-            //    //{
-            //    //    Directory.Delete(storageDir, true);
-            //    //}
-
-            //    return Task.FromResult(0);
-            //});
 
             return Task.FromResult(configuration);
         }

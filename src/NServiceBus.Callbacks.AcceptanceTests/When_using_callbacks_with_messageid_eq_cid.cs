@@ -1,9 +1,8 @@
-﻿namespace NServiceBus.AcceptanceTests.Callbacks
+﻿namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System;
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_callbacks_with_messageid_eq_cid : NServiceBusAcceptanceTest

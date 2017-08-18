@@ -1,4 +1,4 @@
-namespace NServiceBus.AcceptanceTests
+namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System;
     using System.IO;
@@ -7,12 +7,8 @@ namespace NServiceBus.AcceptanceTests
     using AcceptanceTesting.Customization;
     using NUnit.Framework;
 
-    /// <summary>
-    /// Base class for all the NSB test that sets up our conventions
-    /// </summary>
     [TestFixture]
-    // ReSharper disable once PartialTypeWithSinglePart
-    public abstract partial class NServiceBusAcceptanceTest
+    public abstract class NServiceBusAcceptanceTest
     {
         [SetUp]
         public void SetUp()
@@ -39,12 +35,21 @@ namespace NServiceBus.AcceptanceTests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            var storageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".acpttests");
-
-            if (Directory.Exists(storageDir))
+            if (Directory.Exists(StorageRootDir))
             {
-                Directory.Delete(storageDir, true);
+                Directory.Delete(StorageRootDir, true);
             }
         }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            if (Directory.Exists(StorageRootDir))
+            {
+                Directory.Delete(StorageRootDir, true);
+            }
+        }
+
+        public static string StorageRootDir => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".acpttests");
     }
 }

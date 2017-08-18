@@ -1,8 +1,7 @@
-﻿namespace NServiceBus.AcceptanceTests.Callbacks
+﻿namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_callback_to_get_message : NServiceBusAcceptanceTest

@@ -1,4 +1,4 @@
-﻿namespace NServiceBus.AcceptanceTests.EndpointTemplates
+﻿namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using AcceptanceTesting.Support;
     using ObjectBuilder;

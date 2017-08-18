@@ -1,4 +1,4 @@
-namespace NServiceBus.AcceptanceTests.Callbacks
+namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System;
     using Configuration.AdvancedExtensibility;

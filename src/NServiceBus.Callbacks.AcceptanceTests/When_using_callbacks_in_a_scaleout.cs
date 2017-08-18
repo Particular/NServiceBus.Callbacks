@@ -1,10 +1,9 @@
-﻿namespace NServiceBus.AcceptanceTests.Callbacks
+﻿namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System;
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using AcceptanceTesting.Support;
-    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_callbacks_in_a_scaleout : NServiceBusAcceptanceTest
