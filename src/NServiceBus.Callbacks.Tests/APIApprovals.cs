@@ -18,8 +18,8 @@ public class APIApprovals
         var combine = Path.Combine(TestContext.CurrentContext.TestDirectory, Path.GetFileName(typeof(CallbackExtensions).Assembly.Location));
         var assembly = Assembly.LoadFile(combine);
         var publicApi = Filter(ApiGenerator.GeneratePublicApi(assembly));
-        Approvals.Verify(publicApi);
 
+        Approvals.Verify(publicApi);
     }
 
     string Filter(string text)
