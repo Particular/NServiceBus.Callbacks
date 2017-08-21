@@ -4,8 +4,6 @@
     <TargetFramework>net452</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
-    <DebugType>full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>PCR0001</NoWarn>
   </PropertyGroup>
@@ -14,10 +12,7 @@
     <ProjectReference Include="..\NServiceBus.Callbacks.Testing\NServiceBus.Callbacks.Testing.csproj" />
     <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="7.0.0-alpharelease0051" />
     <PackageReference Include="ApprovalTests" Version="3.0.13" />

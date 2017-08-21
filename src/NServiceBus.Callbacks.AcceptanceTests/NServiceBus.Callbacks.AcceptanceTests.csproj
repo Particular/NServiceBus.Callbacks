@@ -2,7 +2,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
-    <DebugSymbols>True</DebugSymbols>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>PCR0001</NoWarn>
   </PropertyGroup>
@@ -11,7 +10,5 @@
     <PackageReference Include="NServiceBus" Version="7.0.0-alpharelease0051" />
     <PackageReference Include="NUnit" Version="3.7.1" />
     <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Messaging" />
   </ItemGroup>
 </Project>

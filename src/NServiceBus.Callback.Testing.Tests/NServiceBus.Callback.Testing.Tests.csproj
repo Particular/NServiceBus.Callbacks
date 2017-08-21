@@ -3,11 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Optimize>False</Optimize>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <NoWarn>PCR0001</NoWarn>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\NServiceBus.Callbacks.Testing\NServiceBus.Callbacks.Testing.csproj" />
     <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
