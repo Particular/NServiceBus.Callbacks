@@ -1,10 +1,9 @@
-﻿namespace NServiceBus.AcceptanceTests.Callbacks
+﻿namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_enum_response_canceled : NServiceBusAcceptanceTest
@@ -85,8 +84,8 @@
                     {
                         c.MakeInstanceUniquelyAddressable("1");
                         c.EnableCallbacks();
-                    })
-                    .AddMapping<MyRequest>(typeof(Replier));
+                        c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Replier));
+                    });
             }
         }
 

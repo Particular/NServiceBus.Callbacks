@@ -1,18 +1,16 @@
-namespace NServiceBus.AcceptanceTests.Callbacks
+namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using EndpointTemplates;
     using NUnit.Framework;
-    using ScenarioDescriptors;
 
     public class When_a_callback_for_local_message : NServiceBusAcceptanceTest
     {
         [Test]
         public async Task Should_trigger_the_callback_when_the_response_comes_back()
         {
-            await Scenario.Define<Context>()
-                .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, context) =>
+            var context = await Scenario.Define<Context>()
+                .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
                 {
                     var options = new SendOptions();
 
@@ -20,17 +18,14 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
                     await bus.Request<MyResponse>(new MyRequest(), options);
 
-                    Assert.True(context.HandlerGotTheRequest);
-                    context.CallbackFired = true;
+                    Assert.True(c.HandlerGotTheRequest);
+                    c.CallbackFired = true;
                 }))
                 .Done(c => c.CallbackFired)
-                .Repeat(r => r.For(Transports.Default))
-                .Should(c =>
-                {
-                    Assert.True(c.CallbackFired);
-                    Assert.True(c.HandlerGotTheRequest);
-                })
                 .Run();
+
+            Assert.True(context.CallbackFired);
+            Assert.True(context.HandlerGotTheRequest);
         }
 
         public class Context : ScenarioContext
