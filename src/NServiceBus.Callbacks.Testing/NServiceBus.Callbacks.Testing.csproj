@@ -12,8 +12,8 @@
     <Description>NServiceBus Callbacks Testing</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0-alpharelease0051" />
-    <PackageReference Include="NServiceBus.Testing" Version="7.0.0-alpha0002" />
+    <PackageReference Include="NServiceBus" Version="7.0.0-*" />
+    <PackageReference Include="NServiceBus.Testing" Version="7.0.0-*" />
     <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
   </ItemGroup>
 </Project>
