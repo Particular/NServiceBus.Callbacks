@@ -16,4 +16,9 @@
     <PackageReference Include="NServiceBus.Testing" Version="7.0.0-*" />
     <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Particular.Packaging" Version="0.1.0" PrivateAssets="All" />
+  </ItemGroup>
+
 </Project>
