@@ -19,7 +19,7 @@
         /// addressable.
         /// </param>
         /// <param name="enforceUniqueEndpointInstanceAddress">To make sure that replies are routed to the correct endpoint instance each instance must have a unique address.
-        /// For some scenarios, like when using a federated transport, this isn't needed. Set this option to `false` to allow non unique instances.</param>
+        /// For some scenarios, like when using a federated transport, this isn't needed. Set this option to `false` to allow non unique instances. This setting is only relevant if this endpoint is making requests.</param>
         public static void EnableCallbacks(this EndpointConfiguration config,
             bool makesRequests = true,
             bool enforceUniqueEndpointInstanceAddress = true)
