@@ -1,6 +1,8 @@
 ﻿namespace NServiceBus
 {
+    using Configuration.AdvanceExtensibility;
     using Features;
+    using Settings;
 
     /// <summary>
     /// Extension methods to configure callbacks on <see cref="EndpointConfiguration" />.
@@ -15,8 +17,14 @@
         /// The value that indicates whether the endpoint can make callback requests. If <c>true</c>, the endpoint must be uniquely
         /// addressable.
         /// </param>
-        public static void EnableCallbacks(this EndpointConfiguration config, bool makesRequests = true)
+        /// <param name="enforceUniqueEndpointInstanceAddress">To make sure that replies are routed to the correct endpoint instance each instance must have a unique address.
+        /// For some scenarios, like when using a federated transport, this isn't needed. Set this option to `false` to allow non unique instances. This setting is only relevant if this endpoint is making requests.</param>
+        public static void EnableCallbacks(this EndpointConfiguration config,
+            bool makesRequests = true,
+            bool enforceUniqueEndpointInstanceAddress = true)
         {
+            config.GetSettings().Set(EnforceUniqueEndpointInstanceAddressSettingsKey, enforceUniqueEndpointInstanceAddress);
+
             if (makesRequests)
             {
                 config.EnableFeature<CallbackRequestSupport>();
@@ -27,5 +35,12 @@
                 config.EnableFeature<CallbackReplySupport>();
             }
         }
+
+        internal static bool IsUniqueEndpointInstanceAddressRequired(this ReadOnlySettings settings)
+        {
+            return settings.Get<bool>(EnforceUniqueEndpointInstanceAddressSettingsKey);
+        }
+
+        const string EnforceUniqueEndpointInstanceAddressSettingsKey = "Callbacks.EnforceUniqueEndpointInstanceAddress";
     }
 }
