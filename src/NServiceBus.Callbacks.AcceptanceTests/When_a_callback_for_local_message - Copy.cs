@@ -25,7 +25,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
             {
                 EndpointSetup<DefaultServer>(c =>
                 {
-                    c.EnableCallbacks();
+                    c.EnableCallbacks(enforceUniqueEndpointInstanceAddress: false);
                 });
             }
         }
