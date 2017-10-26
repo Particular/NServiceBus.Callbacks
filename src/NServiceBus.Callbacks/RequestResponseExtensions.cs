@@ -107,7 +107,6 @@
             {
                 options.RouteReplyToThisInstance();
             }
-            
 
             options.RegisterCancellationToken(cancellationToken);
 
