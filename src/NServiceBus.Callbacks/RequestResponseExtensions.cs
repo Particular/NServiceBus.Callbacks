@@ -102,7 +102,13 @@
 
             var tcs = new TaskCompletionSource<TResponse>();
             var adapter = new TaskCompletionSourceAdapter<TResponse>(tcs);
-            options.RouteReplyToThisInstance();
+
+            if (!options.IsRoutingReplyToAnyInstance() && !options.IsRoutingReplyToThisInstance())
+            {
+                options.RouteReplyToThisInstance();
+            }
+            
+
             options.RegisterCancellationToken(cancellationToken);
 
             using (options.RegisterTokenSource(adapter))
