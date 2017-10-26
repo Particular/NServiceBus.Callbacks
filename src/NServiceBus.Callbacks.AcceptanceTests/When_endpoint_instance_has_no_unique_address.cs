@@ -6,10 +6,52 @@ namespace NServiceBus.AcceptanceTests.Callbacks
     using EndpointTemplates;
     using NUnit.Framework;
 
-    public class When_routing_reply_to_specific_non_unique_instance : NServiceBusAcceptanceTest
+    public class When_endpoint_instance_has_no_unique_address : NServiceBusAcceptanceTest
     {
         [Test]
-        public void Should_throw_if_requested_explicitly()
+        public async Task Should_allow_requests_routed_to_any_instance()
+        {
+            var context = await Scenario.Define<Context>()
+                .WithEndpoint<EndpointWithNoUniqueAddress>(e => e.When(async (s, c) =>
+                {
+                    var options = new SendOptions();
+
+                    options.RouteReplyToAnyInstance();
+                    options.RouteToThisEndpoint();
+
+                    await s.Request<MyResponse>(new MyRequest(), options);
+
+                    c.GotResponse = true;
+                }))
+                .Done(c => c.GotResponse)
+                .Run();
+
+            Assert.True(context.GotResponse);
+        }
+
+        [Test]
+        public async Task Should_allow_requests_routed_to_custom_address()
+        {
+            var context = await Scenario.Define<Context>()
+                .WithEndpoint<EndpointWithNoUniqueAddress>(e => e.When(async (s, c) =>
+                {
+                    var options = new SendOptions();
+
+                    options.RouteReplyTo(AcceptanceTesting.Customization.Conventions.EndpointNamingConvention(typeof(EndpointWithNoUniqueAddress)));
+                    options.RouteToThisEndpoint();
+
+                    await s.Request<MyResponse>(new MyRequest(), options);
+
+                    c.GotResponse = true;
+                }))
+                .Done(c => c.GotResponse)
+                .Run();
+
+            Assert.True(context.GotResponse);
+        }
+
+        [Test]
+        public void Should_throw_reply_is_routed_to_specific_instance()
         {
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () => await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithNoUniqueAddress>(e => e.When(async (s, c) =>
@@ -35,7 +77,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
                 {
                     var options = new SendOptions();
 
-                   options.RouteToThisEndpoint();
+                    options.RouteToThisEndpoint();
 
                     await s.Request<MyResponse>(new MyRequest(), options);
                 }))
@@ -44,6 +86,7 @@ namespace NServiceBus.AcceptanceTests.Callbacks
 
             StringAssert.Contains("MakeInstanceUniquelyAddressable", ex.Message);
         }
+
 
         public class Context : ScenarioContext
         {

@@ -103,7 +103,9 @@
             var tcs = new TaskCompletionSource<TResponse>();
             var adapter = new TaskCompletionSourceAdapter<TResponse>(tcs);
 
-            if (!options.IsRoutingReplyToAnyInstance() && !options.IsRoutingReplyToThisInstance())
+            if (!options.IsRoutingReplyToAnyInstance() &&
+                !options.IsRoutingReplyToThisInstance() &&
+                options.GetReplyToRoute() == null)
             {
                 options.RouteReplyToThisInstance();
             }
