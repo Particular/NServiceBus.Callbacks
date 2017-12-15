@@ -25,7 +25,7 @@ namespace NServiceBus.Callbacks.AcceptanceTests
 
                     try
                     {
-                        ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options, cs.Token);
+                        ctx.ResponseViaCallback = await bus.Request<MyResponse>(new MyRequest(), options, cs.Token);
                         ctx.CallbackFired = true;
                     }
                     catch (OperationCanceledException e)
@@ -33,10 +33,11 @@ namespace NServiceBus.Callbacks.AcceptanceTests
                         exception = e;
                     }
                 }))
-                .Done(c => exception != null)
+                .Done(c => exception != null && c.GotTheResponseMessage)
                 .Run();
 
-            Assert.IsNull(context.Response);
+            Assert.True(context.GotTheResponseMessage);
+            Assert.IsNull(context.ResponseViaCallback);
             Assert.False(context.CallbackFired);
             Assert.True(context.HandlerGotTheRequest);
             Assert.IsInstanceOf<OperationCanceledException>(exception);
@@ -50,7 +51,9 @@ namespace NServiceBus.Callbacks.AcceptanceTests
 
             public bool CallbackFired { get; set; }
 
-            public MyResponse Response { get; set; }
+            public MyResponse ResponseViaCallback { get; set; }
+
+            public bool GotTheResponseMessage { get; set; }
         }
 
         public class EndpointWithLocalCallback : EndpointConfigurationBuilder
@@ -74,6 +77,18 @@ namespace NServiceBus.Callbacks.AcceptanceTests
                     Context.TokenSource.Cancel();
 
                     return context.Reply(new MyResponse());
+                }
+            }
+
+            public class MyResponseHandler : IHandleMessages<MyResponse>
+            {
+                public Context Context { get; set; }
+
+                public Task Handle(MyResponse message, IMessageHandlerContext context)
+                {
+                    Context.GotTheResponseMessage = true;
+
+                    return Task.FromResult(0);
                 }
             }
         }
