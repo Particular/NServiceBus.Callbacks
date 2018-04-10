@@ -9,7 +9,7 @@ namespace NServiceBus
     
     public class static CallbackExtensions
     {
-        public static void EnableCallbacks(this NServiceBus.EndpointConfiguration config, bool makesRequests = True, bool enforceUniqueEndpointInstanceAddress = True) { }
+        public static void EnableCallbacks(this NServiceBus.EndpointConfiguration config, bool makesRequests = True) { }
     }
     public class static RequestResponseExtensions
     {
