@@ -26,12 +26,12 @@ namespace NServiceBus
 
         public void TrySetResult(object result)
         {
-            taskCompletionSource.TrySetResult((TResult) result);
+            Task.Run(() => taskCompletionSource.TrySetResult((TResult) result));
         }
 
         public void TrySetCanceled()
         {
-            taskCompletionSource.TrySetCanceled();
+            Task.Run(() => taskCompletionSource.TrySetCanceled());
         }
     }
 }
