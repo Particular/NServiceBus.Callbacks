@@ -6,7 +6,7 @@
     {
         protected override void Setup(FeatureConfigurationContext context)
         {
-            if (context.Settings.IsUniqueEndpointInstanceAddressRequired() && !context.Settings.HasSetting("EndpointInstanceDiscriminator"))
+            if (!context.Settings.HasSetting("EndpointInstanceDiscriminator"))
             {
                 throw new Exception("In order to use the callbacks feature you need to specify an endpoint instance ID via EndpointConfiguration.MakeInstanceUniquelyAddressable(string discriminator)");
             }
