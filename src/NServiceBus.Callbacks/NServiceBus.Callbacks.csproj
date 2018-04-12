@@ -67,6 +67,7 @@
     <Compile Include="Reply\RequestResponseInvocationForMessagesBehavior.cs" />
     <Compile Include="RequestResponseStateLookup.cs" />
     <Compile Include="Request\UpdateRequestResponseCorrelationTableBehavior.cs" />
+    <Compile Include="TaskEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\packaging\nuget\nservicebus.callbacks.nuspec">
