@@ -6,7 +6,7 @@
     [TestFixture]
     public class TaskCompletionSourceAdapterTests
     {
-        [Test, Timeout(5000)]
+        [Test]
         public async Task ShouldSetResultNonBlocking()
         {
             var tcs = new TaskCompletionSource<bool>();
@@ -30,7 +30,7 @@
             await result;
         }
 
-        [Test, Timeout(5000)]
+        [Test]
         public async Task ShouldSetCanceledNonBlocking()
         {
             var tcs = new TaskCompletionSource<bool>();
