@@ -30,7 +30,7 @@ namespace NServiceBus
                 }
             }
 
-            var messageIntentEnum = message.GetMesssageIntent();
+            var messageIntentEnum = message.GetMessageIntent();
             if (checkMessageIntent && messageIntentEnum != MessageIntentEnum.Reply)
             {
                 return null;

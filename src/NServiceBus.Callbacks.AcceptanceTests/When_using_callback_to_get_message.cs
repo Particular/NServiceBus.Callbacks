@@ -1,8 +1,7 @@
-﻿namespace NServiceBus.AcceptanceTests.Callbacks
+﻿namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_callback_to_get_message : NServiceBusAcceptanceTest
@@ -50,11 +49,11 @@
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    {
-                        c.MakeInstanceUniquelyAddressable("1");
-                        c.EnableCallbacks();
-                    })
-                    .AddMapping<MyRequest>(typeof(Replier));
+                {
+                    c.MakeInstanceUniquelyAddressable("1");
+                    c.EnableCallbacks();
+                    c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Replier));
+                });
             }
         }
 

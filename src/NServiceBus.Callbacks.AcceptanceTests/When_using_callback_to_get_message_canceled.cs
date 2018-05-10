@@ -1,10 +1,9 @@
-﻿namespace NServiceBus.AcceptanceTests.Callbacks
+﻿namespace NServiceBus.Callbacks.AcceptanceTests
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_callback_to_get_message_canceled : NServiceBusAcceptanceTest
@@ -33,12 +32,12 @@
                         exception = e;
                     }
                 }))
-                .Done(c => exception != null)
+                .Done(c => c.GotTheResponseMessage)
                 .Run();
 
-            Assert.IsNull(context.Response);
+            Assert.True(context.GotTheResponseMessage);
             Assert.False(context.CallbackFired);
-            Assert.True(context.HandlerGotTheRequest);
+            Assert.IsNull(context.Response);
             Assert.IsInstanceOf<OperationCanceledException>(exception);
         }
 
@@ -46,11 +45,11 @@
         {
             public CancellationTokenSource TokenSource { get; set; }
 
-            public bool HandlerGotTheRequest { get; set; }
-
             public bool CallbackFired { get; set; }
 
             public MyResponse Response { get; set; }
+
+            public bool GotTheResponseMessage { get; set; }
         }
 
         class Replier : EndpointConfigurationBuilder
@@ -66,7 +65,6 @@
 
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Context.HandlerGotTheRequest = true;
                     Context.TokenSource.Cancel();
 
                     return context.Reply(new MyResponse());
@@ -79,11 +77,23 @@
             public EndpointWithLocalCallback()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    {
-                        c.MakeInstanceUniquelyAddressable("1");
-                        c.EnableCallbacks();
-                    })
-                    .AddMapping<MyRequest>(typeof(Replier));
+                {
+                    c.MakeInstanceUniquelyAddressable("1");
+                    c.EnableCallbacks();
+                    c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Replier));
+                });
+            }
+
+            public class MyResponseHandler : IHandleMessages<MyResponse>
+            {
+                public Context Context { get; set; }
+
+                public Task Handle(MyResponse message, IMessageHandlerContext context)
+                {
+                    Context.GotTheResponseMessage = true;
+
+                    return Task.FromResult(0);
+                }
             }
         }
 
