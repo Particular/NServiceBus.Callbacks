@@ -15,15 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="NServiceBus.Callbacks.approved.cs" />
-    <PackageReference Include="ApprovalTests" Version="3.0.13" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="NServiceBus" Version="6.1.0" />
     <PackageReference Include="NServiceBus.Testing" Version="6.0.2" />
     <PackageReference Include="NUnit" Version="3.11.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
-    <PackageReference Include="ApiApprover" Version="6.1.0-beta2" />
-    <PackageReference Include="PublicApiGenerator" Version="6.1.0-beta2" />
+    <PackageReference Include="Particular.Approvals" Version="0.2.0" />
+    <PackageReference Include="PublicApiGenerator" Version="8.1.0" />
   </ItemGroup>
 
 </Project>
