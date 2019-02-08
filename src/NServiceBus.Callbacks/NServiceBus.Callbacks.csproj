@@ -8,7 +8,6 @@
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>..\..\binaries\</OutputPath>
     <NoWarn>CS0419</NoWarn>
