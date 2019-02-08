@@ -23,7 +23,6 @@
     <PackageReference Include="NServiceBus.Testing" Version="6.0.0" />
     <PackageReference Include="NuGetPackager" Version="0.6.3" />
     <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" />
-    <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
     <None Include="..\..\packaging\nuget\NServiceBus.Callbacks.Testing.nuspec" Link="NServiceBus.Callbacks.Testing.nuspec" />
   </ItemGroup>
 

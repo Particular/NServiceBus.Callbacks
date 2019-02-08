@@ -19,7 +19,6 @@
     <PackageReference Include="Particular.CodeRules" Version="0.2.0" />
     <PackageReference Include="NuGetPackager" Version="0.6.3" />
     <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" />
-    <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
     <None Include="..\..\packaging\nuget\NServiceBus.Callbacks.nuspec" Link="NServiceBus.Callbacks.nuspec" />
   </ItemGroup>
 
