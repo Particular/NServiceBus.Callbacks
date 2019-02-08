@@ -6,7 +6,7 @@
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>
-    <NoWarn>PCR0001</NoWarn>
+    <NoWarn>$(NoWarn);PCR0001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

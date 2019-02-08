@@ -10,7 +10,7 @@
     <DebugSymbols>True</DebugSymbols>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>..\..\binaries\</OutputPath>
-    <NoWarn>CS0419;CS1591</NoWarn>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
     <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
   </PropertyGroup>
 
