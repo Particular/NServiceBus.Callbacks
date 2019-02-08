@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
     <SignAssembly>true</SignAssembly>
@@ -9,6 +9,12 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>PCR0001</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
+    <ProjectReference Include="..\NServiceBus.Callbacks.Testing\NServiceBus.Callbacks.Testing.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="NServiceBus.Callbacks.Testing.approved.cs" />
     <PackageReference Include="ApprovalTests" Version="3.0.13" />
@@ -21,7 +27,6 @@
     <PackageReference Include="NUnit" Version="3.7.1" />
     <PackageReference Include="ApiApprover" Version="6.1.0-beta2" />
     <PackageReference Include="PublicApiGenerator" Version="6.1.0-beta2" />
-    <ProjectReference Include="..\NServiceBus.Callbacks.Testing\NServiceBus.Callbacks.Testing.csproj" />
-    <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
   </ItemGroup>
+
 </Project>

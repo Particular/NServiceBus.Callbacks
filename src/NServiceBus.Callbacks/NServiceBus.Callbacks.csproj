@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
     <AssemblyName>NServiceBus.Callbacks</AssemblyName>
@@ -14,6 +14,7 @@
     <NoWarn>CS0419</NoWarn>
     <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="6.0.0" />
     <PackageReference Include="Particular.CodeRules" Version="0.2.0" />
@@ -22,4 +23,5 @@
     <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
     <None Include="..\..\packaging\nuget\NServiceBus.Callbacks.nuspec" Link="NServiceBus.Callbacks.nuspec" />
   </ItemGroup>
+
 </Project>

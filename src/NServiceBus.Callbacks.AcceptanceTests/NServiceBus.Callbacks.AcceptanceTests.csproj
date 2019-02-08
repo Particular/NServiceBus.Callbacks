@@ -1,17 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
     <DebugSymbols>True</DebugSymbols>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>PCR0001</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Messaging" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="NServiceBus.AcceptanceTesting" Version="6.1.0" />
     <PackageReference Include="NServiceBus" Version="6.1.0" />
     <PackageReference Include="NUnit" Version="3.7.1" />
-    <ProjectReference Include="..\NServiceBus.Callbacks\NServiceBus.Callbacks.csproj" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Messaging" />
   </ItemGroup>
+
 </Project>
