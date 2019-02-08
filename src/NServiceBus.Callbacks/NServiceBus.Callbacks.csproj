@@ -4,8 +4,6 @@
     <TargetFramework>net452</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
-    <DebugType>full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
     <OutputPath>..\..\binaries\</OutputPath>
     <Description>NServiceBus Callbacks</Description>
   </PropertyGroup>
