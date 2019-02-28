@@ -1,17 +1,15 @@
-﻿using System.IO;
-using System.Runtime.CompilerServices;
-using ApiApprover;
-using NServiceBus.Callbacks.Testing;
+﻿using NServiceBus.Callbacks.Testing;
 using NUnit.Framework;
+using Particular.Approvals;
+using PublicApiGenerator;
 
 [TestFixture]
 public class APIApprovals
 {
     [Test]
-    [MethodImpl(MethodImplOptions.NoInlining)]
     public void Approve()
     {
-        Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-        PublicApiApprover.ApprovePublicApi(typeof(TestableCallbackAwareSession).Assembly);
+        var publicApi = ApiGenerator.GeneratePublicApi(typeof(TestableCallbackAwareSession).Assembly);
+        Approver.Verify(publicApi);
     }
 }
