@@ -11,9 +11,7 @@
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="[6.0.0, 7.0.0)" />
     <PackageReference Include="Particular.CodeRules" Version="0.2.1" PrivateAssets="All" />
-    <PackageReference Include="Particular.Packaging" Version="0.2.1" PrivateAssets="All" />
+    <PackageReference Include="Particular.Packaging" Version="0.3.0" PrivateAssets="All" />
   </ItemGroup>
-
-  <Import Project="../GitVersionWorkaround.targets" />
 
 </Project>
