@@ -9,9 +9,21 @@
 
     public class TestableCallbackAwareSession : TestableMessageSession
     {
-        List<Tuple<Func<object, SendOptions, bool>, object>> matchers = new List<Tuple<Func<object, SendOptions, bool>, object>>();
+        public enum MatchState
+        {
+            Match,
+            NoMatch,
+            Cancel
+        }
+        List<Tuple<Func<object, SendOptions, MatchState>, object>> matchers = new List<Tuple<Func<object, SendOptions, MatchState>, object>>();
 
         public void When<TRequest, TResult>(Func<TRequest, bool> matcher, TResult response)
+            where TRequest : class
+        {
+            When((TRequest m, SendOptions _) => matcher(m), response);
+        }
+
+        public void When<TRequest, TResult>(Func<TRequest, MatchState> matcher, TResult response)
             where TRequest : class
         {
             When((TRequest m, SendOptions _) => matcher(m), response);
@@ -20,10 +32,21 @@
         public void When<TRequest, TResult>(Func<TRequest, SendOptions, bool> matcher, TResult response)
             where TRequest : class
         {
-            matchers.Add(Tuple.Create<Func<object, SendOptions, bool>, object>((m, o) =>
+            matchers.Add(Tuple.Create<Func<object, SendOptions, MatchState>, object>((m, o) =>
             {
                 var msg = m as TRequest;
-                return msg != null && matcher(msg, o);
+                return msg != null && matcher(msg, o) ? MatchState.Match : MatchState.NoMatch;
+            }, response));
+        }
+
+        public void When<TRequest, TResult>(Func<TRequest, SendOptions, MatchState> matcher, TResult response)
+            where TRequest : class
+        {
+            matchers.Add(Tuple.Create<Func<object, SendOptions, MatchState>, object>((m, o) =>
+            {
+                var msg = m as TRequest;
+                if (msg == null) return MatchState.NoMatch;
+                return matcher(msg, o);
             }, response));
         }
 
@@ -39,17 +62,22 @@
                     TrySetCanceled(state);
 
                     var result = matcher.Item1(message, options);
-                    if (result)
+                    switch (result)
                     {
-                        try
-                        {
-                            state.TaskCompletionSource.TrySetResult(matcher.Item2);
-                        }
-                        catch (InvalidCastException exception)
-                        {
-                            throw new InvalidOperationException($"Matcher matched but response type '{matcher.Item2?.GetType()}' is incompatible with expected response type of '{state.TaskCompletionSource.ResponseType}'.", exception);
-                        }
-                        return;
+                        case MatchState.Match:
+                            try
+                            {
+                                state.TaskCompletionSource.TrySetResult(matcher.Item2);
+                            }
+                            catch (InvalidCastException exception)
+                            {
+                                throw new InvalidOperationException($"Matcher matched but response type '{matcher.Item2?.GetType()}' is incompatible with expected response type of '{state.TaskCompletionSource.ResponseType}'.", exception);
+                            }
+
+                            return;
+                        case MatchState.Cancel:
+                            state.TaskCompletionSource.TrySetCanceled();
+                            return;
                     }
                 }
 

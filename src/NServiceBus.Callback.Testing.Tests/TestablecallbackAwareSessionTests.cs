@@ -78,6 +78,40 @@
         }
 
         [Test]
+        public void When_request_matcher_matches_for_cancellation()
+        {
+            var tokenSource = new CancellationTokenSource();
+
+            var callbackSession = new TestableCallbackAwareSession();
+
+            callbackSession.When<Request, string>(r =>
+                                                  {
+                                                      return r.MagicNumber == 42 ? TestableCallbackAwareSession.MatchState.Cancel : TestableCallbackAwareSession.MatchState.NoMatch;
+                                                  }, "HelloWorld");
+
+            Assert.ThrowsAsync<TaskCanceledException>(async () => await callbackSession.Request<string>(new Request { MagicNumber = 42 }, tokenSource.Token));
+        }
+
+        [Test]
+        public void When_request_option_matcher_matches_for_cancellation()
+        {
+            var tokenSource = new CancellationTokenSource();
+            var expectedHeader = "TestingHeader";
+
+            var callbackSession = new TestableCallbackAwareSession();
+
+            callbackSession.When<Request, string>((r, o) =>
+                                                  {
+                                                      return r.MagicNumber == 42 && o.GetHeaders().ContainsKey(expectedHeader) ? TestableCallbackAwareSession.MatchState.Cancel : TestableCallbackAwareSession.MatchState.NoMatch;
+                                                  }, "HelloWorld");
+
+            var options = new SendOptions();
+            options.SetHeader(expectedHeader, "value");
+
+            Assert.ThrowsAsync<TaskCanceledException>(async () => await callbackSession.Request<string>(new Request { MagicNumber = 42 }, options, tokenSource.Token));
+        }
+
+        [Test]
         public void When_request_option_matcher_does_not_match_should_honor_cancellation()
         {
             var tokenSource = new CancellationTokenSource();
