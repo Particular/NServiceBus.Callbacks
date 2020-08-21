@@ -37,8 +37,6 @@
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
-                public Context Context { get; set; }
-
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
                     return context.Reply(200);

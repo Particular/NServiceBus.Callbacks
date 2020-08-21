@@ -64,12 +64,17 @@
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
-                public Context Context { get; set; }
+                Context testContext;
+
+                public MyRequestHandler(Context testContext)
+                {
+                    this.testContext = testContext;
+                }
 
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Context.HandlerGotTheRequest = true;
-                    Context.TokenSource.Cancel();
+                    testContext.HandlerGotTheRequest = true;
+                    testContext.TokenSource.Cancel();
 
                     return context.Reply(OldEnum.Success);
                 }
