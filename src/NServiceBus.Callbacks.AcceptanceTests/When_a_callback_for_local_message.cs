@@ -48,12 +48,17 @@ namespace NServiceBus.Callbacks.AcceptanceTests
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
-                public Context Context { get; set; }
+                Context testContext;
+
+                public MyRequestHandler(Context testContext)
+                {
+                    this.testContext = testContext;
+                }
 
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Assert.False(Context.CallbackFired);
-                    Context.HandlerGotTheRequest = true;
+                    Assert.False(testContext.CallbackFired);
+                    testContext.HandlerGotTheRequest = true;
 
                     return context.Reply(new MyResponse());
                 }

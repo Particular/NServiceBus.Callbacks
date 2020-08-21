@@ -61,11 +61,16 @@
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
-                public Context Context { get; set; }
+                Context testContext;
+
+                public MyRequestHandler(Context testContext)
+                {
+                    this.testContext = testContext;
+                }
 
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Context.TokenSource.Cancel();
+                    testContext.TokenSource.Cancel();
 
                     return context.Reply(new MyResponse());
                 }
@@ -86,11 +91,16 @@
 
             public class MyResponseHandler : IHandleMessages<MyResponse>
             {
-                public Context Context { get; set; }
+                Context testContext;
+
+                public MyResponseHandler(Context testContext)
+                {
+                    this.testContext = testContext;
+                }
 
                 public Task Handle(MyResponse message, IMessageHandlerContext context)
                 {
-                    Context.GotTheResponseMessage = true;
+                    testContext.GotTheResponseMessage = true;
 
                     return Task.FromResult(0);
                 }

@@ -81,8 +81,6 @@
 
             public class MyMessageHandler : IHandleMessages<MyRequest>
             {
-                public Context Context { get; set; }
-
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
                     return context.Reply(new MyResponse

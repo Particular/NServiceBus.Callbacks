@@ -1,4 +1,4 @@
-[assembly: System.CLSCompliantAttribute(true)]
+[assembly: System.CLSCompliantAttribute(false)]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 namespace NServiceBus.Callbacks.Testing
 {

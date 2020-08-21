@@ -47,11 +47,16 @@
 
             public class MyRequestHandler : IHandleMessages<MyRequest>
             {
-                public Context Context { get; set; }
+                Context testContext;
+
+                public MyRequestHandler(Context testContext)
+                {
+                    this.testContext = testContext;
+                }
 
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Assert.False(Context.CallbackFired);
+                    Assert.False(testContext.CallbackFired);
 
                     return context.Reply(new MyResponse());
                 }
