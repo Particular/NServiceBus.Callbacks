@@ -16,7 +16,6 @@
             // simulate code handling the callback response after await endpoint.Request<Response>(...);
             var result = tcs.Task.ContinueWith(_ =>
             {
-                // ReSharper disable once AccessToModifiedClosure
                 while (!@continue)
                 {
                     // spin
@@ -40,7 +39,6 @@
             // simulate code handling the callback response after await endpoint.Request<Response>(...);
             var result = tcs.Task.ContinueWith(_ =>
             {
-                // ReSharper disable once AccessToModifiedClosure
                 while (!@continue)
                 {
                     // spin
