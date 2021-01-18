@@ -13,9 +13,8 @@
 
         public override Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
         {
-            RequestResponseStateLookup.State requestResponseState;
 
-            if (context.Extensions.TryGet(out requestResponseState))
+            if (context.Extensions.TryGet(out RequestResponseStateLookup.State requestResponseState))
             {
                 lookup.RegisterState(context.MessageId, requestResponseState);
 
@@ -25,8 +24,7 @@
                     var stateLookup = s.Item1;
                     var messageId = s.Item2;
 
-                    RequestResponseStateLookup.State responseState;
-                    if (stateLookup.TryRemove(messageId, out responseState))
+                    if (stateLookup.TryRemove(messageId, out RequestResponseStateLookup.State responseState))
                     {
                         responseState.TaskCompletionSource.TrySetCanceled();
                     }

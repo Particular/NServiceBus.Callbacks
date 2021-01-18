@@ -15,7 +15,7 @@
             var callbackSession = new TestableCallbackAwareSession();
             callbackSession.When<Request, int>(r => r.MagicNumber == 42, 42);
 
-            var exception = Assert.ThrowsAsync<InvalidOperationException>(async() => await callbackSession.Request<string>(new Request { MagicNumber = 42 }));
+            var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await callbackSession.Request<string>(new Request { MagicNumber = 42 }));
             StringAssert.Contains("Matcher matched but response type 'System.Int32' is incompatible with expected response type of 'System.String'.", exception.Message);
         }
 
@@ -123,7 +123,7 @@
 
             var callbackSession = new TestableCallbackAwareSession();
 
-            callbackSession.When<Request, string>((r,o) =>
+            callbackSession.When<Request, string>((r, o) =>
             {
                 tokenSource.Cancel();
                 return r.MagicNumber == 42 && o.GetHeaders().ContainsKey(expectedHeader);

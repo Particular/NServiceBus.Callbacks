@@ -21,7 +21,7 @@
                     // spin
                 }
             }, TaskContinuationOptions.ExecuteSynchronously);
-            
+
             adapter.TrySetResult(true);
             // TrySetResult should continue immediately
             @continue = true;

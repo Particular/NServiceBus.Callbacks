@@ -117,8 +117,7 @@
         static RequestResponseStateLookup.State RegisterTokenSource(this ExtendableOptions options, TaskCompletionSourceAdapter adapter)
         {
             var extensions = options.GetExtensions();
-            RequestResponseStateLookup.State state;
-            if (extensions.TryGet(out state))
+            if (extensions.TryGet(out RequestResponseStateLookup.State state))
             {
                 state.TaskCompletionSource = adapter;
             }
