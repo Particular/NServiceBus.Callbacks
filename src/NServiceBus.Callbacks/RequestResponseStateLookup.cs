@@ -41,7 +41,7 @@ namespace NServiceBus
             }
 
             public CancellationToken CancellationToken;
-            public TaskCompletionSourceAdapter TaskCompletionSource;
+            public ITaskCompletionSourceAdapter TaskCompletionSource;
             CancellationTokenRegistration Registrations;
         }
     }

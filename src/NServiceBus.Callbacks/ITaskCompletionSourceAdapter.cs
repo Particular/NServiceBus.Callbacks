@@ -3,7 +3,7 @@ namespace NServiceBus
     using System;
     using System.Threading.Tasks;
 
-    interface TaskCompletionSourceAdapter
+    interface ITaskCompletionSourceAdapter
     {
         Type ResponseType { get; }
 
@@ -12,7 +12,7 @@ namespace NServiceBus
         void TrySetCanceled();
     }
 
-    class TaskCompletionSourceAdapter<TResult> : TaskCompletionSourceAdapter
+    class TaskCompletionSourceAdapter<TResult> : ITaskCompletionSourceAdapter
     {
         TaskCompletionSource<TResult> taskCompletionSource;
 
