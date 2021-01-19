@@ -22,8 +22,7 @@
         {
             matchers.Add(Tuple.Create<Func<object, SendOptions, bool>, object>((m, o) =>
             {
-                var msg = m as TRequest;
-                return msg != null && matcher(msg, o);
+                return m is TRequest msg && matcher(msg, o);
             }, response));
         }
 
@@ -31,8 +30,7 @@
         {
             await base.Send(message, options).ConfigureAwait(false);
 
-            RequestResponseStateLookup.State state;
-            if (options.GetExtensions().TryGet(out state))
+            if (options.GetExtensions().TryGet(out RequestResponseStateLookup.State state))
             {
                 foreach (var matcher in matchers)
                 {

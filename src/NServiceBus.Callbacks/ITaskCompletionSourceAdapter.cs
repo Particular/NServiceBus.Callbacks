@@ -3,7 +3,7 @@ namespace NServiceBus
     using System;
     using System.Threading.Tasks;
 
-    interface TaskCompletionSourceAdapter
+    interface ITaskCompletionSourceAdapter
     {
         Type ResponseType { get; }
 
@@ -12,7 +12,7 @@ namespace NServiceBus
         void TrySetCanceled();
     }
 
-    class TaskCompletionSourceAdapter<TResult> : TaskCompletionSourceAdapter
+    class TaskCompletionSourceAdapter<TResult> : ITaskCompletionSourceAdapter
     {
         TaskCompletionSource<TResult> taskCompletionSource;
 
@@ -30,14 +30,14 @@ namespace NServiceBus
             var castedResult = (TResult)result;
             // prevent the continuation from blocking the pipeline by invoking it in parallel.
             // Consider switching to TaskCreationOptions.RunContinuationsAsynchronously when updating the framework to 4.6. See https://blogs.msdn.microsoft.com/pfxteam/2015/02/02/new-task-apis-in-net-4-6/.
-            Task.Run(() => taskCompletionSource.TrySetResult(castedResult)).Ignore();
+            _ = Task.Run(() => taskCompletionSource.TrySetResult(castedResult));
         }
 
         public void TrySetCanceled()
         {
             // prevent the continuation from blocking the pipeline by invoking it in parallel.
             // Consider switching to TaskCreationOptions.RunContinuationsAsynchronously when updating the framework to 4.6. See https://blogs.msdn.microsoft.com/pfxteam/2015/02/02/new-task-apis-in-net-4-6/.
-            Task.Run(() => taskCompletionSource.TrySetCanceled()).Ignore();
+            _ = Task.Run(() => taskCompletionSource.TrySetCanceled());
         }
     }
 }

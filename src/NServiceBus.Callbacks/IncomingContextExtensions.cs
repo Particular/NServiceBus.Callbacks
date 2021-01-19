@@ -15,13 +15,11 @@ namespace NServiceBus
                 return null;
             }
 
-            string version;
             var checkMessageIntent = true;
 
-            if (message.Headers.TryGetValue(Headers.NServiceBusVersion, out version))
+            if (message.Headers.TryGetValue(Headers.NServiceBusVersion, out string version))
             {
-                Version parsedVersion;
-                if (Version.TryParse(version, out parsedVersion))
+                if (Version.TryParse(version, out Version parsedVersion))
                 {
                     if (parsedVersion < minimumVersionThatSupportMessageIntent_Reply)
                     {
@@ -36,14 +34,12 @@ namespace NServiceBus
                 return null;
             }
 
-            RequestResponseStateLookup.State state;
-            return lookup.TryRemove(correlationId, out state) ? (RequestResponseStateLookup.State?) state : null;
+            return lookup.TryRemove(correlationId, out RequestResponseStateLookup.State state) ? (RequestResponseStateLookup.State?)state : null;
         }
 
         static string GetCorrelationId(this IMessageProcessingContext context)
         {
-            string str;
-            return context.MessageHeaders.TryGetValue(Headers.CorrelationId, out str) ? str : null;
+            return context.MessageHeaders.TryGetValue(Headers.CorrelationId, out string str) ? str : null;
         }
 
         static Version minimumVersionThatSupportMessageIntent_Reply = new Version(5, 0);
