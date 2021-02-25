@@ -35,8 +35,10 @@
 
             var storageDir = Path.Combine(NServiceBusAcceptanceTest.StorageRootDir, NUnit.Framework.TestContext.CurrentContext.Test.ID);
 
-            configuration.UseTransport<LearningTransport>()
-                .StorageDirectory(storageDir);
+            configuration.UseTransport(new LearningTransport
+            {
+                StorageDirectory = storageDir
+            });
 
             configuration.RegisterComponentsAndInheritanceHierarchy(runDescriptor);
 

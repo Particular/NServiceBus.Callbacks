@@ -89,7 +89,7 @@
                     {
                         c.MakeInstanceUniquelyAddressable("1");
                         c.EnableCallbacks();
-                        c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Replier));
+                        c.ConfigureRouting().RouteToEndpoint(typeof(MyRequest), typeof(Replier));
                     });
             }
         }
