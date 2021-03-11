@@ -107,7 +107,7 @@
 
             using (options.RegisterTokenSource(adapter))
             {
-                await session.Send(requestMessage, options).ConfigureAwait(false);
+                await session.Send(requestMessage, options, cancellationToken).ConfigureAwait(false);
 
                 return await tcs.Task.ConfigureAwait(false);
             }

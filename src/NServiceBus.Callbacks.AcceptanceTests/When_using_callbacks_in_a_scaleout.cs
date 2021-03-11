@@ -66,8 +66,8 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     c.EnableCallbacks();
-                    c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Server));
-                    c.ConfigureTransport().Routing().RouteToEndpoint(typeof(MyRequest), typeof(Server));
+                    c.ConfigureRouting().RouteToEndpoint(typeof(MyRequest), typeof(Server));
+                    c.ConfigureRouting().RouteToEndpoint(typeof(MyRequest), typeof(Server));
                 });
             }
         }
