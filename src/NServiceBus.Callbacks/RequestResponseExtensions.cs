@@ -22,27 +22,9 @@
         /// <typeparam name="TResponse">The response type.</typeparam>
         /// <param name="session">The session.</param>
         /// <param name="requestMessage">The request message.</param>
-        /// <returns>A task which contains the response when it is completed.</returns>
-        public static Task<TResponse> Request<TResponse>(this IMessageSession session, object requestMessage)
-        {
-            return session.Request<TResponse>(requestMessage, CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Sends a <paramref name="requestMessage" /> to the configured destination and returns back a
-        /// <see cref="Task{TResponse}" /> which can be awaited.
-        /// </summary>
-        /// <remarks>
-        /// The task returned is non durable. When the AppDomain is unloaded or the response task is canceled.
-        /// Messages can still arrive to the requesting endpoint but in that case no handling code will be attached to consume
-        /// that response message and therefore the message will be moved to the error queue.
-        /// </remarks>
-        /// <typeparam name="TResponse">The response type.</typeparam>
-        /// <param name="session">The session.</param>
-        /// <param name="requestMessage">The request message.</param>
         /// <param name="cancellationToken">The cancellation token used to cancel the request.</param>
         /// <returns>A task which contains the response when it is completed.</returns>
-        public static Task<TResponse> Request<TResponse>(this IMessageSession session, object requestMessage, CancellationToken cancellationToken)
+        public static Task<TResponse> Request<TResponse>(this IMessageSession session, object requestMessage, CancellationToken cancellationToken = default)
         {
             return session.Request<TResponse>(requestMessage, new SendOptions(), cancellationToken);
         }
@@ -60,28 +42,9 @@
         /// <param name="session">The session.</param>
         /// <param name="requestMessage">The request message.</param>
         /// <param name="options">The options for the send.</param>
-        /// <returns>A task which contains the response when it is completed.</returns>
-        public static Task<TResponse> Request<TResponse>(this IMessageSession session, object requestMessage, SendOptions options)
-        {
-            return session.Request<TResponse>(requestMessage, options, CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Sends a <paramref name="requestMessage" /> to the configured destination and returns back a
-        /// <see cref="Task{TResponse}" /> which can be awaited.
-        /// </summary>
-        /// <remarks>
-        /// The task returned is non durable. When the AppDomain is unloaded or the response task is canceled.
-        /// Messages can still arrive to the requesting endpoint but in that case no handling code will be attached to consume
-        /// that response message and therefore the message will be moved to the error queue.
-        /// </remarks>
-        /// <typeparam name="TResponse">The response type.</typeparam>
-        /// <param name="session">The session.</param>
-        /// <param name="requestMessage">The request message.</param>
-        /// <param name="options">The options for the send.</param>
         /// <param name="cancellationToken">The cancellation token used to cancel the request.</param>
         /// <returns>A task which contains the response when it is completed.</returns>
-        public static async Task<TResponse> Request<TResponse>(this IMessageSession session, object requestMessage, SendOptions options, CancellationToken cancellationToken)
+        public static async Task<TResponse> Request<TResponse>(this IMessageSession session, object requestMessage, SendOptions options, CancellationToken cancellationToken = default)
         {
             if (requestMessage == null)
             {
@@ -113,7 +76,6 @@
             }
         }
 
-
         static RequestResponseStateLookup.State RegisterTokenSource(this ExtendableOptions options, ITaskCompletionSourceAdapter adapter)
         {
             var extensions = options.GetExtensions();
@@ -126,7 +88,6 @@
                 state = new RequestResponseStateLookup.State
                 {
                     TaskCompletionSource = adapter,
-                    CancellationToken = CancellationToken.None
                 };
             }
             extensions.Set(state);
