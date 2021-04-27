@@ -5,7 +5,7 @@
 
     static class ExtendableOptionsExtensions
     {
-        public static void RegisterCancellationToken(this ExtendableOptions options, CancellationToken cancellationToken)
+        public static void RegisterCancellationToken(this ExtendableOptions options, CancellationToken cancellationToken = default)
         {
             var extensions = options.GetExtensions();
             if (extensions.TryGet(out RequestResponseStateLookup.State state))
