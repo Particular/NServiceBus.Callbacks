@@ -27,9 +27,9 @@
                         ctx.Response = await bus.Request<MyResponse>(new MyRequest(), options, cs.Token);
                         ctx.CallbackFired = true;
                     }
-                    catch (OperationCanceledException e)
+                    catch (OperationCanceledException ex) when (cs.Token.IsCancellationRequested)
                     {
-                        exception = e;
+                        exception = ex;
                     }
                 }))
                 .Done(c => c.GotTheResponseMessage)
