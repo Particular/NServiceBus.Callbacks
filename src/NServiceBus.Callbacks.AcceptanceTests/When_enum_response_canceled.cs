@@ -32,9 +32,9 @@
                         c.Response = await bus.Request<OldEnum>(new MyRequest(), options, cs.Token);
                         c.CallbackFired = true;
                     }
-                    catch (OperationCanceledException e)
+                    catch (OperationCanceledException ex) when (cs.Token.IsCancellationRequested)
                     {
-                        exception = e;
+                        exception = ex;
                     }
                 }))
                 .WithEndpoint<Replier>()
