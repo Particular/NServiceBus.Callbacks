@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus.Testing" Version="[8.0.0-alpha.155, 9.0.0)" />
+    <PackageReference Include="NServiceBus.Testing" Version="[8.0.0-alpha.168, 9.0.0)" />
     <PackageReference Include="Particular.Packaging" Version="1.2.1" PrivateAssets="All" />
   </ItemGroup>
 
