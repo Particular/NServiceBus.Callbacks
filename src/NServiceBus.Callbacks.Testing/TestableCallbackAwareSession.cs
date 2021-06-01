@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using Extensibility;
     using NServiceBus.Testing;
+    using System.Threading;
 
     public class TestableCallbackAwareSession : TestableMessageSession
     {
@@ -26,9 +27,9 @@
             }, response));
         }
 
-        public override async Task Send(object message, SendOptions options)
+        public override async Task Send(object message, SendOptions options, CancellationToken cancellationToken = default)
         {
-            await base.Send(message, options).ConfigureAwait(false);
+            await base.Send(message, options, cancellationToken).ConfigureAwait(false);
 
             if (options.GetExtensions().TryGet(out RequestResponseStateLookup.State state))
             {
