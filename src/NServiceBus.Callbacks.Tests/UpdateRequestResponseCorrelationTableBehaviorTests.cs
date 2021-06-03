@@ -37,7 +37,7 @@
         }
 
         [Test]
-        public async Task Should_cancel_request_when_token_is_already_cancelled()
+        public async Task Should_cancel_request_when_token_is_already_canceled()
         {
             var dictionary = new ConcurrentDictionary<string, RequestResponseStateLookup.State>();
             var requestResponseStateLookup = new RequestResponseStateLookup(dictionary);
