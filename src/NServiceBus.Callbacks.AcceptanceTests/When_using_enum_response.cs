@@ -6,7 +6,7 @@
 
     public class When_using_enum_response : NServiceBusAcceptanceTest
     {
-        public enum OldEnum
+        public enum ResponseStatus
         {
             Fail,
             Success
@@ -18,7 +18,7 @@
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithLocalCallback>(b => b.When(async (bus, c) =>
                 {
-                    c.Response = await bus.Request<OldEnum>(new MyRequest(), new SendOptions());
+                    c.Response = await bus.Request<ResponseStatus>(new MyRequest(), new SendOptions());
                     c.CallbackFired = true;
                 }))
                 .WithEndpoint<Replier>()
@@ -26,13 +26,13 @@
                 .Run();
 
             Assert.IsNotNull(context.Response);
-            Assert.AreEqual(OldEnum.Success, context.Response);
+            Assert.AreEqual(ResponseStatus.Success, context.Response);
         }
 
         class Context : ScenarioContext
         {
             public bool CallbackFired { get; set; }
-            public OldEnum Response { get; set; }
+            public ResponseStatus Response { get; set; }
         }
 
         class Replier : EndpointConfigurationBuilder
@@ -46,7 +46,7 @@
             {
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    return context.Reply(OldEnum.Success);
+                    return context.Reply(ResponseStatus.Success);
                 }
             }
         }

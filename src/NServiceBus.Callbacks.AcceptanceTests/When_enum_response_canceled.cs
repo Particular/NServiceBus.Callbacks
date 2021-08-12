@@ -8,7 +8,7 @@
 
     public class When_enum_response_canceled : NServiceBusAcceptanceTest
     {
-        public enum OldEnum
+        public enum ResponseStatus
         {
             Fail,
             Success
@@ -29,7 +29,7 @@
 
                     try
                     {
-                        c.Response = await bus.Request<OldEnum>(new MyRequest(), options, cs.Token);
+                        c.Response = await bus.Request<ResponseStatus>(new MyRequest(), options, cs.Token);
                         c.CallbackFired = true;
                     }
                     catch (OperationCanceledException ex) when (cs.Token.IsCancellationRequested)
@@ -41,7 +41,7 @@
                 .Done(c => exception != null || c.HandlerGotTheRequest)
                 .Run();
 
-            Assert.AreNotEqual(OldEnum.Success, context.Response);
+            Assert.AreNotEqual(ResponseStatus.Success, context.Response);
             Assert.False(context.CallbackFired);
             Assert.True(context.HandlerGotTheRequest);
             Assert.IsInstanceOf<OperationCanceledException>(exception);
@@ -52,7 +52,7 @@
             public CancellationTokenSource TokenSource { get; set; }
             public bool HandlerGotTheRequest { get; set; }
             public bool CallbackFired { get; set; }
-            public OldEnum Response { get; set; }
+            public ResponseStatus Response { get; set; }
         }
 
         public class Replier : EndpointConfigurationBuilder
@@ -76,7 +76,7 @@
                     testContext.HandlerGotTheRequest = true;
                     testContext.TokenSource.Cancel();
 
-                    return context.Reply(OldEnum.Success);
+                    return context.Reply(ResponseStatus.Success);
                 }
             }
         }
