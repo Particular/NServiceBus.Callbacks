@@ -9,22 +9,22 @@
     [TestFixture]
     public class When_sending_reply_to_the_request
     {
-        [TestCase("6.0.0", MessageIntentEnum.Reply, true)]
-        [TestCase("6.0.0", MessageIntentEnum.Send, false)]
-        [TestCase("6.0.0", MessageIntentEnum.Publish, false)]
-        [TestCase("6.0.0", MessageIntentEnum.Subscribe, false)]
-        [TestCase("6.0.0", MessageIntentEnum.Unsubscribe, false)]
-        [TestCase("5.0.0", MessageIntentEnum.Reply, true)]
-        [TestCase("5.0.0", MessageIntentEnum.Send, false)]
-        [TestCase("5.0.0", MessageIntentEnum.Publish, false)]
-        [TestCase("5.0.0", MessageIntentEnum.Subscribe, false)]
-        [TestCase("5.0.0", MessageIntentEnum.Unsubscribe, false)]
-        [TestCase("4.7.0", MessageIntentEnum.Reply, true)]
-        [TestCase("4.7.0", MessageIntentEnum.Send, true)]
-        [TestCase("4.7.0", MessageIntentEnum.Publish, true)]
-        [TestCase("4.7.0", MessageIntentEnum.Subscribe, true)]
-        [TestCase("4.7.0", MessageIntentEnum.Unsubscribe, true)]
-        public void From_v5_0_0_should_return_value_only_for_reply_intent(string nsbVersion, MessageIntentEnum intent, bool expectedNonEmptyResult)
+        [TestCase("6.0.0", MessageIntent.Reply, true)]
+        [TestCase("6.0.0", MessageIntent.Send, false)]
+        [TestCase("6.0.0", MessageIntent.Publish, false)]
+        [TestCase("6.0.0", MessageIntent.Subscribe, false)]
+        [TestCase("6.0.0", MessageIntent.Unsubscribe, false)]
+        [TestCase("5.0.0", MessageIntent.Reply, true)]
+        [TestCase("5.0.0", MessageIntent.Send, false)]
+        [TestCase("5.0.0", MessageIntent.Publish, false)]
+        [TestCase("5.0.0", MessageIntent.Subscribe, false)]
+        [TestCase("5.0.0", MessageIntent.Unsubscribe, false)]
+        [TestCase("4.7.0", MessageIntent.Reply, true)]
+        [TestCase("4.7.0", MessageIntent.Send, true)]
+        [TestCase("4.7.0", MessageIntent.Publish, true)]
+        [TestCase("4.7.0", MessageIntent.Subscribe, true)]
+        [TestCase("4.7.0", MessageIntent.Unsubscribe, true)]
+        public void From_v5_0_0_should_return_value_only_for_reply_intent(string nsbVersion, MessageIntent intent, bool expectedNonEmptyResult)
         {
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
@@ -38,21 +38,21 @@
             Assert.AreEqual(expectedNonEmptyResult, result.HasValue);
         }
 
-        [TestCase("4.7.12", MessageIntentEnum.Reply)]
-        [TestCase("4.7.12", MessageIntentEnum.Send)]
-        [TestCase("4.7.12", MessageIntentEnum.Publish)]
-        [TestCase("4.7.12", MessageIntentEnum.Subscribe)]
-        [TestCase("4.7.12", MessageIntentEnum.Unsubscribe)]
-        [TestCase("4.2.9", MessageIntentEnum.Reply)]
-        [TestCase("4.2.9", MessageIntentEnum.Send)]
-        [TestCase("4.2.9", MessageIntentEnum.Publish)]
-        [TestCase("4.2.9", MessageIntentEnum.Subscribe)]
-        [TestCase("4.2.9", MessageIntentEnum.Unsubscribe)]
-        [TestCase("4.1.0", MessageIntentEnum.Reply)]
-        [TestCase("4.1.0", MessageIntentEnum.Send)]
-        [TestCase("3.0.0", MessageIntentEnum.Reply)]
-        [TestCase("3.0.0", MessageIntentEnum.Publish)]
-        public void Below_v5_0_0_should_return_value_for_all_intents(string nsbVersion, MessageIntentEnum intent)
+        [TestCase("4.7.12", MessageIntent.Reply)]
+        [TestCase("4.7.12", MessageIntent.Send)]
+        [TestCase("4.7.12", MessageIntent.Publish)]
+        [TestCase("4.7.12", MessageIntent.Subscribe)]
+        [TestCase("4.7.12", MessageIntent.Unsubscribe)]
+        [TestCase("4.2.9", MessageIntent.Reply)]
+        [TestCase("4.2.9", MessageIntent.Send)]
+        [TestCase("4.2.9", MessageIntent.Publish)]
+        [TestCase("4.2.9", MessageIntent.Subscribe)]
+        [TestCase("4.2.9", MessageIntent.Unsubscribe)]
+        [TestCase("4.1.0", MessageIntent.Reply)]
+        [TestCase("4.1.0", MessageIntent.Send)]
+        [TestCase("3.0.0", MessageIntent.Reply)]
+        [TestCase("3.0.0", MessageIntent.Publish)]
+        public void Below_v5_0_0_should_return_value_for_all_intents(string nsbVersion, MessageIntent intent)
         {
             var correlationId = new Guid().ToString();
             var lookup = new RequestResponseStateLookup();
@@ -68,7 +68,7 @@
 
         class IncomingMessageFromLegacyEndpoint : IncomingMessage
         {
-            public IncomingMessageFromLegacyEndpoint(string nsbVersion, MessageIntentEnum msgIntent)
+            public IncomingMessageFromLegacyEndpoint(string nsbVersion, MessageIntent msgIntent)
                 : base(
                     new Guid().ToString(),
                     new Dictionary<string, string>
