@@ -11,7 +11,7 @@ jobs:
     runs-on: windows-2019 # Code signing requirement https://github.com/NuGet/Home/issues/7939
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 0
       - name: Parse repo name
@@ -46,7 +46,7 @@ jobs:
           path: nugets/*
           retention-days: 1
       - name: Install Octopus CLI
-        uses: OctopusDeploy/install-octopus-cli-action@v1.1.6
+        uses: OctopusDeploy/install-octopus-cli-action@v1.1.8
         with:
           version: latest
       - name: Create Octopus Package
@@ -80,13 +80,13 @@ jobs:
           path: octopus-package/*
           retention-days: 1
       - name: Push package to Octopus Deploy
-        uses: OctopusDeploy/push-package-action@v1.0.2
+        uses: OctopusDeploy/push-package-action@v1.1.1
         with:
           server: https://deploy.particular.net
           api_key: ${{ secrets.OCTOPUS_DEPLOY_API_KEY }}
           packages: octopus-package/${{env.PARTICULAR_REPO_NAME}}.Deploy.${{env.GitVersion_SemVer}}.nupkg
       - name: Create Octopus Deploy release
-        uses: OctopusDeploy/create-release-action@v1.0.6
+        uses: OctopusDeploy/create-release-action@v1.1.1
         with:
           server: https://deploy.particular.net
           api_key: ${{ secrets.OCTOPUS_DEPLOY_API_KEY }}
