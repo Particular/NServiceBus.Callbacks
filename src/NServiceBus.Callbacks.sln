@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Callbacks", "NServiceBus.Callbacks\NServiceBus.Callbacks.csproj", "{B465A2EF-27A9-402B-BAC7-A660BE93C931}"
 EndProject
@@ -14,8 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Callback.Testin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{839AF52F-46FA-4284-8199-F097A95C8F21}"
 	ProjectSection(SolutionItems) = preProject
-		Directory.Build.props = Directory.Build.props
-		..\GitVersion.yml = ..\GitVersion.yml
+		Custom.Build.props = Custom.Build.props
 	EndProjectSection
 EndProject
 Global
