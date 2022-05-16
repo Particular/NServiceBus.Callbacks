@@ -34,7 +34,9 @@ namespace NServiceBus
                 return null;
             }
 
+#pragma warning disable IDE0004 // Remove Unnecessary Cast - Requires C# 9 or above
             return lookup.TryRemove(correlationId, out RequestResponseStateLookup.State state) ? (RequestResponseStateLookup.State?)state : null;
+#pragma warning restore IDE0004 // Remove Unnecessary Cast
         }
 
         static string GetCorrelationId(this IMessageProcessingContext context)
