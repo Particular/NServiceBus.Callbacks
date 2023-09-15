@@ -4,6 +4,7 @@ namespace NServiceBus.Callbacks.AcceptanceTests
     using System.Threading;
     using System.Threading.Tasks;
     using AcceptanceTesting;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
     using NUnit.Framework;
 
     public class When_a_callback_for_local_message_canceled : NServiceBusAcceptanceTest

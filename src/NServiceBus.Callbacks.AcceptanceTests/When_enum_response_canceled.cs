@@ -5,6 +5,8 @@
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using NUnit.Framework;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
+    using NServiceBus.AcceptanceTesting.Customization;
 
     public class When_enum_response_canceled : NServiceBusAcceptanceTest
     {

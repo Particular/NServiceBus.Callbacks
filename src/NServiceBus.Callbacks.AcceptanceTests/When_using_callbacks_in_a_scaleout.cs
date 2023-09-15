@@ -5,6 +5,8 @@
     using AcceptanceTesting;
     using AcceptanceTesting.Support;
     using NUnit.Framework;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
+    using NServiceBus.AcceptanceTesting.Customization;
 
     public class When_using_callbacks_in_a_scaleout : NServiceBusAcceptanceTest
     {

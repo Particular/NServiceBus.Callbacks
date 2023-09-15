@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using NUnit.Framework;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
 
     public class When_using_callbacks_with_messageid_eq_cid : NServiceBusAcceptanceTest
     {

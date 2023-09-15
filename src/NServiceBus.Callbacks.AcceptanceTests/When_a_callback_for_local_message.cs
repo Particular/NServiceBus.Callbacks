@@ -3,6 +3,7 @@ namespace NServiceBus.Callbacks.AcceptanceTests
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using NUnit.Framework;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
 
     public class When_a_callback_for_local_message : NServiceBusAcceptanceTest
     {
