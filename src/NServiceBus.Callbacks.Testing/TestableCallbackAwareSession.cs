@@ -2,15 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
-    using NServiceBus;
+    using System.Threading;
     using System.Threading.Tasks;
     using Extensibility;
+    using NServiceBus;
     using NServiceBus.Testing;
-    using System.Threading;
 
     public class TestableCallbackAwareSession : TestableMessageSession
     {
-        List<Tuple<Func<object, SendOptions, bool>, object>> matchers = new List<Tuple<Func<object, SendOptions, bool>, object>>();
+        List<Tuple<Func<object, SendOptions, bool>, object>> matchers = [];
 
         public void When<TRequest, TResult>(Func<TRequest, bool> matcher, TResult response)
             where TRequest : class
