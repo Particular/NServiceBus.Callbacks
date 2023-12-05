@@ -1,22 +1,21 @@
 # NServiceBus.Callbacks
 
-This library provides extensions for NServiceBus which allow to define a callback on send operations. Callbacks can be used to map a response message to a stateful resource (e.g. a HTTP Request) without the need to use a message handler.
+NServiceBus.Callbacks is an extension for NServiceBus to support defining callbacks on send operations. Callbacks can be used to map a response message to a stateful resource (e.g. an HTTP Request) without needing to use a message handler.
 
+It is part of the [Particular Service Platform](https://particular.net/service-platform), which includes [NServiceBus](https://particular.net/nservicebus) and tools to build, monitor, and debug distributed systems.
 
-### Getting started
+## Official documentation
 
-To get started, install the package via NuGet:
+See the [Client-side callbacks documentation](https://docs.particular.net/nservicebus/messaging/callbacks) for more details on how to use it.
 
-```
-Install-Package NServiceBus.Callbacks
-``` 
-
-### Testing callbacks
+## Running tests locally
 
 To test callbacks, install the testing package via NuGet:
 
 ```
 Install-Package NServiceBus.Callbacks.Testing
-``` 
+```
 
-For more information please read our documentation about [Handling Responses on the Client Side](http://docs.particular.net/nservicebus/messaging/handling-responses-on-the-client-side) and the [Callbacks sample project](http://docs.particular.net/samples/callbacks/).
+## Contributing
+
+If you are interested in contributing, please follow the instructions on [How to contribute](https://docs.particular.net/platform/contributing).
