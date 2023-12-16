@@ -4,8 +4,6 @@ NServiceBus.Callbacks is an extension for NServiceBus to support defining callba
 
 It is part of the [Particular Service Platform](https://particular.net/service-platform), which includes [NServiceBus](https://particular.net/nservicebus) and tools to build, monitor, and debug distributed systems.
 
-## Documentation
-
 See the [Client-side callbacks documentation](https://docs.particular.net/nservicebus/messaging/callbacks) for more details on how to use it.
 
 ## Running tests locally
