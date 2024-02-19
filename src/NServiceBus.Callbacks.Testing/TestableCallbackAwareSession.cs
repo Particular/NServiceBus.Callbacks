@@ -8,16 +8,25 @@
     using NServiceBus;
     using NServiceBus.Testing;
 
+    /// <summary>
+    /// A callbacks-aware testable <see cref="IMessageSession"/> implementation.
+    /// </summary>
     public class TestableCallbackAwareSession : TestableMessageSession
     {
         List<Tuple<Func<object, SendOptions, bool>, object>> matchers = [];
 
+        /// <summary>
+        /// Registers a response for the matched request.
+        /// </summary>
         public void When<TRequest, TResult>(Func<TRequest, bool> matcher, TResult response)
             where TRequest : class
         {
             When((TRequest m, SendOptions _) => matcher(m), response);
         }
 
+        /// <summary>
+        /// Registers a response for the matched request.
+        /// </summary>
         public void When<TRequest, TResult>(Func<TRequest, SendOptions, bool> matcher, TResult response)
             where TRequest : class
         {
@@ -27,6 +36,9 @@
             }, response));
         }
 
+        /// <summary>
+        ///  Sends the provided message.
+        /// </summary>
         public override async Task Send(object message, SendOptions options, CancellationToken cancellationToken = default)
         {
             await base.Send(message, options, cancellationToken).ConfigureAwait(false);
