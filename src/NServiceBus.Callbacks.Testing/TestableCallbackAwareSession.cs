@@ -9,14 +9,14 @@
     using NServiceBus.Testing;
 
     /// <summary>
-    /// A callbacks aware testable NServiceBus.IMessageSession implementation.
+    /// A callbacks-aware testable <see cref="IMessageSession"/> implementation.
     /// </summary>
     public class TestableCallbackAwareSession : TestableMessageSession
     {
         List<Tuple<Func<object, SendOptions, bool>, object>> matchers = [];
 
         /// <summary>
-        /// Register a response for thew matched request.
+        /// Registers a response for the matched request.
         /// </summary>
         public void When<TRequest, TResult>(Func<TRequest, bool> matcher, TResult response)
             where TRequest : class
@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// Register a response for thew matched request.
+        /// Registers a response for the matched request.
         /// </summary>
         public void When<TRequest, TResult>(Func<TRequest, SendOptions, bool> matcher, TResult response)
             where TRequest : class
