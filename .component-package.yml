@@ -1,0 +1,4 @@
+ComponentType: Other
+ComponentPackages:
+  - Name: NServiceBus.Callbacks
+  - Name: NServiceBus.Callbacks.Testing
