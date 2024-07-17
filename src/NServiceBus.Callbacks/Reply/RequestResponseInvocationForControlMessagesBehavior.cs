@@ -34,7 +34,15 @@ namespace NServiceBus
 
             var responseType = result.Value.TaskCompletionSource.ResponseType;
             var errorCode = incomingMessage.Headers[Headers.ReturnMessageErrorCodeHeader];
-            result.Value.TaskCompletionSource.TrySetResult(errorCode.ConvertFromReturnCode(responseType));
+            try
+            {
+                result.Value.TaskCompletionSource.TrySetResult(errorCode.ConvertFromReturnCode(responseType));
+            }
+            catch (Exception e)
+            {
+                result.Value.TaskCompletionSource.TrySetException(e);
+                throw;
+            }
         }
 
         static bool IsControlMessage(IncomingMessage incomingMessage)
