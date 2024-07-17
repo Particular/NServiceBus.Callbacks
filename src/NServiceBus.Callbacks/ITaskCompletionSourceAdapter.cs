@@ -10,6 +10,8 @@ namespace NServiceBus
         void TrySetResult(object result);
 
         void TrySetCanceled();
+
+        void TrySetException(Exception exception);
     }
 
     class TaskCompletionSourceAdapter<TResult> : ITaskCompletionSourceAdapter
@@ -38,6 +40,13 @@ namespace NServiceBus
             // prevent the continuation from blocking the pipeline by invoking it in parallel.
             // Consider switching to TaskCreationOptions.RunContinuationsAsynchronously when updating the framework to 4.6. See https://blogs.msdn.microsoft.com/pfxteam/2015/02/02/new-task-apis-in-net-4-6/.
             _ = Task.Run(() => taskCompletionSource.TrySetCanceled());
+        }
+
+        public void TrySetException(Exception exception)
+        {
+            // prevent the continuation from blocking the pipeline by invoking it in parallel.
+            // Consider switching to TaskCreationOptions.RunContinuationsAsynchronously when updating the framework to 4.6. See https://blogs.msdn.microsoft.com/pfxteam/2015/02/02/new-task-apis-in-net-4-6/.
+            _ = Task.Run(() => taskCompletionSource.TrySetException(exception));
         }
     }
 }
