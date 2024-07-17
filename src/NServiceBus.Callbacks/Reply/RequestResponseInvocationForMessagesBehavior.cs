@@ -27,8 +27,16 @@
                 return;
             }
 
-            result.Value.TaskCompletionSource.TrySetResult(context.Message.Instance);
-            context.MessageHandled = true;
+            try
+            {
+                result.Value.TaskCompletionSource.TrySetResult(context.Message.Instance);
+                context.MessageHandled = true;
+            }
+            catch (Exception e)
+            {
+                result.Value.TaskCompletionSource.TrySetException(e);
+                throw;
+            }
         }
 
         RequestResponseStateLookup requestResponseStateLookup;
