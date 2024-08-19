@@ -26,7 +26,7 @@
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.True(context.CallbackFired);
+            Assert.That(context.CallbackFired, Is.True);
         }
 
         class Context : ScenarioContext

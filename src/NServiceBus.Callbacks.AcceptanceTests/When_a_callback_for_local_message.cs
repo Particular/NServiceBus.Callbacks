@@ -18,14 +18,14 @@ namespace NServiceBus.Callbacks.AcceptanceTests
 
                     await bus.Request<MyResponse>(new MyRequest(), options);
 
-                    Assert.True(c.HandlerGotTheRequest);
+                    Assert.That(c.HandlerGotTheRequest, Is.True);
                     c.CallbackFired = true;
                 }))
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.True(context.CallbackFired);
-            Assert.True(context.HandlerGotTheRequest);
+            Assert.That(context.CallbackFired, Is.True);
+            Assert.That(context.HandlerGotTheRequest, Is.True);
         }
 
         public class Context : ScenarioContext

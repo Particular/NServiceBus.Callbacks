@@ -43,7 +43,7 @@
 
             Assert.AreNotEqual(ResponseStatus.Success, context.Response);
             Assert.That(context.CallbackFired, Is.False);
-            Assert.True(context.HandlerGotTheRequest);
+            Assert.That(context.HandlerGotTheRequest, Is.True);
             Assert.IsInstanceOf<OperationCanceledException>(exception);
         }
 

@@ -35,7 +35,7 @@
                 .Done(c => c.GotTheResponseMessage)
                 .Run();
 
-            Assert.True(context.GotTheResponseMessage);
+            Assert.That(context.GotTheResponseMessage, Is.True);
             Assert.That(context.CallbackFired, Is.False);
             Assert.IsNull(context.Response);
             Assert.IsInstanceOf<OperationCanceledException>(exception);
