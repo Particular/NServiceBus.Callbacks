@@ -63,7 +63,7 @@
 
             var result = incomingContext.TryRemoveResponseStateBasedOnCorrelationId(message, lookup);
 
-            Assert.IsTrue(result.HasValue);
+            Assert.That(result.HasValue, Is.True);
         }
 
         class IncomingMessageFromLegacyEndpoint : IncomingMessage
