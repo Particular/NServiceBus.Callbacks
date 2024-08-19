@@ -57,7 +57,7 @@ namespace NServiceBus.Callbacks.AcceptanceTests
 
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Assert.False(testContext.CallbackFired);
+                    Assert.That(testContext.CallbackFired, Is.False);
                     testContext.HandlerGotTheRequest = true;
 
                     return context.Reply(new MyResponse());

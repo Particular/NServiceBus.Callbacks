@@ -36,7 +36,7 @@ namespace NServiceBus.Callbacks.AcceptanceTests
                 .Run();
 
             Assert.AreNotEqual(200, context.Response);
-            Assert.False(context.CallbackFired);
+            Assert.That(context.CallbackFired, Is.False);
             Assert.True(context.HandlerGotTheRequest);
             Assert.IsInstanceOf<OperationCanceledException>(exception);
         }

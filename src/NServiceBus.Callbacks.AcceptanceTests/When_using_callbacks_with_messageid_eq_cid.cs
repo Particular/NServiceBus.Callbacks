@@ -56,7 +56,7 @@
 
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Assert.False(testContext.CallbackFired);
+                    Assert.That(testContext.CallbackFired, Is.False);
 
                     return context.Reply(new MyResponse());
                 }

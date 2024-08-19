@@ -45,7 +45,7 @@
 
             Assert.True(ctx.CallbackAFired, "Callback on ClientA should fire");
             Assert.True(ctx.CallbackBFired, "Callback on ClientB should fire");
-            Assert.False(ctx.ResponseEndedUpAtTheWrongClient, "One of the responses ended up at the wrong client");
+            Assert.That(ctx.ResponseEndedUpAtTheWrongClient, Is.False, "One of the responses ended up at the wrong client");
         }
 
         class Context : ScenarioContext
