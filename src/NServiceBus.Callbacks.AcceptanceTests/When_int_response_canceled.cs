@@ -35,7 +35,7 @@ namespace NServiceBus.Callbacks.AcceptanceTests
                 .Done(c => exception != null || c.HandlerGotTheRequest)
                 .Run();
 
-            Assert.AreNotEqual(200, context.Response);
+            Assert.That(context.Response, Is.Not.EqualTo(200));
             Assert.That(context.CallbackFired, Is.False);
             Assert.That(context.HandlerGotTheRequest, Is.True);
             Assert.IsInstanceOf<OperationCanceledException>(exception);

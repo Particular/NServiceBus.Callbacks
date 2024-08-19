@@ -41,7 +41,7 @@
                 .Done(c => exception != null || c.HandlerGotTheRequest)
                 .Run();
 
-            Assert.AreNotEqual(ResponseStatus.Success, context.Response);
+            Assert.That(context.Response, Is.Not.EqualTo(ResponseStatus.Success));
             Assert.That(context.CallbackFired, Is.False);
             Assert.That(context.HandlerGotTheRequest, Is.True);
             Assert.IsInstanceOf<OperationCanceledException>(exception);
