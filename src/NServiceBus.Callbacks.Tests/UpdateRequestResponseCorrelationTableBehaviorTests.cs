@@ -33,7 +33,7 @@
             });
 
             Assert.ThrowsAsync<TaskCanceledException>(async () => { await tcs.Task; });
-            Assert.IsEmpty(dictionary);
+            Assert.That(dictionary, Is.Empty);
         }
 
         [Test]
@@ -57,7 +57,7 @@
             await behavior.Invoke(outgoingPhysicalMessageContext, () => Task.FromResult(0));
 
             Assert.ThrowsAsync<TaskCanceledException>(async () => { await tcs.Task; });
-            Assert.IsEmpty(dictionary);
+            Assert.That(dictionary, Is.Empty);
         }
     }
 }
