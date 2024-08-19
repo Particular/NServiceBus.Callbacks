@@ -25,7 +25,6 @@
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.That(context.Response, Is.Not.Null);
             Assert.That(context.Response, Is.EqualTo(ResponseStatus.Success));
         }
 
