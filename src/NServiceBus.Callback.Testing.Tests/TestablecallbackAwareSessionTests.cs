@@ -42,7 +42,7 @@
 
             var result = await callbackSession.Request<string>(new Request { MagicNumber = 42 });
 
-            Assert.AreEqual("HelloWorld", result);
+            Assert.That(result, Is.EqualTo("HelloWorld"));
         }
 
         [Test]
@@ -58,7 +58,7 @@
 
             var result = await callbackSession.Request<string>(new Request { MagicNumber = 42 }, options);
 
-            Assert.AreEqual("HelloWorld", result);
+            Assert.That(result, Is.EqualTo("HelloWorld"));
         }
 
         [Test]
@@ -112,7 +112,7 @@
 
             var result = await callbackSession.Request<string>(new Request { MagicNumber = 42 }, tokenSource.Token);
 
-            Assert.AreEqual("HelloWorld", result);
+            Assert.That(result, Is.EqualTo("HelloWorld"));
         }
 
         [Test]
@@ -134,7 +134,7 @@
 
             var result = await callbackSession.Request<string>(new Request { MagicNumber = 42 }, options, tokenSource.Token);
 
-            Assert.AreEqual("HelloWorld", result);
+            Assert.That(result, Is.EqualTo("HelloWorld"));
         }
 
         class Request
