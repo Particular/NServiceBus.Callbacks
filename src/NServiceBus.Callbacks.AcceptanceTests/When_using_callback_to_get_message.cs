@@ -19,7 +19,7 @@
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.IsNotNull(context.Response);
+            Assert.That(context.Response, Is.Not.Null);
         }
 
         class Context : ScenarioContext

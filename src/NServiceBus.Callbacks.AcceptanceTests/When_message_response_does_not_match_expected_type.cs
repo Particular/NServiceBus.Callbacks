@@ -33,7 +33,7 @@
                 .Run();
 
             Assert.That(requestTask.Status, Is.EqualTo(TaskStatus.Faulted));
-            Assert.IsNotNull(exception);
+            Assert.That(exception, Is.Not.Null);
             Assert.That(exception.GetType(), Is.EqualTo(typeof(InvalidCastException)));
         }
 
