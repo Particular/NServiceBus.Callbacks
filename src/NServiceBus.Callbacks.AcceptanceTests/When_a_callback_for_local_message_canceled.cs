@@ -36,11 +36,14 @@ namespace NServiceBus.Callbacks.AcceptanceTests
                 .Done(c => exception != null && c.GotTheResponseMessage)
                 .Run();
 
-            Assert.That(context.GotTheResponseMessage, Is.True);
-            Assert.That(context.ResponseViaCallback, Is.Null);
-            Assert.That(context.CallbackFired, Is.False);
-            Assert.That(context.HandlerGotTheRequest, Is.True);
-            Assert.That(exception, Is.InstanceOf<OperationCanceledException>());
+            Assert.Multiple(() =>
+            {
+                Assert.That(context.GotTheResponseMessage, Is.True);
+                Assert.That(context.ResponseViaCallback, Is.Null);
+                Assert.That(context.CallbackFired, Is.False);
+                Assert.That(context.HandlerGotTheRequest, Is.True);
+                Assert.That(exception, Is.InstanceOf<OperationCanceledException>());
+            });
         }
 
         public class Context : ScenarioContext

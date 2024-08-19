@@ -24,8 +24,11 @@ namespace NServiceBus.Callbacks.AcceptanceTests
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.That(context.CallbackFired, Is.True);
-            Assert.That(context.HandlerGotTheRequest, Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(context.CallbackFired, Is.True);
+                Assert.That(context.HandlerGotTheRequest, Is.True);
+            });
         }
 
         public class Context : ScenarioContext

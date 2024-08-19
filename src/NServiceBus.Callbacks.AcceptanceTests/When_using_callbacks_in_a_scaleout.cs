@@ -43,9 +43,12 @@
                 .Done(c => c.CallbackAFired && c.CallbackBFired)
                 .Run(new RunSettings());
 
-            Assert.That(ctx.CallbackAFired, Is.True, "Callback on ClientA should fire");
-            Assert.That(ctx.CallbackBFired, Is.True, "Callback on ClientB should fire");
-            Assert.That(ctx.ResponseEndedUpAtTheWrongClient, Is.False, "One of the responses ended up at the wrong client");
+            Assert.Multiple(() =>
+            {
+                Assert.That(ctx.CallbackAFired, Is.True, "Callback on ClientA should fire");
+                Assert.That(ctx.CallbackBFired, Is.True, "Callback on ClientB should fire");
+                Assert.That(ctx.ResponseEndedUpAtTheWrongClient, Is.False, "One of the responses ended up at the wrong client");
+            });
         }
 
         class Context : ScenarioContext

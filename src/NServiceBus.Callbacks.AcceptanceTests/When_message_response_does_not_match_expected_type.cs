@@ -32,8 +32,11 @@
                 .Done(c => exception != null)
                 .Run();
 
-            Assert.That(requestTask.Status, Is.EqualTo(TaskStatus.Faulted));
-            Assert.That(exception, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(requestTask.Status, Is.EqualTo(TaskStatus.Faulted));
+                Assert.That(exception, Is.Not.Null);
+            });
             Assert.That(exception.GetType(), Is.EqualTo(typeof(InvalidCastException)));
         }
 
