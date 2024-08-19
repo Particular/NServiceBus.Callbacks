@@ -38,7 +38,7 @@
             Assert.That(context.GotTheResponseMessage, Is.True);
             Assert.That(context.CallbackFired, Is.False);
             Assert.That(context.Response, Is.Null);
-            Assert.IsInstanceOf<OperationCanceledException>(exception);
+            Assert.That(exception, Is.InstanceOf<OperationCanceledException>());
         }
 
         class Context : ScenarioContext

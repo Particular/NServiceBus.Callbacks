@@ -44,7 +44,7 @@
             Assert.That(context.Response, Is.Not.EqualTo(ResponseStatus.Success));
             Assert.That(context.CallbackFired, Is.False);
             Assert.That(context.HandlerGotTheRequest, Is.True);
-            Assert.IsInstanceOf<OperationCanceledException>(exception);
+            Assert.That(exception, Is.InstanceOf<OperationCanceledException>());
         }
 
         public class Context : ScenarioContext

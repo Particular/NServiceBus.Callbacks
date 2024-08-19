@@ -40,7 +40,7 @@ namespace NServiceBus.Callbacks.AcceptanceTests
             Assert.That(context.ResponseViaCallback, Is.Null);
             Assert.That(context.CallbackFired, Is.False);
             Assert.That(context.HandlerGotTheRequest, Is.True);
-            Assert.IsInstanceOf<OperationCanceledException>(exception);
+            Assert.That(exception, Is.InstanceOf<OperationCanceledException>());
         }
 
         public class Context : ScenarioContext
