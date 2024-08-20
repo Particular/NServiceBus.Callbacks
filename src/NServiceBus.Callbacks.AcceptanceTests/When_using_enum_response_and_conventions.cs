@@ -26,8 +26,7 @@
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.IsNotNull(context.Response);
-            Assert.AreEqual(ResponseStatus.Success, context.Response);
+            Assert.That(context.Response, Is.EqualTo(ResponseStatus.Success));
         }
 
         class Context : ScenarioContext
