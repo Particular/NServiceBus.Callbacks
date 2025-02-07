@@ -12,4 +12,9 @@
     <PackageReference Include="Particular.Packaging" Version="4.2.0" PrivateAssets="All" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="NServiceBus.Callbacks.Tests" Key="$(NServiceBusTestsKey)" />
+    <InternalsVisibleTo Include="NServiceBus.Callbacks.Testing" Key="$(NServiceBusKey)" />
+  </ItemGroup>
+
 </Project>
