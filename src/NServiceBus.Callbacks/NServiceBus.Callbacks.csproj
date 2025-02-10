@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\NServiceBus.snk</AssemblyOriginatorKeyFile>
     <Description>NServiceBus Callbacks</Description>
   </PropertyGroup>
 
@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="NServiceBus.Callbacks.Tests" Key="$(NServiceBusTestsKey)" />
     <InternalsVisibleTo Include="NServiceBus.Callbacks.Testing" Key="$(NServiceBusKey)" />
+    <InternalsVisibleTo Include="NServiceBus.Callbacks.Tests" Key="$(NServiceBusTestsKey)" />
   </ItemGroup>
 
 </Project>
