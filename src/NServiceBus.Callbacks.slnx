@@ -1,23 +1,12 @@
 <Solution>
-  <Configurations>
-    <Platform Name="Any CPU" />
-    <Platform Name="Mixed Platforms" />
-    <Platform Name="x86" />
-  </Configurations>
   <Folder Name="/Solution Items/">
     <File Path="../.github/workflows/ci.yml" />
     <File Path="../.github/workflows/release.yml" />
     <File Path="Custom.Build.props" />
   </Folder>
   <Project Path="NServiceBus.Callback.Testing.Tests/NServiceBus.Callback.Testing.Tests.csproj" />
-  <Project Path="NServiceBus.Callbacks.AcceptanceTests/NServiceBus.Callbacks.AcceptanceTests.csproj">
-    <Build Solution="*|x86" Project="false" />
-  </Project>
+  <Project Path="NServiceBus.Callbacks.AcceptanceTests/NServiceBus.Callbacks.AcceptanceTests.csproj" />
   <Project Path="NServiceBus.Callbacks.Testing/NServiceBus.Callbacks.Testing.csproj" />
-  <Project Path="NServiceBus.Callbacks.Tests/NServiceBus.Callbacks.Tests.csproj">
-    <Build Solution="*|x86" Project="false" />
-  </Project>
-  <Project Path="NServiceBus.Callbacks/NServiceBus.Callbacks.csproj">
-    <Build Solution="*|x86" Project="false" />
-  </Project>
+  <Project Path="NServiceBus.Callbacks.Tests/NServiceBus.Callbacks.Tests.csproj" />
+  <Project Path="NServiceBus.Callbacks/NServiceBus.Callbacks.csproj" />
 </Solution>
