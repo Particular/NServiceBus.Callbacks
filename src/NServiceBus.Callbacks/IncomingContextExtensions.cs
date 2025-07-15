@@ -28,8 +28,8 @@ namespace NServiceBus
                 }
             }
 
-            var MessageIntent = message.GetMessageIntent();
-            if (checkMessageIntent && MessageIntent != MessageIntent.Reply)
+            var messageIntent = message.GetMessageIntent();
+            if (checkMessageIntent && messageIntent != MessageIntent.Reply)
             {
                 return null;
             }
