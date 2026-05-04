@@ -35,7 +35,7 @@
 
             var result = incomingContext.TryRemoveResponseStateBasedOnCorrelationId(message, lookup);
 
-            Assert.AreEqual(expectedNonEmptyResult, result.HasValue);
+            Assert.That(result.HasValue, Is.EqualTo(expectedNonEmptyResult));
         }
 
         [TestCase("4.7.12", MessageIntent.Reply)]
@@ -63,7 +63,7 @@
 
             var result = incomingContext.TryRemoveResponseStateBasedOnCorrelationId(message, lookup);
 
-            Assert.IsTrue(result.HasValue);
+            Assert.That(result.HasValue, Is.True);
         }
 
         class IncomingMessageFromLegacyEndpoint : IncomingMessage

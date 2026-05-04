@@ -16,7 +16,7 @@
             callbackSession.When<Request, int>(r => r.MagicNumber == 42, 42);
 
             var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await callbackSession.Request<string>(new Request { MagicNumber = 42 }));
-            StringAssert.Contains("Matcher matched but response type 'System.Int32' is incompatible with expected response type of 'System.String'.", exception.Message);
+            Assert.That(exception.Message, Does.Contain("Matcher matched but response type 'System.Int32' is incompatible with expected response type of 'System.String'."));
         }
 
         [Test]
@@ -31,7 +31,7 @@
             options.SetHeader(expectedHeader, "value");
 
             var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await callbackSession.Request<string>(new Request { MagicNumber = 42 }, options));
-            StringAssert.Contains("Matcher matched but response type 'System.Int32' is incompatible with expected response type of 'System.String'.", exception.Message);
+            Assert.That(exception.Message, Does.Contain("Matcher matched but response type 'System.Int32' is incompatible with expected response type of 'System.String'."));
         }
 
         [Test]
@@ -42,7 +42,7 @@
 
             var result = await callbackSession.Request<string>(new Request { MagicNumber = 42 });
 
-            Assert.AreEqual("HelloWorld", result);
+            Assert.That(result, Is.EqualTo("HelloWorld"));
         }
 
         [Test]
@@ -58,7 +58,7 @@
 
             var result = await callbackSession.Request<string>(new Request { MagicNumber = 42 }, options);
 
-            Assert.AreEqual("HelloWorld", result);
+            Assert.That(result, Is.EqualTo("HelloWorld"));
         }
 
         [Test]
@@ -112,7 +112,7 @@
 
             var result = await callbackSession.Request<string>(new Request { MagicNumber = 42 }, tokenSource.Token);
 
-            Assert.AreEqual("HelloWorld", result);
+            Assert.That(result, Is.EqualTo("HelloWorld"));
         }
 
         [Test]
@@ -134,7 +134,7 @@
 
             var result = await callbackSession.Request<string>(new Request { MagicNumber = 42 }, options, tokenSource.Token);
 
-            Assert.AreEqual("HelloWorld", result);
+            Assert.That(result, Is.EqualTo("HelloWorld"));
         }
 
         class Request

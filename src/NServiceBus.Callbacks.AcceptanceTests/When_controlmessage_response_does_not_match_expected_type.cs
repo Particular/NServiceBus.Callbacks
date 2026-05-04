@@ -32,9 +32,9 @@
                 .Done(c => exception != null)
                 .Run();
 
-            Assert.AreEqual(TaskStatus.Faulted, requestTask.Status);
-            Assert.IsNotNull(exception);
-            Assert.AreEqual(typeof(ArgumentException), exception.GetType());
+            Assert.That(requestTask.Status, Is.EqualTo(TaskStatus.Faulted));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.GetType(), Is.EqualTo(typeof(ArgumentException)));
         }
 
         class Context : ScenarioContext
