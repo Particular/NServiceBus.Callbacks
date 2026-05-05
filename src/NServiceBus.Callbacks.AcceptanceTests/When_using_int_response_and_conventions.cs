@@ -20,7 +20,7 @@
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.That(context.Response, Is.Not.EqualTo(200));
+            Assert.That(context.Response, Is.EqualTo(200));
         }
 
         class Context : ScenarioContext
