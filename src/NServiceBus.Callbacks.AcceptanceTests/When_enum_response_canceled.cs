@@ -41,10 +41,10 @@
                 .Done(c => exception != null || c.HandlerGotTheRequest)
                 .Run();
 
-            Assert.AreNotEqual(ResponseStatus.Success, context.Response);
-            Assert.False(context.CallbackFired);
-            Assert.True(context.HandlerGotTheRequest);
-            Assert.IsInstanceOf<OperationCanceledException>(exception);
+            Assert.That(context.Response, Is.Not.EqualTo(ResponseStatus.Success));
+            Assert.That(context.CallbackFired, Is.False);
+            Assert.That(context.HandlerGotTheRequest, Is.True);
+            Assert.That(exception, Is.InstanceOf<OperationCanceledException>());
         }
 
         public class Context : ScenarioContext

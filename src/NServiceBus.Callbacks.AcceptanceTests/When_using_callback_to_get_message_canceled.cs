@@ -35,10 +35,10 @@
                 .Done(c => c.GotTheResponseMessage)
                 .Run();
 
-            Assert.True(context.GotTheResponseMessage);
-            Assert.False(context.CallbackFired);
-            Assert.IsNull(context.Response);
-            Assert.IsInstanceOf<OperationCanceledException>(exception);
+            Assert.That(context.GotTheResponseMessage, Is.True);
+            Assert.That(context.CallbackFired, Is.False);
+            Assert.That(context.Response, Is.Null);
+            Assert.That(exception, Is.InstanceOf<OperationCanceledException>());
         }
 
         class Context : ScenarioContext

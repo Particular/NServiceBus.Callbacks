@@ -26,7 +26,7 @@
                 .Done(c => c.CallbackFired)
                 .Run();
 
-            Assert.True(context.CallbackFired);
+            Assert.That(context.CallbackFired, Is.True);
         }
 
         class Context : ScenarioContext
@@ -56,7 +56,7 @@
 
                 public Task Handle(MyRequest message, IMessageHandlerContext context)
                 {
-                    Assert.False(testContext.CallbackFired);
+                    Assert.That(testContext.CallbackFired, Is.False);
 
                     return context.Reply(new MyResponse());
                 }
