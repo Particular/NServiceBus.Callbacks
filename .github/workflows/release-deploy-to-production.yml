@@ -18,19 +18,12 @@ jobs:
     secrets: inherit
   virus-scan:
     needs: publish-release-notes
-    runs-on: ubuntu-latest
     permissions:
       contents: write
-    steps:
-      - name: Scan release for viruses
-        uses: Particular/virus-scan-action@main
-        with:
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          tag: ${{ inputs.version }}
-          github-access-token: ${{ secrets.GITHUB_TOKEN }}
-          slack-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ vars.VIRUS_REPORTING_SLACK_CHANNEL }}
+    uses: Particular/deployment-workflows/.github/workflows/virus-scan.yml@1.0.0
+    with:
+      version: ${{ inputs.version }}
+    secrets: inherit
   push-nuget-packages:
     permissions:
       id-token: write
