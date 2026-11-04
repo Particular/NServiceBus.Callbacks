@@ -33,7 +33,7 @@ jobs:
           name: nugets
           path: nugets/*
           retention-days: 1
-      - name: Create draft release and attach artifacts
+      - name: Attach artifacts to release
         uses: particular/deployment-workflows/.github/actions/create-draft-release-with-assets@1.0.0
         with:
           asset-paths: "nugets/"
