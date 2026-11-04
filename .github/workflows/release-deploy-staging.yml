@@ -1,6 +1,6 @@
 name: Deploy Staging
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       version:
         required: true
@@ -8,13 +8,9 @@ on:
 env:
   DOTNET_NOLOGO: true
 jobs:
-  check-authorized-user:
-    uses: Particular/deployment-workflows/.github/workflows/verify-authorized-user.yml@1.0.0
   push-nuget-packages-staging:
-    needs: check-authorized-user
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
       contents: write
     steps:
       - name: Push NuGet packages
@@ -24,7 +20,6 @@ jobs:
           deploy-environment: staging
           api-key: ${{ secrets.FEEDZIO_PUBLISH_API_KEY }}
   generate-release-notes:
-    needs: check-authorized-user
     uses: Particular/deployment-workflows/.github/workflows/generate-release-notes.yml@1.0.0
     with:
       version: ${{ inputs.version }}

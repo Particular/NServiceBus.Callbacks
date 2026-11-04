@@ -1,16 +1,13 @@
-name: Release - build and store artifacts
+name: Build Artifacts
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
-      - '[0-9]+.[0-9]+.[0-9]+-*'
+  workflow_call:
 env:
   DOTNET_NOLOGO: true
 defaults:
   run:
     shell: pwsh
 jobs:
-  build-and-store-artifacts:
+  build-artifacts:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
