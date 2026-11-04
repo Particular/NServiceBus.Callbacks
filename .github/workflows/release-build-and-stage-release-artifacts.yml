@@ -1,6 +1,5 @@
-name: Release - build and stage artifacts
+name: Build And Stage Release Artifacts
 on:
-  workflow_dispatch:
   push:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
@@ -11,10 +10,9 @@ jobs:
     secrets: inherit
   stage-artifacts:
     needs: build-artifacts
-    if: github.event_name == 'push'
     permissions:
       contents: write
-    uses: ./.github/workflows/release-deploy-staging.yml
+    uses: ./.github/workflows/release-deploy-to-staging.yml
     with:
       version: ${{ github.ref_name }}
     secrets: inherit

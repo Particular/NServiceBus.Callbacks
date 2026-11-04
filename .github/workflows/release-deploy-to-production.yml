@@ -1,4 +1,4 @@
-name: Deploy Production
+name: Deploy To Production
 on:
   workflow_dispatch:
     inputs:
@@ -43,4 +43,3 @@ jobs:
           with:
             version: ${{ inputs.version }}
             deploy-environment: production
-            api-key: required-but-real-value-not-needed-we-use-trusted-publishing-for-production
